@@ -1,7 +1,11 @@
 ---
-title: Blog Title
-description: Your blog description, which is long text, can be an introduction to the post or a paragraph of the post.
-date: 2024-05-01
+title: Vim :The Life Style
+description: I talk about my vim journey and how it has changed my life.
+date: 2024-10-23
 ---
 
-Use [Vitesse Them for Astro](https://astro.build/themes/details/vitesse-theme-for-astro/) to start writing your blog posts.
+Hello, everyone.
+
+[vim](https://www.vim.org/) is a text editor that has changed my life. I have been using it for a long time and I can't imagine my life without it.
+
+`:q!`

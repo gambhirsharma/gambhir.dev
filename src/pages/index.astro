@@ -1,83 +1,82 @@
 ---
+import CurrentTime from '@/components/CurrentTime.vue'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 ---
 
 <BaseLayout description={siteConfig.description}>
   <article class="prose">
-    <h1 class="text-title">Vitesse theme</h1>
-    <p>Vitesse theme for Astro, supports Vue and UnoCSS.</p>
+    <p>~/Full-Stack Developer</p>
+    <div class="intro-section">
+      <h1 class="text-title">Gambhir Sharma ⚡</h1>
+      <!--<h2>@gambhir_sharma</h2>-->
+      <div class="intro-list">
+        <span
+          ><div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-map-pin"
+              ><path
+                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+              ></path><circle cx="12" cy="10" r="3"></circle></svg
+            >
+          </div>Rome, Italy
+          <div><CurrentTime client:load /></div>
+        </span>
+        <span
+          ><div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-briefcase-business"
+              ><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path
+                d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg
+            >
+          </div>Full-Stack @ Repocraft</span
+        >
+      </div>
+      <p>
+        1st year undergrad student at
+        <a target="_blank" href="https://torvergata.eu">Tor Vergata</a> and a <b> Fullstack developer</b>.
+      </p>
+    </div>
     <p>
-      A minimal, SEO-riendly portfolio and blog theme for Astro. It's inspired
-      by <a target="_blank" href="https://antfu.me">antfu.me</a>.
+      <img width="640" height="360" src="/hero.png" alt="Hero Image" />
     </p>
     <p>
-      <img width="640" height="360" src="/hero.jpg" alt="Hero Image" />
+      I am passionate about building stuff & optimizing it. I'm currently working at
+      <a target="_blank" href="https://repocraft.com">Repocraft</a> as a Full-Stack Developer. Also being a Open Source enthusiast,
+      I love contributing to open source projects check <a href="https://gambhirsharma" target="_blank">my GitHub</a> for
+      more.
     </p>
     <p>
-      Based on first principles thinking, and you can also see from the picture
-      <sup>👆</sup>, the goal of this theme is to
-      <b>make complex things as simple as possible</b>
-      . So, the core of this theme is the content, and the other elements are just
-      auxiliary.
-    </p>
-    <p>Here are the features you don't need to worry about:</p>
-    <ul>
-      <li>100 / 100 Lighthouse performance</li>
-      <li>Responsive</li>
-      <li>SEO-friendly</li>
-      <li>Light / Dark Theme</li>
-      <li>Markdown support</li>
-      <li>
-        <a target="_blank" href="https://mdxjs.com/">MDX</a>
-        (components in your markdown) support
-      </li>
-      <li>
-        <a target="_blank" href="https://vuejs.org/">Vue</a>
-        SFC component support
-      </li>
-      <li>Auto generated sitemap and RSS Feed</li>
-      <li>
-        <a target="_blank" href="https://vueuse.org/">VueUse</a>
-        &
-        <a target="_blank" href="https://lodash.com/">Lodash</a>
-        support
-      </li>
-    </ul>
-    <p>
-      By the way, this theme use the <a
-        target="_blank"
-        href="https://unocss.dev/">UnoCSS</a
-      > for style, it's fast.
+      I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges.
+      I am a quick learner and I love to work in a team.
     </p>
     <p>
-      Visit it
-      <a
-        target="_blank"
-        href="https://github.com/kevinwong865/astro-theme-vitesse"
-      >
-        on GitHub
-      </a>
-      to fork the repository, read the docs or one-click deploy on Netlify.
-    </p>
-    <p>
-      If you like Vitesse theme for Astro, please
-      <a target="_blank" href="https://github.com/kevinwong865">
-        click follow
-      </a>
-      for me.
+      I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a>
     </p>
     <hr class="hr-line" />
     <p>Find me on</p>
     <p class="flex gap-x-4 gap-y-2 flex-wrap">
       {
         siteConfig.socialLinks.map((link) => (
-          <a
-            aria-label={link.text}
-            href={link.href}
-            target="_blank"
-            class="prose-link"
-          >
+          <a aria-label={link.text} href={link.href} target="_blank" class="prose-link">
             <i class:list={[link.icon]} />
             {link.text}
           </a>
@@ -86,13 +85,25 @@ import siteConfig from '@/site-config'
     </p>
     <p>
       If you have any questions, please email me at
-      <a
-        prose-link
-        aria-label={siteConfig.email}
-        href={`mailto:${siteConfig.email}`}
-      >
+      <a prose-link aria-label={siteConfig.email} href={`mailto:${siteConfig.email}`}>
         {siteConfig.email}
       </a>.
     </p>
   </article>
 </BaseLayout>
+
+<style>
+  .intro-section {
+    .intro-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+</style>

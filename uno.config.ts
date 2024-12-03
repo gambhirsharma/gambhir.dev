@@ -52,6 +52,7 @@ export default defineConfig({
     'i-simple-icons-github',
     'i-simple-icons-x',
     'i-simple-icons-linkedin',
+    'i-simple-icons-discord',
     'i-simple-icons-instagram',
     'i-simple-icons-youtube',
     'i-simple-icons-bilibili',

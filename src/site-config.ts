@@ -1,23 +1,23 @@
 export const siteConfig = {
-  author: 'Kevin Wong',
-  title: 'Vitesse theme for Astro',
-  subtitle: 'Vitesse theme for Astro, supports Vue and UnoCSS.',
-  description: 'A Minimal, SEO-friendly portfolio and blog theme for Astro.',
+  author: 'Gambhir Sharma ⚡',
+  title: 'Gambhir Sharma',
+  subtitle: 'presonal blog',
+  description: 'Personal website and blog of Gambhir Sharma',
   image: {
     src: '/hero.jpg',
     alt: 'Website Main Image',
   },
-  email: 'kevinwong865@gmail.com',
+  email: 'gambhir786191ss@gmail.com',
   socialLinks: [
     {
       text: 'GitHub',
-      href: '',
+      href: 'https://www.github.com/gambhir-sharma',
       icon: 'i-simple-icons-github',
       header: 'i-ri-github-line',
     },
     {
       text: 'Twitter',
-      href: '',
+      href: 'https://www.twitter.com/gambhir_sharma',
       icon: 'i-simple-icons-x',
       header: 'i-ri-twitter-x-line',
     },
@@ -27,19 +27,14 @@ export const siteConfig = {
       icon: 'i-simple-icons-linkedin',
     },
     {
-      text: 'Instagram',
+      text: 'Discord',
       href: '',
-      icon: 'i-simple-icons-instagram',
-    },
-    {
-      text: 'Youtube',
-      href: '',
-      icon: 'i-simple-icons-youtube',
+      icon: 'i-simple-icons-discord',
     },
   ],
   header: {
     logo: {
-      src: '/favicon.svg',
+      src: '/favicon.png',
       alt: 'Logo Image',
     },
     navLinks: [

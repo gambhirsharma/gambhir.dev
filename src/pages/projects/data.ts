@@ -2,7 +2,7 @@ import type { ProjectData } from '@/types'
 
 export const projectData: ProjectData = [
   {
-    title: 'Projects Group',
+    title: 'Full Stack',
     projects: [
       {
         text: 'Project Name',
@@ -19,7 +19,7 @@ export const projectData: ProjectData = [
     ],
   },
   {
-    title: 'Projects Group',
+    title: 'AI/ML',
     projects: [
       {
         text: 'Project Name',
@@ -42,11 +42,11 @@ export const projectData: ProjectData = [
     ],
   },
   {
-    title: 'Project Name',
+    title: 'K8s',
     projects: [],
   },
   {
-    title: 'Projects Group',
+    title: 'AWS',
     projects: [
       {
         text: 'Project Name',
@@ -75,11 +75,11 @@ export const projectData: ProjectData = [
     ],
   },
   {
-    title: 'Projects Group',
+    title: 'NeoVim Plugins',
     projects: [
       {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
+        text: 'Vesper.nvim',
+        description: 'A NeoVim colorscheme inspired by Vesper theme for VSCode',
         icon: 'i-carbon-campsite',
         href: '/',
       },

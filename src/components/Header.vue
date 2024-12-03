@@ -81,7 +81,12 @@ function toggleNavDrawer() {
   >
     <div class="flex items-center h-full">
       <a href="/" mr-6 aria-label="Header Logo Image">
+        <!--
         <img width="32" height="32" :src="siteConfig.header.logo.src" :alt="siteConfig.header.logo.alt">
+-->
+        <h1>
+          gambhir.xyz
+        </h1>
       </a>
       <nav class="sm:flex hidden flex-wrap gap-x-6 position-initial flex-row">
         <a
@@ -105,9 +110,7 @@ function toggleNavDrawer() {
       <ThemeToggle />
     </div>
   </header>
-  <nav
-    class="nav-drawer sm:hidden"
-  >
+  <nav class="nav-drawer sm:hidden">
     <i i-ri-menu-2-fill />
     <a
       v-for="link in navLinks" :key="link.text" :aria-label="`${link.text}`" :target="getLinkTarget(link.href)"
@@ -131,8 +134,8 @@ function toggleNavDrawer() {
 
 .nav-drawer {
   transform: translateX(-100%);
-  --at-apply: box-border fixed h-screen z-999 left-0 top-0 min-w-32vw max-w-50vw
-    bg-main p-6 text-lg flex flex-col gap-5 transition-all;
+  --at-apply: box-border fixed h-screen z-999 left-0 top-0 min-w-32vw max-w-50vw bg-main p-6 text-lg flex flex-col gap-5
+    transition-all;
 }
 
 .nav-drawer-mask {
