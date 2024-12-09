@@ -11,7 +11,7 @@ export const siteConfig = {
   socialLinks: [
     {
       text: 'GitHub',
-      href: 'https://www.github.com/gambhir-sharma',
+      href: 'https://www.github.com/gambhirsharma',
       icon: 'i-simple-icons-github',
       header: 'i-ri-github-line',
     },
@@ -23,14 +23,15 @@ export const siteConfig = {
     },
     {
       text: 'Linkedin',
-      href: '',
+      href: 'https://www.linkedin.com/in/gambhir-sharma/',
       icon: 'i-simple-icons-linkedin',
     },
-    {
-      text: 'Discord',
-      href: '',
-      icon: 'i-simple-icons-discord',
-    },
+    // {
+    //  text: 'Discord',
+    //  href: '',
+    //  icon: 'i-simple-icons-discord',
+    // },
+    {},
   ],
   header: {
     logo: {
