@@ -35,11 +35,23 @@ export default {
 </template>
 
 <style scoped>
+html.dark {
+  --bg-color: #161b22;
+  --text-color: #42b983;
+}
+
+html:not(.dark) {
+  --bg-color: #ffffff;
+  --text-color: #161b22;
+}
+
 div {
   padding: 9px 4px;
   border-radius: 4px;
-  background-color: #161b22;
-  color: #42b983;
+  background-color: var(--current_time_bg-color);
+  color: var(--current_time_text-color);
+  /*background-color: #161b22;*/
+  /*  color: #42b983;*/
   margin: 0;
 }
 </style>

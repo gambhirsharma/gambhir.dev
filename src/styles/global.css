@@ -62,3 +62,14 @@ html.dark::view-transition-old(root) {
 html.dark::view-transition-new(root) {
   z-index: 1;
 }
+
+/* The time component  */
+html.dark {
+  --current_time_bg-color: #161b22;
+  --current_time_text-color: #42b983;
+}
+
+html:not(.dark) {
+  --current_time_bg-color: #ffffff;
+  --current_time_text-color: #161b22;
+}
