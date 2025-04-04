@@ -5,40 +5,40 @@ export const projectData: ProjectData = [
     title: 'Full Stack',
     projects: [
       {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
+        text: 'Repocraft',
+        description: 'Project Starting template generator',
         icon: 'i-carbon-campsite',
         href: '/',
       },
-      {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
-        icon: 'i-carbon-campsite',
-        href: '/',
-      },
+      // {
+      //  text: 'Project Name',
+      //  description: 'Your project description information is a long piece of text.',
+      //  icon: 'i-carbon-campsite',
+      //  href: '/',
+      // },
     ],
   },
   {
     title: 'AI/ML',
     projects: [
       {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
+        text: 'Analyse NFT Network',
+        description: 'This Repo is a Data Science Project that Analyse the NFT network.',
         icon: 'i-carbon-campsite',
-        href: '/',
+        href: 'https://github.com/gambhirsharma/NFT-Data-Analytics',
       },
-      {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
-        icon: 'i-carbon-campsite',
-        href: '/',
-      },
-      {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
-        icon: 'i-carbon-campsite',
-        href: '/',
-      },
+      // {
+      //  text: 'Project Name',
+      //  description: 'Your project description information is a long piece of text.',
+      //  icon: 'i-carbon-campsite',
+      //  href: '/',
+      // },
+      // {
+      //  text: 'Project Name',
+      //  description: 'Your project description information is a long piece of text.',
+      //  icon: 'i-carbon-campsite',
+      //  href: '/',
+      // },
     ],
   },
   {
@@ -49,29 +49,29 @@ export const projectData: ProjectData = [
     title: 'AWS',
     projects: [
       {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
+        text: 'On-the-Fly Image Processing',
+        description: 'Use AWS CDK to build an on-the-fly Image Processing',
         icon: 'i-carbon-campsite',
         href: '/',
       },
       {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
+        text: 'Serverless web-scrapping',
+        description: 'Web-scrapping for Lazio Disco website',
         icon: 'i-carbon-campsite',
-        href: '/',
+        href: 'https://github.com/gambhirsharma/lazio-disco-bot/tree/main/lazio-serverless',
       },
-      {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
-        icon: 'i-carbon-campsite',
-        href: '/',
-      },
-      {
-        text: 'Project Name',
-        description: 'Your project description information is a long piece of text.',
-        icon: 'i-carbon-campsite',
-        href: '/',
-      },
+      // {
+      //  text: 'Project Name',
+      //  description: 'Your project description information is a long piece of text.',
+      //  icon: 'i-carbon-campsite',
+      //  href: '/',
+      // },
+      // {
+      //  text: 'Project Name',
+      //  description: 'Your project description information is a long piece of text.',
+      //  icon: 'i-carbon-campsite',
+      //  href: '/',
+      // },
     ],
   },
   {
