@@ -24,7 +24,7 @@ export const projectData: ProjectData = [
       {
         text: 'Analyse NFT Network',
         description: 'This Repo is a Data Science Project that Analyse the NFT network.',
-        icon: 'i-carbon-campsite',
+        icon: 'i-ri-nft-line',
         href: 'https://github.com/gambhirsharma/NFT-Data-Analytics',
       },
       // {
@@ -51,13 +51,13 @@ export const projectData: ProjectData = [
       {
         text: 'On-the-Fly Image Processing',
         description: 'Use AWS CDK to build an on-the-fly Image Processing',
-        icon: 'i-carbon-campsite',
+        icon: 'i-ri-image-ai-line',
         href: '/',
       },
       {
         text: 'Serverless web-scrapping',
         description: 'Web-scrapping for Lazio Disco website',
-        icon: 'i-carbon-campsite',
+        icon: 'i-ri-macbook-line',
         href: 'https://github.com/gambhirsharma/lazio-disco-bot/tree/main/lazio-serverless',
       },
       // {
@@ -75,13 +75,13 @@ export const projectData: ProjectData = [
     ],
   },
   {
-    title: 'NeoVim Plugins',
+    title: 'NeoVim',
     projects: [
       {
         text: 'Vesper.nvim',
         description: 'A NeoVim colorscheme inspired by Vesper theme for VSCode',
-        icon: 'i-carbon-campsite',
-        href: '/',
+        icon: 'i-ri-brush-4-line',
+        href: 'https://github.com/gambhirsharma/vesper.nvim',
       },
     ],
   },
