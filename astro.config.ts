@@ -5,9 +5,9 @@ import UnoCSS from 'unocss/astro'
 import vue from '@astrojs/vue'
 
 export default defineConfig({
-  site: 'https://astro-theme-vitesse.ntlify.app/',
+  site: 'https://gambhir.xyz',
   server: {
-    port: 1977,
+    port: 3000,
   },
   integrations: [
     mdx(),
@@ -21,9 +21,10 @@ export default defineConfig({
     shikiConfig: {
       themes: {
         light: 'github-light-default',
-        dark: 'github-dark-default',
+        dark: 'aurora-x',
       },
       wrap: true,
     },
   },
+
 })

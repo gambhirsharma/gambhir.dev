@@ -5,6 +5,7 @@ import BaseHead from '@/components/BaseHead.astro'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import ScrollToTop from '@/components/ScrollToTop.vue'
+import Analytics from '@vercel/analytics/astro'
 
 const { ...head } = Astro.props
 ---
@@ -14,6 +15,7 @@ const { ...head } = Astro.props
   <head>
     <BaseHead {...head} />
     <ViewTransitions />
+    <Analytics />
   </head>
   <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
     <Header client:load />
