@@ -25,11 +25,11 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
     "@astrojs/vue": "^4.5.0",
     "@unocss/reset": "^0.61.0",
-    "@vercel/analytics": "^1.5.0",
     "astro": "^4.11.3",
     "nprogress": "^0.2.0",
     "unocss": "^0.61.0",
