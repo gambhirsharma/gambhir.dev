@@ -3,7 +3,7 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import UnoCSS from 'unocss/astro'
 import vue from '@astrojs/vue'
-import partytown from '@astrojs/partytown';
+import partytown from '@astrojs/partytown'
 
 export default defineConfig({
   site: 'https://gambhir.xyz',
@@ -17,10 +17,10 @@ export default defineConfig({
       injectReset: true,
     }),
     vue(),
-    partytown({ 
-      config: { 
-        forward: ['dataLayer.push'] 
-      } 
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
     }),
   ],
   markdown: {
