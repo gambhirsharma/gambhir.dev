@@ -17,9 +17,10 @@ import siteConfig from '@/site-config'
       -->
     </div>
     <div flex>
+      <!--
       <a nav-link href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
-      <span op-70>&nbsp;&nbsp;&copy;&nbsp;&nbsp;{{ new Date().getFullYear() }}&nbsp;&nbsp;{{ siteConfig.author
-      }}</span>
+      -->
+      <span op-70>{{ siteConfig.author }}&nbsp;&nbsp;&copy;&nbsp;&nbsp;{{ new Date().getFullYear() }}&nbsp;&nbsp;</span>
     </div>
   </footer>
 </template>
