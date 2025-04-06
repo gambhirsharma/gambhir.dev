@@ -17,11 +17,10 @@ const { ...head } = Astro.props
 <!-- Google tag (gtag.js) -->
     <script is:inline type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-TXR5YDK68S"></script>
     <script is:inline type="text/partytown">
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-TXR5YDK68S');
+      window.dataLayer = window.dataLayer || []
+      function gtag() {dataLayer.push(arguments)}
+      gtag('js', new Date())
+      gtag('config', 'G-TXR5YDK68S')
     </script>
   </head>
   <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
