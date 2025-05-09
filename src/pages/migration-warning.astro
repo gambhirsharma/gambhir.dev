@@ -1,0 +1,87 @@
+---
+// src/pages/migration-warning.astro
+const { pathname, search } = Astro.url
+const target = `https://gambhir.dev${pathname}${search}`
+import '../styles/dot.css'
+import '../styles/global.css'
+import { fade } from 'astro:transitions'
+
+// disables pre-rendering => makes this page server-rendered
+// export const prerender = false;
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+    Meta refresh after 10s
+ -->
+    <meta http-equiv="refresh" content={`10;url=${target}`} />
+    <title>Domain Is Changing</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+        font-family: sans-serif;
+        padding: 1rem;
+      }
+      h1 {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
+    <main
+      class="z-[2000] grow mx-auto sm:pt-36 pt-26 pb-16 px-6 relative dot"
+      transition:animate={fade({ duration: '0.4s' })}
+    >
+      <div class="text-6xl font-semibold space-x-10 flex justify-center items-center">
+        <h1>gambhir<span class="text-gray-500">.xyz</span></h1>
+        <svg class="w-28 h-28" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+          ><!-- Icon from Huge Icons by Hugeicons - undefined -->
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M20 12H4m11 5s5-3.682 5-5s-5-5-5-5"
+            color="currentColor"></path></svg
+        >
+        <h1>gambhir<span class="text-[#42b983]">.dev</span></h1>
+      </div>
+
+      <div>
+        <p>
+          Redirected in <span id="countdown">10</span> seconds…
+        </p>
+        <p>
+          If you're not redirected, <a class="text-[#42b983]" href={target}>click here</a>
+        </p>
+      </div>
+    </main>
+  </body>
+  <script>
+    // Countdown timer
+    let timeLeft = 10
+    const countdownElement = document.getElementById('countdown')
+
+    const countdownInterval = setInterval(() => {
+      timeLeft--
+      if (countdownElement) {
+        countdownElement.textContent = timeLeft
+      }
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval)
+      }
+    }, 1000)
+
+    // Fallback JS redirect after 10s
+    setTimeout(() => {
+      window.location.replace('https://gambhir.dev')
+    }, 10000)
+  </script>
+</html>

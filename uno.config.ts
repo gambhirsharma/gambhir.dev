@@ -64,5 +64,6 @@ export default defineConfig({
     'i-ri-image-ai-line',
     'i-ri-macbook-line',
     'i-ri-nft-line',
+    'i-hugeicons-arrow-right-02',
   ],
 })
