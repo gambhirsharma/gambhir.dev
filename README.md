@@ -1,4 +1,4 @@
-# gambhir.xyz
+# gambhir.dev
 Personal website
 
 ## Screenshots

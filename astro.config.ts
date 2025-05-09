@@ -6,7 +6,7 @@ import vue from '@astrojs/vue'
 import partytown from '@astrojs/partytown'
 
 export default defineConfig({
-  site: 'https://gambhir.xyz',
+  site: 'https://gambhir.dev',
   server: {
     port: 3000,
   },

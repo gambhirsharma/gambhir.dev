@@ -85,7 +85,7 @@ function toggleNavDrawer() {
         <img width="32" height="32" :src="siteConfig.header.logo.src" :alt="siteConfig.header.logo.alt">
 -->
         <h1>
-          gambhir.xyz
+          gambhir.dev
         </h1>
       </a>
       <nav class="sm:flex hidden flex-wrap gap-x-6 position-initial flex-row">
