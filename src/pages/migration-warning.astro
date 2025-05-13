@@ -5,9 +5,6 @@ const target = `https://gambhir.dev${pathname}${search}`
 import '../styles/dot.css'
 import '../styles/global.css'
 import { fade } from 'astro:transitions'
-
-// disables pre-rendering => makes this page server-rendered
-// export const prerender = false;
 ---
 
 <html lang="en" class="dark">
@@ -59,7 +56,7 @@ import { fade } from 'astro:transitions'
           Redirected in <span id="countdown">10</span> seconds…
         </p>
         <p>
-          If you're not redirected, <a class="text-[#42b983]" href={target}>click here</a>
+          If you're not redirected, <a class="text-[#42b983]" href="https://www.gambhir.dev">click here</a>
         </p>
       </div>
     </main>
@@ -72,7 +69,7 @@ import { fade } from 'astro:transitions'
     const countdownInterval = setInterval(() => {
       timeLeft--
       if (countdownElement) {
-        countdownElement.textContent = timeLeft
+        countdownElement.textContent = timeLeft.toString()
       }
       if (timeLeft <= 0) {
         clearInterval(countdownInterval)
