@@ -1,18 +1,15 @@
-import { defineMiddleware } from 'astro:middleware'
+import { defineMiddleware } from 'astro/middleware'
 
-export const onRequest = defineMiddleware(({ request }, next) => {
-  const host = request.headers.get('host') || ''
-  const url = new URL(request.url)
+export const onRequest = defineMiddleware((context, next) => {
+  // console.log(`Middleware is working`)
+  const host = context.request.headers.get('host') || ''
 
-  // If coming in on gambhir.xyz (and not already on the warning page)
-  if (host.endsWith('gambhir.xyz') && url.pathname !== '/migration-warning') {
-    // Server‐side redirect to your migration notice
-    return new Response(null, {
-      status: 302,
-      headers: { Location: '/migration-warning' },
-    })
+  if (host.includes('gambhir.xyz')) {
+    // console.log(`The host is: ${host}`)
+    return Response.redirect(
+      new URL('/migration-warning', context?.url),
+      302,
+    )
   }
-
-  // Otherwise continue to normal rendering
   return next()
 })

@@ -2,6 +2,7 @@
 import CurrentTime from '@/components/CurrentTime.vue'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
+export const prerender = false
 ---
 
 <BaseLayout description={siteConfig.description}>
