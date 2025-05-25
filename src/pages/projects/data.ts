@@ -10,12 +10,12 @@ export const projectData: ProjectData = [
         icon: 'i-carbon-campsite',
         href: '/',
       },
-      // {
-      //  text: 'Project Name',
-      //  description: 'Your project description information is a long piece of text.',
-      //  icon: 'i-carbon-campsite',
-      //  href: '/',
-      // },
+      {
+        text: 'Supabase On Fly Image',
+        description: 'Optimize you image on go!!',
+        icon: 'i-carbon-campsite',
+        href: '/',
+      },
     ],
   },
   {
