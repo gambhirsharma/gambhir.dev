@@ -43,7 +43,14 @@ export const projectData: ProjectData = [
   },
   {
     title: 'K8s',
-    projects: [],
+    projects: [
+      {
+        text: 'Vercel Clone',
+        description: 'Deploy your React/Nextjs project',
+        icon: 'i-ri-image-ai-line',
+        href: 'https://github.com/gambhirsharma/vercel-clone',
+      },
+    ],
   },
   {
     title: 'AWS',
