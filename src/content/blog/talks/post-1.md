@@ -10,5 +10,5 @@ date: 2023-12-27
 **Presented at GDG Guwahati, India**
 
 <p>
-    Download the <a href="../../../../assets/htmx.pptx" download="htmx.pptx">htmx.pptx</a>
+    Download the <a href="/htmx.pptx" download="htmx.pptx">htmx.pptx</a>
 </p>
