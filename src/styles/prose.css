@@ -119,13 +119,19 @@
 }
 .prose code {
   font-weight: 600;
+  background-color: #222934;
   font-size: 0.875em;
+  border-radius: 4px;
+  font-family: monospace;
+  padding: 0.25em 0.3em;
 }
 .prose code::before {
-  content: '`';
+  content: '';
+  display: none;
 }
 .prose code::after {
-  content: '`';
+  content: '';
+  display: none;
 }
 .prose a code {
   color: #111827;
