@@ -5,6 +5,12 @@ export const projectData: ProjectData = [
     title: 'Full Stack',
     projects: [
       {
+        text: 'gambhir.dev',
+        description: 'Personal website',
+        icon: 'i-carbon-campsite',
+        href: '/',
+      },
+      {
         text: 'Repocraft',
         description: 'Project Starting template generator',
         icon: 'i-carbon-campsite',
@@ -49,6 +55,12 @@ export const projectData: ProjectData = [
         description: 'Deploy your React/Nextjs project',
         icon: 'i-ri-image-ai-line',
         href: 'https://github.com/gambhirsharma/vercel-clone',
+      },
+      {
+        text: 'Supabase On Fly Image',
+        description: 'Optimize you image on go!!',
+        icon: 'i-carbon-campsite',
+        href: '/',
       },
     ],
   },
