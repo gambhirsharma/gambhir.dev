@@ -117,9 +117,14 @@
   line-height: 1.4285714;
   margin-top: 0.8571429em;
 }
-.prose code {
-  font-weight: 600;
+
+html.dark > .prose code {
   background-color: #222934;
+}
+
+.prose code {
+  background-color: #e0e4e7;
+  font-weight: 600;
   font-size: 0.875em;
   border-radius: 4px;
   font-family: monospace;
