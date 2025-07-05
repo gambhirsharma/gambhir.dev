@@ -75,11 +75,26 @@
   margin-bottom: 1.6em;
   padding-left: 1em;
 }
+.prose blockquote p {
+  border-left: 4px solid #42b983;
+  padding-left: 1em;
+  color: #555;
+  font-style: italic;
+  background: #f9f9f9;
+}
+html.dark {
+  .prose blockquote p {
+    background-color: #121212;
+  }
+}
+
 .prose blockquote p:first-of-type::before {
   content: open-quote;
+  display: none;
 }
 .prose blockquote p:last-of-type::after {
   content: close-quote;
+  display: none;
 }
 .prose h1 {
   font-weight: 800;
@@ -118,10 +133,6 @@
   margin-top: 0.8571429em;
 }
 
-html.dark > .prose code {
-  background-color: #222934;
-}
-
 .prose code {
   background-color: #e0e4e7;
   font-weight: 600;
@@ -134,6 +145,13 @@ html.dark > .prose code {
   content: '';
   display: none;
 }
+
+html.dark {
+  code {
+    background-color: #202731;
+  }
+}
+
 .prose code::after {
   content: '';
   display: none;
