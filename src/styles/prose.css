@@ -63,6 +63,9 @@
   border-color: rgba(125, 125, 125, 0.3);
   margin-top: 3em;
   margin-bottom: 3em;
+  height: 2px;
+  width: 100%;
+  background-color: rgba(125, 125, 125, 0.3);
 }
 .prose blockquote {
   font-weight: 500;
