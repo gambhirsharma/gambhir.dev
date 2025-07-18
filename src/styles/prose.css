@@ -4,6 +4,11 @@
 .prose a {
   --at-apply: prose-link;
 }
+.prose a:hover {
+  cursor:
+    url('/banana.svg') 5 7,
+    pointer;
+}
 .prose strong {
   font-weight: 600;
 }
