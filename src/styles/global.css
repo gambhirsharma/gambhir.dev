@@ -67,9 +67,11 @@ html.dark::view-transition-new(root) {
 html.dark {
   --current_time_bg-color: #161b22;
   --current_time_text-color: #42b983;
+  --text-primary-green-color: #42b983;
 }
 
 html:not(.dark) {
   --current_time_bg-color: #ffffff;
   --current_time_text-color: #161b22;
+  --text-primary-green-color: #42b983;
 }
