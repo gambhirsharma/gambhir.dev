@@ -13,13 +13,13 @@ export const projectData: ProjectData = [
       {
         text: 'Repocraft',
         description: 'Project Starting template generator',
-        icon: 'i-carbon-campsite',
+        icon: 'i-lucide-columns-settings',
         href: '/',
       },
       {
         text: 'Supabase On Fly Image',
         description: 'Optimize you image on go!!',
-        icon: 'i-carbon-campsite',
+        icon: 'i-lucide-images',
         href: '/',
       },
     ],
@@ -53,13 +53,13 @@ export const projectData: ProjectData = [
       {
         text: 'Vercel Clone',
         description: 'Deploy your React/Nextjs project',
-        icon: 'i-ri-image-ai-line',
+        icon: 'i-lucide-server-cog',
         href: 'https://github.com/gambhirsharma/vercel-clone',
       },
       {
         text: 'Supabase On Fly Image',
         description: 'Optimize you image on go!!',
-        icon: 'i-carbon-campsite',
+        icon: 'i-lucide-images',
         href: '/',
       },
     ],
