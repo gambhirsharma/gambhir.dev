@@ -6,7 +6,7 @@
 }
 .prose a:hover {
   cursor:
-    url('kela-v1.svg') 5 7,
+    url('/kela.svg') 5 7,
     pointer;
 }
 .prose strong {
