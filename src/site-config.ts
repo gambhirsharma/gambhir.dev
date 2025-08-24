@@ -31,7 +31,6 @@ export const siteConfig = {
     //  href: '',
     //  icon: 'i-simple-icons-discord',
     // },
-    {},
   ],
   header: {
     logo: {
