@@ -17,3 +17,21 @@ export type ProjectData = Array<{
     href: string
   }>
 }>
+
+export interface HomePageData {
+  project: Array<{
+    title: string
+    description: string
+    techstack: Array<string>
+    url: string
+  }>
+  work: Array<{
+    title: string
+    position: string
+    duration: {
+      start: Date
+      end: Date | 'Present'
+    }
+    description: string
+  }>
+}

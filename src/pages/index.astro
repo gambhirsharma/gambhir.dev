@@ -2,13 +2,14 @@
 import CurrentTime from '@/components/CurrentTime.vue'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
+import { HomeData } from '@/content/websiteData'
 ---
 
 <BaseLayout description={siteConfig.description}>
   <article class="prose">
     <p>~/Full-Stack Developer</p>
     <div class="intro-section">
-      <h1 class="text-title">Gambhir Sharma ⚡</h1>
+      <h1 class="text-title">Gambhir Sharma</h1>
       <div class="intro-list">
         <span
           ><div>
@@ -48,26 +49,28 @@ import siteConfig from '@/site-config'
             >
           </div>
           <div>
-            Open to work:
-            <a href="/assets/CV.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">download CV</a>
+            <!-- Open to work: -->
+            Intern
+            <a href="https://www.cgi.com/en" target="_blank" class="prose-link"> @CGI </a>
+            <!-- <a href="/assets/CV.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">download CV</a> -->
           </div>
         </span>
       </div>
       <p>
-        I am a freshman undergrad student at
-        <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata">Tor Vergata</a> and a <b>
-          Fullstack developer</b
-        >.
-        <br />
-        Spend most my time capturing
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)"> flags </a>
-        at
-        <a target="_blank" href="https://cyberchallenge.it/">cyberchallenge.it</a>
-        with my minimal NeoVim <a target="_blank" href="https://github.com/gambhirsharma/nvim"> config</a>.
+        I’m an undergraduate student at
+        <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata"
+          >University of Rome Tor Vergata</a
+        > & <b> Fullstack developer</b>.
+        <!-- Spend most my time capturing -->
+        <!-- <a target="_blank" href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)"> flags </a> -->
+        <!-- at -->
+        <!-- <a target="_blank" href="https://cyberchallenge.it/">cyberchallenge.it</a> -->
+        <!-- with my minimal NeoVim <a target="_blank" href="https://github.com/gambhirsharma/nvim"> config</a>. -->
+        I also work as a DevOps intern at CGI, where I manage Kubernetes clusters.
       </p>
     </div>
     <p>
-      <img width="640" height="360" src="/hero.png" alt="Hero Image" />
+      <img width="640" height="360" src="/wave.png" alt="Hero Image" />
     </p>
     <p>
       I am passionate about building stuff & optimizing it. I have worked at
@@ -78,18 +81,45 @@ import siteConfig from '@/site-config'
         target="_blank">my GitHub</a
       > for more.
     </p>
-    <p>
-      I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges.
-      I am a quick learner and I love to work in a team. Here is <a
-        href="/assets/CV.pdf"
-        download="Gambhir_Sharma_CV.pdf"
-      >
-        my CV</a
-      >
-    </p>
-    <p>
-      I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a>
-    </p>
+    <!-- <p> -->
+    <!--   I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges. -->
+    <!--   I am a quick learner and I love to work in a team. Here is <a -->
+    <!--     href="/assets/CV.pdf" -->
+    <!--     download="Gambhir_Sharma_CV.pdf" -->
+    <!--   > -->
+    <!--     my CV</a -->
+    <!--   > -->
+    <!-- </p> -->
+    <h3>Work</h3>
+    <ul style="all:unset; padding-left: 0; margin-botton: 15px;">
+      {
+        HomeData.work.length > 0 &&
+          HomeData.work.map((x) => (
+            <li style="all:unset;">
+              <h4 style>
+                {x.duration.end === 'Present' && <i style="color:var(--text-primary-green-color">*</i>}
+                {x.title}
+              </h4>
+              <i style="font-style:unset; color: grey">
+                {x.position} (
+                {x.duration.start instanceof Date ? x.duration.start.toISOString().slice(0, 7) : x.duration.start}
+                {' ⋅ '}
+                {x.duration.end === 'Present'
+                  ? 'Present'
+                  : x.duration.end instanceof Date
+                    ? x.duration.end.toISOString().slice(0, 7)
+                    : x.duration.end}
+                )
+              </i>
+              <p>{x.description}</p>
+            </li>
+          ))
+      }
+    </ul>
+
+    <!-- <p> -->
+    <!--   I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a> -->
+    <!-- </p> -->
     <hr class="hr-line" />
     <p>Find me on:</p>
     <p class="flex gap-x-4 gap-y-2 flex-wrap">

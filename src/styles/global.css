@@ -75,3 +75,14 @@ html:not(.dark) {
   --current_time_text-color: #161b22;
   --text-primary-green-color: #42b983;
 }
+
+html.dark {
+  #hero-img {
+    content: url('/hero.png');
+  }
+}
+html:not(dark) {
+  #hero-img {
+    content: url('/wave.png');
+  }
+}

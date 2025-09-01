@@ -84,9 +84,14 @@ function toggleNavDrawer() {
         <!--
         <img width="32" height="32" :src="siteConfig.header.logo.src" :alt="siteConfig.header.logo.alt">
 -->
-        <h1>
-          gambhir.dev
-        </h1>
+        <div class="flex items-center gap-2 justify-center lg-mx-10">
+          <h1 class="font-bold text-xl">
+            gambhir.dev
+          </h1>
+          <i class="text-xl" title="Wave">
+            🌊
+          </i>
+        </div>
       </a>
       <nav class="sm:flex hidden flex-wrap gap-x-6 position-initial flex-row">
         <a
