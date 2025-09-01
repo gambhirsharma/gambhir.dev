@@ -91,11 +91,11 @@ import { HomeData } from '@/content/websiteData'
     <!--   > -->
     <!-- </p> -->
     <h3>Work</h3>
-    <ul style="all:unset; padding-left: 0; margin-botton: 15px;">
+    <div style="all: none; padding-left: 0; margin-botton: 15px;">
       {
         HomeData.work.length > 0 &&
           HomeData.work.map((x) => (
-            <li style="all:unset;">
+            <div style="all:unset;">
               <h4 style>
                 {x.duration.end === 'Present' && <i style="color:var(--text-primary-green-color">*</i>}
                 {x.title}
@@ -112,10 +112,10 @@ import { HomeData } from '@/content/websiteData'
                 )
               </i>
               <p>{x.description}</p>
-            </li>
+            </div>
           ))
       }
-    </ul>
+    </div>
 
     <!-- <p> -->
     <!--   I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a> -->
