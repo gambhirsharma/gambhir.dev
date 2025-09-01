@@ -90,13 +90,31 @@ import { HomeData } from '@/content/websiteData'
     <!--     my CV</a -->
     <!--   > -->
     <!-- </p> -->
-    <h3>Work</h3>
+    <h3 style="display: flex; align-items: center; gap: 0.5rem;">
+      <i>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-briefcase-business"
+          ><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path
+            d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg
+        >
+      </i>
+      work
+    </h3>
     <div style="all: none; padding-left: 0; margin-botton: 15px;">
       {
         HomeData.work.length > 0 &&
           HomeData.work.map((x) => (
             <div style="all:unset;">
-              <h4 style>
+              <h4>
                 {x.duration.end === 'Present' && <i style="color:var(--text-primary-green-color">*</i>}
                 {x.title}
               </h4>
@@ -111,10 +129,54 @@ import { HomeData } from '@/content/websiteData'
                     : x.duration.end}
                 )
               </i>
-              <p>{x.description}</p>
+              <p style="margin: 0.7rem 0">{x.description}</p>
             </div>
           ))
       }
+    </div>
+
+    <br />
+    <h3 style="display: flex; align-items: center; gap: 0.5rem;">
+      <i>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-briefcase-business"
+          ><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path
+            d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg
+        >
+      </i>
+      projects
+    </h3>
+    <div style="all: none; padding-left: 0; margin-botton: 15px;">
+      {
+        HomeData.project.length > 0 &&
+          HomeData.project.map((x) => (
+            <div style="all:unset;">
+              <h4>
+                <a href={x.url} target="_blank" class="prose-link">
+                  {x.title}
+                </a>
+              </h4>
+              <div>
+                {x.techstack.map((tech) => (
+                  <i style="margin-right: 5px; color: grey; font-style: normal;"> {tech}</i>
+                ))}
+              </div>
+              <p style="margin: 0.7rem 0">{x.description}</p>
+            </div>
+          ))
+      }
+      <p>
+        <a href="/projects" style="color: var(--text-primary-green-color); border-bottom-width: 0"> all projects ↗ </a>
+      </p>
     </div>
 
     <!-- <p> -->

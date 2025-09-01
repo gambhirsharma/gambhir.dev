@@ -5,8 +5,14 @@ export const HomeData: HomePageData = {
     {
       title: 'OnFly Image Optimization',
       description: 'An self host image optmimization',
-      techstack: ['Nextjs'],
-      url: 'https://gambhir.dev',
+      techstack: ['Nextjs', 'k8s', 'TypeScipt'],
+      url: 'https://github.com/gambhirsharma/OnFly-Image-Optimization',
+    },
+    {
+      title: 'craft.gambhir.dev',
+      description: 'Crative coding, codepen that I created',
+      techstack: ['PUG', 'SASS', 'Style'],
+      url: 'https://craft.gambhir.dev',
     },
   ],
   work: [
