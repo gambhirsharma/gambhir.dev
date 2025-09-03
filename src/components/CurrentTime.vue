@@ -20,7 +20,7 @@ export default {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false,
+        hour12: true,
       }).format(new Date())
     },
     updateTime() {
@@ -53,5 +53,6 @@ div {
   /*background-color: #161b22;*/
   /*  color: #42b983;*/
   margin: 0;
+  text-transform: uppercase;
 }
 </style>
