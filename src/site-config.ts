@@ -4,7 +4,7 @@ export const siteConfig = {
   subtitle: 'presonal blog',
   description: 'Personal website and blog of Gambhir Sharma',
   image: {
-    src: '/hero.jpg',
+    src: '/OG.png',
     alt: 'Website Main Image',
   },
   email: 'gambhir786191ss@gmail.com',
