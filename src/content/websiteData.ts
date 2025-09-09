@@ -16,15 +16,15 @@ export const HomeData: HomePageData = {
     },
   ],
   work: [
-    // {
-    //   title: 'CGI',
-    //   position: 'DevOps Intern',
-    //   duration: {
-    //     start: new Date('2025-09-01'),
-    //     end: 'Present',
-    //   },
-    //   description: 'got hand on experience on production scale kubernetes cluster',
-    // },
+    {
+      title: 'CGI',
+      position: 'DevOps Intern',
+      duration: {
+        start: new Date('2025-09-01'),
+        end: 'Present',
+      },
+      description: 'got hand on experience on production scale kubernetes cluster',
+    },
     {
       title: 'MIMPI',
       position: 'Sofrware Engineer Intern',
