@@ -7,7 +7,8 @@ export const siteConfig = {
     src: '/OG.png',
     alt: 'Website Main Image',
   },
-  email: 'gambhir786191ss@gmail.com',
+  email: 'gambhiritaly@gmail.com',
+  emailDisplay: 'gambhir<country of 🍕>@gmail.com',
   socialLinks: [
     {
       text: 'GitHub',
