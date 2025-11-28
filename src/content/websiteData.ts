@@ -4,7 +4,7 @@ export const HomeData: HomePageData = {
   project: [
     {
       title: 'OnFly Image Optimization',
-      description: 'an self host image optmimization',
+      description: 'a self-hosted image optimization service',
       techstack: ['Nextjs', 'k8s', 'TypeScipt'],
       url: 'https://github.com/gambhirsharma/OnFly-Image-Optimization',
     },

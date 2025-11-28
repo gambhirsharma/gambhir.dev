@@ -6,21 +6,33 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'gambhir.dev',
-        description: 'Personal website',
+        description: 'personal website',
         icon: 'i-carbon-campsite',
         href: '/',
       },
       {
-        text: 'Repocraft',
-        description: 'Project Starting template generator',
-        icon: 'i-lucide-columns-settings',
-        href: '/',
+        text: 'craft.gambhir.dev',
+        description: 'crative coding, codepen',
+        icon: 'i-hugeicons-blush-brush-02',
+        href: 'https://craft.gambhir.dev',
+      },
+      // {
+      //   text: 'Repocraft',
+      //   description: 'Project Starting template generator',
+      //   icon: 'i-lucide-columns-settings',
+      //   href: '/',
+      // },
+      {
+        text: 'WATFU',
+        description: 'what food to eat',
+        icon: 'i-fluent-food-16-regular',
+        href: 'https://github.com/gambhirsharma/WATFU',
       },
       {
-        text: 'Supabase On Fly Image',
-        description: 'Optimize you image on go!!',
-        icon: 'i-lucide-images',
-        href: '/',
+        text: 'pushup.gambhir.dev',
+        description: 'keep track of your daily pushups',
+        icon: 'i-mingcute-fitness-line',
+        href: 'https://github.com/gambhirsharma/pushup.gambhir.dev',
       },
     ],
   },
@@ -29,7 +41,7 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'Analyse NFT Network',
-        description: 'This Repo is a Data Science Project that Analyse the NFT network.',
+        description: 'analyse nft network',
         icon: 'i-ri-nft-line',
         href: 'https://github.com/gambhirsharma/NFT-Data-Analytics',
       },
@@ -52,13 +64,13 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'Vercel Clone',
-        description: 'Deploy your React/Nextjs project',
+        description: 'deploy your react/nextjs project',
         icon: 'i-lucide-server-cog',
         href: 'https://github.com/gambhirsharma/vercel-clone',
       },
       {
         text: 'Supabase On Fly Image',
-        description: 'Optimize you image on go!!',
+        description: 'self-hosted image optimization service',
         icon: 'i-lucide-images',
         href: '/',
       },
@@ -69,13 +81,13 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'On-the-Fly Image Processing',
-        description: 'Use AWS CDK to build an on-the-fly Image Processing',
+        description: 'image processing build with aws cdk',
         icon: 'i-ri-image-ai-line',
         href: '/',
       },
       {
         text: 'Serverless web-scrapping',
-        description: 'Web-scrapping for Lazio Disco website',
+        description: 'web-scrapping for lazio disco website',
         icon: 'i-ri-macbook-line',
         href: 'https://github.com/gambhirsharma/lazio-disco-bot/tree/main/lazio-serverless',
       },
@@ -98,7 +110,7 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'Vesper.nvim',
-        description: 'A NeoVim colorscheme inspired by Vesper theme for VSCode',
+        description: 'neovim colorscheme',
         icon: 'i-ri-brush-4-line',
         href: 'https://github.com/gambhirsharma/vesper.nvim',
       },

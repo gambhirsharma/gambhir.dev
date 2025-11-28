@@ -68,5 +68,8 @@ export default defineConfig({
     'i-lucide-columns-settings',
     'i-lucide-images',
     'i-lucide-server-cog',
+    'i-mingcute-fitness-line',
+    'i-fluent-food-16-regular',
+    'i-hugeicons-blush-brush-02',
   ],
 })
