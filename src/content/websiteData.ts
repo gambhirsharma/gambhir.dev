@@ -18,7 +18,7 @@ export const HomeData: HomePageData = {
   work: [
     {
       title: 'CGI',
-      position: 'devops engineer',
+      position: 'devops eng',
       duration: {
         start: new Date('2025-09-01'),
         end: 'present',
