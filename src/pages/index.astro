@@ -115,14 +115,14 @@ import { HomeData } from '@/content/websiteData'
           HomeData.work.map((x) => (
             <div style="all:unset;">
               <h4>
-                {x.duration.end === 'Present' && <i style="color:var(--text-primary-green-color">*</i>}
+                {x.duration.end === 'present' && <i style="color:var(--text-primary-green-color">*</i>}
                 {x.title}
               </h4>
               <i style="font-style:unset; color: grey">
                 {x.position} (
                 {x.duration.start instanceof Date ? x.duration.start.toISOString().slice(0, 7) : x.duration.start}
                 {' ⋅ '}
-                {x.duration.end === 'Present'
+                {x.duration.end === 'present'
                   ? 'Present'
                   : x.duration.end instanceof Date
                     ? x.duration.end.toISOString().slice(0, 7)

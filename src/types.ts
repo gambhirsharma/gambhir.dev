@@ -30,7 +30,7 @@ export interface HomePageData {
     position: string
     duration: {
       start: Date
-      end: Date | 'Present'
+      end: Date | 'present'
     }
     description: string
   }>

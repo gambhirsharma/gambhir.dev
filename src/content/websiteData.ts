@@ -18,30 +18,30 @@ export const HomeData: HomePageData = {
   work: [
     {
       title: 'CGI',
-      position: 'DevOps Intern',
+      position: 'devops engineer',
       duration: {
         start: new Date('2025-09-01'),
-        end: 'Present',
+        end: 'present',
       },
       description: 'got hand on experience on production scale kubernetes cluster',
     },
     {
       title: 'MIMPI',
-      position: 'Sofrware Engineer Intern',
+      position: 'swe intern',
       duration: {
         start: new Date('2025-04-01'),
         end: new Date('2025-06-01'),
       },
-      description: 'worked on the Flutter & Full stack website',
+      description: 'worked on the flutter & full stack website',
     },
     {
       title: 'RepoCraft',
-      position: 'Software Engineer',
+      position: 'swe',
       duration: {
         start: new Date('2023-06-01'),
         end: new Date('2024-02-01'),
       },
-      description: 'contributed to repoCraft, enhancing both frontend and backend',
+      description: 'contributed to repocraft, enhancing both frontend and backend',
     },
 
   ],
