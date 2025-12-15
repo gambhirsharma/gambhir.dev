@@ -35,3 +35,15 @@ export interface HomePageData {
     description: string
   }>
 }
+
+export interface OpenSourceContribution {
+  repo: string
+  repoUrl: string
+  prTitle: string
+  techStack: string[]
+  prNumber: number
+  prUrl: string
+  status: 'merged' | 'open' | 'closed'
+}
+
+export type OpenSourceData = OpenSourceContribution[]

@@ -1,0 +1,136 @@
+---
+import { openSourceData } from './data'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import siteConfig from '@/site-config'
+
+const getStatusIcon = (status: string) => {
+  switch (status) {
+    case 'merged':
+      return '✅'
+    case 'open':
+      return '🟡'
+    case 'closed':
+      return '❌'
+    default:
+      return '⚪'
+  }
+}
+
+const getStatusText = (status: string) => {
+  return status.charAt(0).toUpperCase() + status.slice(1)
+}
+---
+
+<BaseLayout title="Open Source" description="Open source contributions by Gambhir Sharma">
+  <div class="container py-8 prose">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-2">
+      Open Source Contributions
+      <!-- <a href={siteConfig.socialLinks[0].href} target="_blank"> Gambhir Sharma </a> -->
+    </h1>
+    <!-- <p class="text-gray-500 mb-8"> -->
+    <!-- Pull requests and contributions to open source projects by{' '} -->
+    <!-- </p> -->
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="border-b border-gray-700">
+            <th class="text-left py-3 pr-3 text-gray-500 font-medium">Repo</th>
+            <th class="text-left py-3 px-3 text-gray-500 font-medium">PR Title</th>
+            <th class="text-left py-3 px-3 text-gray-500 font-medium">Tech Stack</th>
+            <th class="text-left py-3 px-3 text-gray-500 font-medium">PR Link</th>
+            <th class="text-left py-3 pl-3 text-gray-500 font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            openSourceData.map((contribution, index) => (
+              <tr
+                class={`border-b border-gray-800 hover:bg-gray-800/30 transition-colors ${index % 2 === 0 ? 'bg-gray-900/10' : ''}`}
+              >
+                <td class="py-3 pr-3">
+                  <a href={contribution.repoUrl} target="_blank" class="hover:underline font-medium">
+                    {contribution.repo}
+                  </a>
+                </td>
+                <td class="py-3 px-3 text-gray-400">
+                  <span class="line-clamp-2">{contribution.prTitle}</span>
+                </td>
+                <td class="py-3 px-3">
+                  <div class="flex flex-wrap gap-1">
+                    {contribution.techStack.map((tech) => (
+                      <span class="text-xs px-2 py-0.5 bg-gray-800 rounded text-gray-400">{tech}</span>
+                    ))}
+                  </div>
+                </td>
+                <td class="py-3 px-3 whitespace-nowrap">
+                  <a href={contribution.prUrl} target="_blank" class="hover:underline text-gray-400">
+                    #{contribution.prNumber}
+                  </a>
+                </td>
+                <td class="py-3 pl-3 whitespace-nowrap">
+                  <span class="inline-flex items-center gap-1 text-sm text-gray-400">
+                    {getStatusIcon(contribution.status)} {getStatusText(contribution.status)}
+                  </span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden space-y-4">
+      {
+        openSourceData.map((contribution) => (
+          <div class="border border-gray-800 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-3">
+              <a href={contribution.repoUrl} target="_blank" class="hover:underline font-medium text-lg">
+                {contribution.repo}
+              </a>
+              <span class="inline-flex items-center gap-1 text-sm text-gray-400">
+                {getStatusIcon(contribution.status)} {getStatusText(contribution.status)}
+              </span>
+            </div>
+
+            <p class="text-gray-400 mb-3">{contribution.prTitle}</p>
+
+            <div class="flex flex-wrap gap-1 mb-3">
+              {contribution.techStack.map((tech) => (
+                <span class="text-xs px-2 py-1 bg-gray-800 rounded text-gray-400">{tech}</span>
+              ))}
+            </div>
+
+            <a href={contribution.prUrl} target="_blank" class="hover:underline text-sm text-gray-500">
+              View PR #{contribution.prNumber} →
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="mt-12">
+      <div class="flex flex-wrap justify-center gap-8 text-sm text-gray-500">
+        <div>
+          <span class="text-2xl font-bold text-gray-300">{openSourceData.length}</span>
+          <span class="ml-2">Total PRs</span>
+        </div>
+        <div>
+          <span class="text-2xl font-bold text-gray-300">
+            {openSourceData.filter((c) => c.status === 'merged').length}
+          </span>
+          <span class="ml-2">Merged</span>
+        </div>
+        <div>
+          <span class="text-2xl font-bold text-gray-300">
+            {openSourceData.filter((c) => c.status === 'open').length}
+          </span>
+          <span class="ml-2">Open</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
