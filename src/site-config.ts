@@ -9,6 +9,10 @@ export const siteConfig = {
   },
   email: 'gambhiritaly@gmail.com',
   emailDisplay: 'gambhir<country of 🍕>@gmail.com',
+  location: {
+    place: 'Rome, Italy',
+    timeZone: 'Europe/Rome',
+  },
   socialLinks: [
     {
       text: 'GitHub',

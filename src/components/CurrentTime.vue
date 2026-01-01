@@ -1,6 +1,12 @@
 <script>
 export default {
-  name: 'RomeTime',
+  name: 'CurrentTime',
+  props: {
+    timeZone: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       romeTime: this.getRomeTime(),
@@ -16,7 +22,7 @@ export default {
   methods: {
     getRomeTime() {
       return new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Europe/Rome',
+        timeZone: this.timeZone,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
