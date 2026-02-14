@@ -1,13 +1,15 @@
 ---
 import CurrentTime from '@/components/CurrentTime.vue'
+import LocationMap from '@/components/LocationMap.vue'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
+import mapLocations from '@/data/map-locations'
 ---
 
 <BaseLayout description={siteConfig.description}>
   <article class="prose">
-    <p>~/Full-Stack Developer</p>
+    <!-- <p>~/F</p> -->
     <div class="intro-section">
       <h1 class="text-title">GAMBHIR SHARMA</h1>
       <div class="intro-list">
@@ -79,30 +81,27 @@ import { HomeData } from '@/content/websiteData'
         </span>
       </div>
       <p>
-        I’m an undergraduate student at
-        <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata"
-          >University of Rome Tor Vergata</a
-        > & <b> Fullstack developer</b>.
+        undergrad student at
+        <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata">tor vergata</a> with a passion
+        to build stuff, & strong advocate for free open-source software. &nbsp;
         <!-- Spend most my time capturing -->
         <!-- <a target="_blank" href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)"> flags </a> -->
         <!-- at -->
         <!-- <a target="_blank" href="https://cyberchallenge.it/">cyberchallenge.it</a> -->
         <!-- with my minimal NeoVim <a target="_blank" href="https://github.com/gambhirsharma/nvim"> config</a>. -->
-        Currently i work as a DevOps engineer at CGI, where I manage Kubernetes clusters.
+        working as devops eng scaling earth observatory <a target="_blank" href="https://insula.earth">insula.earth</a> at
+        CGI, frascati.&nbsp; btw i use neovim
       </p>
     </div>
-    <p>
-      <img width="640" height="360" src="/wave.png" alt="Hero Image" />
-    </p>
-    <p>
-      I am passionate about building stuff & optimizing it. I have worked at
-      <a target="_blank" href="https://repocraft.com">Repocraft</a> and
-      <a target="_blank" href="https://www.linkedin.com/in/gambhir-sharma/">MIMPI</a> as a Full-Stack Developer. Also being
-      a Open Source enthusiast, I love contributing to open source projects check <a
-        href="https://gambhirsharma"
-        target="_blank">my GitHub</a
-      > for more.
-    </p>
+    <div class="map-container">
+      <LocationMap
+        client:only="vue"
+        currentLocation={mapLocations.currentLocation}
+        places={mapLocations.places}
+        zoom={5}
+      />
+    </div>
+    <p></p>
     <!-- <p> -->
     <!--   I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges. -->
     <!--   I am a quick learner and I love to work in a team. Here is <a -->
@@ -238,5 +237,16 @@ import { HomeData } from '@/content/websiteData'
       align-items: center;
       gap: 0.5rem;
     }
+  }
+
+  .map-container {
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, #e5e7eb);
+  }
+
+  :global(html.dark) .map-container {
+    border-color: #374151;
   }
 </style>
