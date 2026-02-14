@@ -4,7 +4,7 @@ export const HomeData: HomePageData = {
   project: [
     {
       title: 'OnFly Image Optimization',
-      description: 'a self-hosted image optimization service',
+      description: 'a self-hosted onfly image optimization service',
       techstack: ['Nextjs', 'k8s', 'TypeScipt'],
       url: 'https://github.com/gambhirsharma/OnFly-Image-Optimization',
     },
@@ -23,7 +23,7 @@ export const HomeData: HomePageData = {
         start: new Date('2025-09-01'),
         end: 'present',
       },
-      description: 'got hand on experience on production scale kubernetes cluster',
+      description: 'scaling earth observation platforms',
     },
     {
       title: 'MIMPI',
@@ -36,12 +36,12 @@ export const HomeData: HomePageData = {
     },
     {
       title: 'RepoCraft',
-      position: 'swe',
+      position: 'swe | web-dev',
       duration: {
         start: new Date('2023-06-01'),
         end: new Date('2024-02-01'),
       },
-      description: 'contributed to repocraft, enhancing both frontend and backend',
+      description: 'all-in-one dependency installer',
     },
 
   ],
