@@ -65,6 +65,12 @@ export const mapLocations: MapLocationsData = {
       lng: 88.3639,
       category: 'visited',
     },
+    {
+      name: 'Prague, Czech Republic',
+      lat: 50.0755,
+      lng: 14.4378,
+      category: 'visited',
+    },
 
     // Places I want to visit
     {
