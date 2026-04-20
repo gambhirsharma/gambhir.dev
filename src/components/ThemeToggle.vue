@@ -35,7 +35,7 @@ function toggleTheme(event: MouseEvent) {
     return
   }
 
-  // @ts-expect-error: Transition API
+  // @ts-expect-error experimental API
   const transition = document.startViewTransition(async () => {
     toggleDark()
   })
@@ -52,6 +52,7 @@ function toggleTheme(event: MouseEvent) {
       {
         duration: 400,
         easing: 'ease-in',
+        fill: 'forwards',
         pseudoElement: isDark.value
           ? '::view-transition-old(root)'
           : '::view-transition-new(root)',
