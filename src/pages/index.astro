@@ -111,25 +111,32 @@ import mapLocations from '@/data/map-locations'
     <!--     my CV</a -->
     <!--   > -->
     <!-- </p> -->
-    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-      <i>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-briefcase-business"
-          ><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path
-            d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg
-        >
-      </i>
-      work
-    </h2>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <i>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-briefcase-business"
+            ><path d="M12 12h.01"></path><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><path
+              d="M22 13a18.15 18.15 0 0 1-20 0"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg
+          >
+        </i>
+        work
+      </h2>
+      <small
+        style="padding: 8px 8px; border-radius: 4px; background-color: var(--current_time_bg-color); color: var(--current_time_text-color); text-transform: uppercase;"
+      >
+        Open to work!</small
+      >
+    </div>
     <div style="all: none; padding-left: 0; margin-botton: 15px;">
       {
         HomeData.work.length > 0 &&
