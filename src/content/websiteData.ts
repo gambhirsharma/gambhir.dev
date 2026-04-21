@@ -18,10 +18,10 @@ export const HomeData: HomePageData = {
   work: [
     {
       title: 'CGI',
-      position: 'devops eng',
+      position: 'devops eng space',
       duration: {
         start: new Date('2025-09-01'),
-        end: 'present',
+        end: new Date('2026-03-31'),
       },
       description: 'scaling earth observation platforms',
     },
