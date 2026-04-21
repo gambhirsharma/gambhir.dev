@@ -135,10 +135,10 @@ import mapLocations from '@/data/map-locations'
         HomeData.work.length > 0 &&
           HomeData.work.map((x) => (
             <div style="all:unset;">
-              <h4>
+              <h3>
                 {x.duration.end === 'present' && <i style="color:var(--text-primary-green-color">*</i>}
                 {x.title}
-              </h4>
+              </h3>
               <i style="font-style:unset; color: grey">
                 {x.position} (
                 {x.duration.start instanceof Date ? x.duration.start.toISOString().slice(0, 7) : x.duration.start}
@@ -181,11 +181,11 @@ import mapLocations from '@/data/map-locations'
         HomeData.project.length > 0 &&
           HomeData.project.map((x) => (
             <div style="all:unset;">
-              <h4>
+              <h3>
                 <a href={x.url} target="_blank" class="prose-link">
                   {x.title}
                 </a>
-              </h4>
+              </h3>
               <div>
                 {x.techstack.map((tech) => (
                   <i style="margin-right: 5px; color: grey; font-style: normal;"> {tech}</i>
