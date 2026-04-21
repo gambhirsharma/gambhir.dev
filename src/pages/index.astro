@@ -30,7 +30,7 @@ import mapLocations from '@/data/map-locations'
                 d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
               ></path><circle cx="12" cy="10" r="3"></circle></svg
             >
-          </div>{siteConfig.location.place}
+          </div>{siteConfig.location.place.toLowerCase()}
           <div><CurrentTime client:load timeZone={siteConfig.location.timeZone} /></div>
         </span>
         <span
@@ -76,7 +76,7 @@ import mapLocations from '@/data/map-locations'
             >
           </div>
           <a href="/CV.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank" class="prose-link">
-            <i> Curriculum Vitae </i>
+            <i> curriculum vitae </i>
           </a>
         </span>
       </div>
@@ -89,8 +89,8 @@ import mapLocations from '@/data/map-locations'
         <!-- at -->
         <!-- <a target="_blank" href="https://cyberchallenge.it/">cyberchallenge.it</a> -->
         <!-- with my minimal NeoVim <a target="_blank" href="https://github.com/gambhirsharma/nvim"> config</a>. -->
-        working as devops eng scaling earth observatory <a target="_blank" href="https://insula.earth">insula.earth</a> at
-        CGI, frascati.&nbsp; btw i use neovim
+        finished internship at <a target="_blank" href="https://www.cgi.com/en">CGI</a> as devops eng scaling earth observatory
+        <a target="_blank" href="https://insula.earth">insula.earth</a> at CGI, frascati.&nbsp; btw i use neovim
       </p>
     </div>
     <div class="map-container">
