@@ -71,6 +71,12 @@ export const mapLocations: MapLocationsData = {
       lng: 14.4378,
       category: 'visited',
     },
+    {
+      name: 'Thessaloniki, Greece',
+      lat: 40.6401,
+      lng: 22.9444,
+      category: 'visited',
+    },
 
     // Places I want to visit
     {
