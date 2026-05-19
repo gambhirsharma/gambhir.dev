@@ -71,5 +71,10 @@ export default defineConfig({
     'i-mingcute-fitness-line',
     'i-fluent-food-16-regular',
     'i-hugeicons-blush-brush-02',
+    'i-ri-chat-ai-line',
+    'i-ri-contrast-2-line',
+    'i-ri-home-line',
+    'i-ri-magic-line',
+    'i-ri-palette-line',
   ],
 })
