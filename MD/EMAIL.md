@@ -84,3 +84,49 @@ Outbound:     │
 - **Email address:** hey@gambhir.dev
 - **Inbound:** Cloudflare Email Routing → Gmail
 - **Outbound:** Gmail → Resend SMTP → Internet
+
+## Email Signature
+
+HTML email signature lives at:
+
+```
+public/email-footer.html
+```
+
+Raw `<table>` block — no wrapper HTML. To use in Gmail:
+1. Open file in browser
+2. Select all → copy
+3. Paste into Gmail → Settings → General → Signature editor
+
+Image references `https://gambhir.dev/me.png` (must be deployed to be visible in recipients' clients).
+
+## Updates
+
+### 2026-05 — Migrated from Cloudflare to Spaceship NS
+
+Nameservers moved back from **Cloudflare** to **Spaceship**. DNS is now managed directly through Spaceship.
+
+Email forwarding switched from **Cloudflare Email Routing** to **Spaceship Email Forwarding**.
+
+- `hey@gambhir.dev` → personal Gmail (via Spaceship forwarder)
+- No longer using Cloudflare for DNS or inbound mail routing
+- Resend SMTP still used for outbound sending via Gmail "Send mail as"
+
+Updated flow:
+
+```
+Inbound:  somebody@example.com
+              ↓
+  Spaceship Email Forwarding
+              ↓
+      hey@gambhir.dev
+              ↓
+       Gmail Inbox
+              │
+Outbound:     │
+    Gmail (Send as)
+       ↓
+  Resend SMTP
+       ↓
+  recipient@example.com
+```
