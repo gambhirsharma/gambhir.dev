@@ -7,8 +7,8 @@ export const siteConfig = {
     src: '/OG.png',
     alt: 'Website Main Image',
   },
-  email: 'gambhiritaly@gmail.com',
-  emailDisplay: 'gambhir<country of 🍕>@gmail.com',
+  email: 'hey@gambhir.dev',
+  emailDisplay: 'hey@gambhir.dev',
   location: {
     place: 'Rome, Italy',
     timeZone: 'Europe/Rome',
