@@ -1,0 +1,144 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import siteConfig from '@/site-config'
+
+const socials = [
+  ...siteConfig.socialLinks.map((l) => ({ ...l, external: true, display: l.href.replace('https://', '') })),
+  {
+    text: 'CodePen',
+    href: 'https://www.codepen.io/gambhirsharma',
+    icon: 'i-simple-icons-codepen',
+    external: true,
+    display: 'codepen.io/gambhirsharma',
+  },
+  {
+    text: 'Mastodon',
+    href: 'https://mastodon.social/@gambhir',
+    icon: 'i-simple-icons-mastodon',
+    external: true,
+    display: '@gambhir@mastodon.social',
+  },
+  {
+    text: 'Discord',
+    href: 'https://discord.com',
+    icon: 'i-simple-icons-discord',
+    external: true,
+    display: 'gambhir_sharma',
+  },
+  {
+    text: 'Bluesky',
+    href: 'https://bsky.app/profile/gambhirsharma.bsky.social',
+    icon: 'i-simple-icons-bluesky',
+    external: true,
+    display: 'gambhirsharma.bsky.social',
+  },
+]
+
+const emails = [
+  {
+    text: 'Email',
+    href: `mailto:${siteConfig.email}`,
+    icon: 'i-ri-mail-line',
+    external: false,
+    display: siteConfig.email,
+  },
+  {
+    text: 'Uni Email',
+    href: 'mailto:gambhir.sharma@students.uniroma2.eu',
+    icon: 'i-ri-graduation-cap-line',
+    external: false,
+    display: 'gambhir.sharma@students.uniroma2.eu',
+  },
+]
+---
+
+<BaseLayout title="Social">
+  <article class="prose">
+    <h1>find me</h1>
+    <div class="social-list">
+      {
+        socials.map((link) => (
+          <div>
+            <a
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener noreferrer' : undefined}
+              class="social-link"
+            >
+              <i class:list={[link.icon, 'social-icon']} />
+              <span class="social-label">{link.text}</span>
+              <span class="social-url">{link.display}</span>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+    <hr class="hr-line" />
+    <div class="social-list">
+      {
+        emails.map((link) => (
+          <div>
+            <a href={link.href} class="social-link">
+              <i class:list={[link.icon, 'social-icon']} />
+              <span class="social-label">{link.text}</span>
+              <span class="social-url">{link.display}</span>
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .social-list {
+    padding: 0;
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    text-decoration: none !important;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .social-link:hover {
+    border-color: var(--text-primary-green-color);
+    background-color: var(--current_time_bg-color);
+  }
+
+  .social-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    color: var(--text-primary-green-color);
+  }
+
+  .social-label {
+    font-weight: 500;
+    min-width: 5rem;
+  }
+
+  .social-url {
+    color: grey;
+    font-size: 0.875rem;
+    margin-left: auto;
+  }
+
+  :global(html.dark) .social-link {
+    border-color: #374151;
+  }
+
+  :global(html.dark) .social-link:hover {
+    border-color: var(--text-primary-green-color);
+  }
+</style>
