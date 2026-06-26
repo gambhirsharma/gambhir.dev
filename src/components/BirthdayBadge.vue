@@ -15,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <small v-if="show" style="padding: 4px 8px; border-radius: 4px; background-color: var(--current_time_bg-color); color: var(--current_time_text-color); text-transform: uppercase; margin-left: 0.6rem; vertical-align: middle; font-size: 0.6rem; letter-spacing: 0.05em;">
-    🎂 birthday
-  </small>
+  <medium v-if="show" style="padding: 4px 8px; border-radius: 4px; background-color: var(--current_time_bg-color); color: var(--current_time_text-color); text-transform: uppercase; margin-left: 0.6rem; vertical-align: middle; font-size: 0.6rem; letter-spacing: 0.05em;">
+    🎈 Birthday 🎈
+  </medium>
 </template>
