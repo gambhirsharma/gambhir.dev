@@ -31,6 +31,7 @@
     "@astrojs/vue": "^5.1.0",
     "@unocss/reset": "^0.61.9",
     "astro": "^5.11.0",
+    "canvas-confetti": "^1.9.4",
     "leaflet": "^1.9.4",
     "nprogress": "^0.2.0",
     "unocss": "^0.61.9",
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^2.27.3",
     "@iconify/json": "^2.2.336",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/leaflet": "^1.9.21",
     "@types/lodash-es": "^4.17.12",
     "@types/nprogress": "^0.2.3",

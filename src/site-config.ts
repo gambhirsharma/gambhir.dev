@@ -1,5 +1,6 @@
 export const siteConfig = {
   author: 'Gambhir Sharma ⚡',
+  birthday: '2004-02-20',
   title: 'Gambhir Sharma',
   subtitle: 'presonal blog',
   description: 'Personal website and blog of Gambhir Sharma',
