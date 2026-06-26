@@ -1,6 +1,7 @@
 ---
 import CurrentTime from '@/components/CurrentTime.vue'
 import LocationMap from '@/components/LocationMap.vue'
+import BirthdayBalloons from '@/components/BirthdayBalloons.vue'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
@@ -8,6 +9,7 @@ import mapLocations from '@/data/map-locations'
 ---
 
 <BaseLayout description={siteConfig.description}>
+  <BirthdayBalloons client:load birthday={siteConfig.birthday} />
   <article class="prose">
     <!-- <p>~/F</p> -->
     <div class="intro-section">

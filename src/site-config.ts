@@ -1,5 +1,7 @@
 export const siteConfig = {
   author: 'Gambhir Sharma ⚡',
+  // real birthday: '2004-02-20'; set to today for testing
+  birthday: '2026-06-26',
   title: 'Gambhir Sharma',
   subtitle: 'presonal blog',
   description: 'Personal website and blog of Gambhir Sharma',
