@@ -16,12 +16,12 @@ export const projectData: ProjectData = [
         icon: 'i-ri-palette-line',
         href: 'https://craft.gambhir.dev',
       },
-      // {
-      //   text: 'Repocraft',
-      //   description: 'Project Starting template generator',
-      //   icon: 'i-lucide-columns-settings',
-      //   href: '/',
-      // },
+      {
+        text: 'Ditch',
+        description: 'multi-platform streaming service',
+        icon: 'i-ri-broadcast-line',
+        href: 'https://gambhir.dev/deck',
+      },
       {
         text: 'WATFU',
         description: 'what food to eat',

@@ -65,7 +65,7 @@ export default defineConfig({
     'i-ri-macbook-line',
     'i-ri-nft-line',
     'i-hugeicons-arrow-right-02',
-    'i-lucide-columns-settings',
+    'i-ri-broadcast-line',
     'i-lucide-images',
     'i-lucide-server-cog',
     'i-mingcute-fitness-line',
