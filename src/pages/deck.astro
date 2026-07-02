@@ -1,0 +1,72 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+
+const pdf = '/Ditch_Deck.pdf'
+---
+
+<BaseLayout title="Deck" description="Ditch Deck">
+  <div class="deck">
+    <div class="deck-header">
+      <h1 class="deck-title">Deck</h1>
+      <a class="deck-download" href={pdf} download>Download PDF</a>
+    </div>
+
+    <object data={pdf} type="application/pdf" class="deck-frame">
+      <iframe src={pdf} class="deck-frame" title="Deck"></iframe>
+      <p class="deck-fallback">
+        Can't display PDF. <a href={pdf} download>Download it here</a>.
+      </p>
+    </object>
+  </div>
+</BaseLayout>
+
+<style>
+  .deck {
+    width: 100%;
+  }
+
+  .deck-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .deck-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .deck-download {
+    font-size: 0.875rem;
+    color: var(--text-primary-green-color);
+    text-decoration: none !important;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    padding: 0.4rem 0.9rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .deck-download:hover {
+    border-color: var(--text-primary-green-color);
+  }
+
+  .deck-frame {
+    width: 100%;
+    height: 80vh;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+  }
+
+  .deck-fallback {
+    padding: 2rem;
+    text-align: center;
+  }
+
+  :global(html.dark) .deck-download,
+  :global(html.dark) .deck-frame {
+    border-color: #374151;
+  }
+</style>
