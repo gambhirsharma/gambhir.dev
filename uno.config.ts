@@ -68,6 +68,7 @@ export default defineConfig({
     'i-ri-broadcast-line',
     'i-lucide-images',
     'i-lucide-server-cog',
+    'i-lucide-radar',
     'i-mingcute-fitness-line',
     'i-fluent-food-16-regular',
     'i-hugeicons-blush-brush-02',

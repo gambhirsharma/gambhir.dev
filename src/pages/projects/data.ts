@@ -40,6 +40,12 @@ export const projectData: ProjectData = [
     title: 'K8s',
     projects: [
       {
+        text: 'ISAC-k8s',
+        description: 'about distributed 6G ISAC sensing fleet on kubeedge',
+        icon: 'i-lucide-radar',
+        href: 'https://github.com/gambhirsharma/ISAC-k8s',
+      },
+      {
         text: 'Vercel Clone',
         description: 'deploy your react/nextjs project',
         icon: 'i-lucide-server-cog',
