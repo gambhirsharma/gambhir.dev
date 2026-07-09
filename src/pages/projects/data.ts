@@ -41,7 +41,7 @@ export const projectData: ProjectData = [
     projects: [
       {
         text: 'ISAC-k8s',
-        description: 'about distributed 6G ISAC sensing fleet on kubeedge',
+        description: 'distributed 6G ISAC sensing fleet on kubeedge',
         icon: 'i-lucide-radar',
         href: 'https://github.com/gambhirsharma/ISAC-k8s',
       },

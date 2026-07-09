@@ -3,8 +3,14 @@ import type { HomePageData } from '@/types'
 export const HomeData: HomePageData = {
   project: [
     {
+      title: 'ISAC-k8s',
+      description: 'distributed 6G ISAC sensing fleet on kubeedge',
+      techstack: ['k8s', 'gRPC', 'golang'],
+      url: 'https://github.com/gambhirsharma/ISAC-k8s',
+    },
+    {
       title: 'OnFly Image Optimization',
-      description: 'a self-hosted onfly image optimization service',
+      description: 'self-hosted onfly image optimization service',
       techstack: ['Nextjs', 'k8s', 'TypeScipt'],
       url: 'https://github.com/gambhirsharma/OnFly-Image-Optimization',
     },
