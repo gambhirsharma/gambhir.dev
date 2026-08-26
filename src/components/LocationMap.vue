@@ -21,8 +21,9 @@ let pulseMarker: L.CircleMarker | null = null
 const placeMarkers: L.CircleMarker[] = []
 
 // Minimal tile layers - using CartoDB Positron/Dark Matter for clean, minimal look
-const lightTileUrl = 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png'
-const darkTileUrl = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
+const cartoApiKey = import.meta.env.PUBLIC_MAP_API_KEY
+const lightTileUrl = `https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png?key=${cartoApiKey}`
+const darkTileUrl = `https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png?key=${cartoApiKey}`
 
 function getTileUrl() {
   return isDark.value ? darkTileUrl : lightTileUrl

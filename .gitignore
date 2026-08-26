@@ -5,3 +5,6 @@ node_modules
 .eslintcache
 *.log
 .vercel
+.env
+.env.*
+!.env.example
