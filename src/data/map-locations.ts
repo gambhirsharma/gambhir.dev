@@ -188,6 +188,12 @@ export const mapLocations: MapLocationsData = {
       lng: -86.2362,
       category: 'wishlist',
     },
+    {
+      name: 'Wellington, New Zealand',
+      lat: -41.2924,
+      lng: 174.7787,
+      category: 'wishlist',
+    },
 
   ],
 }
