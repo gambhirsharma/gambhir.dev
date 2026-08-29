@@ -110,15 +110,15 @@ export const mapLocations: MapLocationsData = {
       category: 'wishlist',
     },
     {
-      name: 'Ramallah, Palestine',
-      lat: 31.9038,
-      lng: 35.2034,
+      name: 'Wadi Rum, Jordan',
+      lat: 29.5731,
+      lng: 35.4206,
       category: 'wishlist',
     },
     {
-      name: 'Amman, Jordan',
-      lat: 31.9454,
-      lng: 35.9284,
+      name: 'Petra, Jordan',
+      lat: 30.3285,
+      lng: 35.4444,
       category: 'wishlist',
     },
     {
