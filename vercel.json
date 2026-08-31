@@ -1,0 +1,18 @@
+{
+  "redirects": [
+    { "source": "/github", "destination": "https://github.com/gambhirsharma", "permanent": true },
+    { "source": "/gihtub", "destination": "https://github.com/gambhirsharma", "permanent": true },
+    { "source": "/gihub", "destination": "https://github.com/gambhirsharma", "permanent": true },
+    { "source": "/gh", "destination": "https://github.com/gambhirsharma", "permanent": true },
+    { "source": "/twitter", "destination": "https://x.com/gambhir_sharma", "permanent": true },
+    { "source": "/x", "destination": "https://x.com/gambhir_sharma", "permanent": true },
+    { "source": "/linkedin", "destination": "https://www.linkedin.com/in/gambhir-sharma/", "permanent": true },
+    { "source": "/in", "destination": "https://www.linkedin.com/in/gambhir-sharma/", "permanent": true },
+    { "source": "/li", "destination": "https://www.linkedin.com/in/gambhir-sharma/", "permanent": true },
+    { "source": "/codepen", "destination": "https://www.codepen.io/gambhirsharma", "permanent": true },
+    { "source": "/mastodon", "destination": "https://mastodon.social/@gambhir", "permanent": true },
+    { "source": "/discord", "destination": "https://discord.com", "permanent": true },
+    { "source": "/bsky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true },
+    { "source": "/bluesky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true }
+  ]
+}

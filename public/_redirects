@@ -1,0 +1,15 @@
+# Short-link redirects for gambhir.dev — Cloudflare Pages / Netlify compatible
+/github  https://github.com/gambhirsharma  301
+/gihtub  https://github.com/gambhirsharma  301
+/gihub   https://github.com/gambhirsharma  301
+/gh      https://github.com/gambhirsharma  301
+/twitter https://x.com/gambhir_sharma  301
+/x       https://x.com/gambhir_sharma  301
+/linkedin https://www.linkedin.com/in/gambhir-sharma/ 301
+/in      https://www.linkedin.com/in/gambhir-sharma/ 301
+/li      https://www.linkedin.com/in/gambhir-sharma/ 301
+/codepen https://www.codepen.io/gambhirsharma 301
+/mastodon https://mastodon.social/@gambhir 301
+/discord https://discord.com 301
+/bsky    https://bsky.app/profile/gambhirsharma.bsky.social 301
+/bluesky https://bsky.app/profile/gambhirsharma.bsky.social 301
