@@ -32,6 +32,9 @@ export default defineConfig({
     // Bluesky
     '/bsky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
     '/bluesky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
+    // nvim minimal setup — short aliases for curl|bash
+    '/nvim': '/nvim-setup.sh',
+    '/nvim.sh': '/nvim-setup.sh',
   },
   integrations: [
     mdx(),

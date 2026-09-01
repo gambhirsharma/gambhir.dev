@@ -13,3 +13,5 @@
 /discord https://discord.com 301
 /bsky    https://bsky.app/profile/gambhirsharma.bsky.social 301
 /bluesky https://bsky.app/profile/gambhirsharma.bsky.social 301
+/nvim    /nvim-setup.sh 301
+/nvim.sh /nvim-setup.sh 301

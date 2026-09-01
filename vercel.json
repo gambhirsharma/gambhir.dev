@@ -13,6 +13,8 @@
     { "source": "/mastodon", "destination": "https://mastodon.social/@gambhir", "permanent": true },
     { "source": "/discord", "destination": "https://discord.com", "permanent": true },
     { "source": "/bsky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true },
-    { "source": "/bluesky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true }
+    { "source": "/bluesky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true },
+    { "source": "/nvim", "destination": "/nvim-setup.sh", "permanent": false },
+    { "source": "/nvim.sh", "destination": "/nvim-setup.sh", "permanent": false }
   ]
 }
