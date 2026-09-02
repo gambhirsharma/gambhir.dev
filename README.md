@@ -18,53 +18,55 @@ Personal website
 
 </details>
 
-## VPS — Minimal Neovim Setup
+## VPS Setup — Single Entrypoint
 
-Zero-plugin config for ssh/VPS. Two files: [`/minimal-init.lua`](./public/minimal-init.lua) (nvim) and [`/minimal-init.vimrc`](./public/minimal-init.vimrc) (vim). Installer backs up existing configs to `*.bak.<timestamp>`.
+All VPS config now lives in [`gambhirsharma/vps-setup`](https://github.com/gambhirsharma/vps-setup). This site only hosts a thin bootstrap that installs `git`, clones that repo, and delegates.
 
-### One-liner
-
-```bash
-curl -fsSL https://gambhir.dev/nvim-setup.sh | bash
-# short aliases
-curl -fsSL https://gambhir.dev/nvim | bash
-curl -fsSL https://gambhir.dev/nvim.sh | bash
-```
-
-Options:
+### One-liner (fresh VPS)
 
 ```bash
-curl -fsSL https://gambhir.dev/nvim-setup.sh | bash -s -- --help
-curl -fsSL https://gambhir.dev/nvim-setup.sh | bash -s -- --vim-only   # only ~/.vimrc
-curl -fsSL https://gambhir.dev/nvim-setup.sh | bash -s -- --nvim-only  # only ~/.config/nvim/init.lua
-curl -fsSL https://gambhir.dev/nvim-setup.sh | bash -s -- --fetch      # fetch latest from site instead of embedded
+curl -fsSL https://gambhir.dev/install.sh | bash
+# aliases (same file)
+curl -fsSL https://gambhir.dev/vps-setup.sh | bash
+curl -fsSL https://gambhir.dev/bootstrap.sh | bash
+curl -fsSL https://gambhir.dev/install | bash
+curl -fsSL https://gambhir.dev/nvim | bash          # legacy alias -> same
 ```
 
-What it does: installs `nvim` → `~/.config/nvim/init.lua` (`$XDG_CONFIG_HOME/nvim/init.lua`) and `vim` → `~/.vimrc`, also copies to `/tmp/minimal-init.lua` / `/tmp/minimal-init.vimrc` for `nvim -u /tmp/minimal-init.lua` workflow.
-
-### Raw files (scp / wget)
+Options are forwarded to `vps-setup/install.sh`:
 
 ```bash
-curl -fsSL https://gambhir.dev/minimal-init.lua -o ~/.config/nvim/init.lua
-curl -fsSL https://gambhir.dev/minimal-init.vimrc -o ~/.vimrc
-# try without installing
-nvim -u /tmp/minimal-init.lua
-vim -u /tmp/minimal-init.vimrc
+curl -fsSL https://gambhir.dev/install.sh | bash -s -- --help
+curl -fsSL https://gambhir.dev/install.sh | bash -s -- --no-zsh --set-shell
+curl -fsSL https://gambhir.dev/install.sh | bash -s -- --no-nvim-config  # skip nvim config
+curl -fsSL https://gambhir.dev/install.sh | bash -s -- --no-vps --nvim-only  # only nvim config
 ```
 
-### Neovim version
+What the bootstrap does:
+1. installs `git` if missing (via `apt`/`dnf`/`yum`/`pacman`/`apk`/`zypper` + `sudo`)
+2. clones `https://github.com/gambhirsharma/vps-setup.git` to `~/vps-setup` (`$VPS_SETUP_DIR`)
+3. runs `~/vps-setup/install.sh` — which then runs `vps-setup.sh` (zsh/tmux/nvim binary) + `nvim-setup.sh` (minimal nvim/vim config)
 
-- Hard min `0.7` (`vim.keymap.set`, `nvim_create_autocmd`, `vim.highlight.on_yank` from `public/minimal-init.lua:35`)
-- Practical min `0.10` ( `vim.diagnostic.config:78` uses `source="if_many"` / `border="rounded"` — strip to `virtual_text=true` on older)
-- Tested on `v0.12.5`. `apt` on Ubuntu jammy ships `0.6`, noble ships `0.9` — install latest if needed:
-
+Re-run/update:
 ```bash
-curl -fsSLO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
-chmod +x nvim-linux-x86_64.appimage && sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
-nvim --version
+cd ~/vps-setup && ./install.sh --help
+cd ~/vps-setup && ./vps-setup.sh --help
+cd ~/vps-setup && ./nvim-setup.sh --help
 ```
 
-`minimal-init.vimrc` works with `vim >=8.2` (nvim extensions gated behind `has('nvim')`).
+### VPS repo contents
+
+`~/vps-setup` after clone:
+- `install.sh` — orchestrator (runs both)
+- `vps-setup.sh` — zsh, tmux, neovim binary (from official GitHub release)
+- `nvim-setup.sh` — zero-plugin nvim/vim config (`~/.config/nvim/init.lua` + `~/.vimrc`)
+- `minimal-init.lua` / `minimal-init.vimrc` — raw configs
+
+Env overrides (forwarded):
+```bash
+VPS_SETUP_DIR=/tmp/vps-setup curl -fsSL https://gambhir.dev/install.sh | bash
+NVIM_VERSION=0.11.0 curl -fsSL https://gambhir.dev/install.sh | bash
+```
 
 ## Inspiration:
 - Using this Template [astro-theme-vitesse](https://github.com/kieranwv/astro-theme-vitesse)

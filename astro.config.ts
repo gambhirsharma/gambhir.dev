@@ -32,9 +32,15 @@ export default defineConfig({
     // Bluesky
     '/bsky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
     '/bluesky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
-    // nvim minimal setup — short aliases for curl|bash
-    '/nvim': '/nvim-setup.sh',
-    '/nvim.sh': '/nvim-setup.sh',
+    // VPS bootstrap — single entrypoint (clones vps-setup repo)
+    '/install': '/install.sh',
+    '/bootstrap': '/bootstrap.sh',
+    '/vps-setup': '/vps-setup.sh',
+    // legacy: nvim-setup.sh removed — redirect to bootstrap (use --no-vps for nvim-only)
+    '/nvim': '/install.sh',
+    '/nvim.sh': '/install.sh',
+    '/nvim-setup.sh': '/install.sh',
+    '/vps-setup.sh': '/install.sh',
   },
   integrations: [
     mdx(),
