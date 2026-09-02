@@ -19,7 +19,6 @@
     { "source": "/vps-setup", "destination": "/vps-setup.sh", "permanent": false },
     { "source": "/nvim", "destination": "/install.sh", "permanent": false },
     { "source": "/nvim.sh", "destination": "/install.sh", "permanent": false },
-    { "source": "/nvim-setup.sh", "destination": "/install.sh", "permanent": false },
-    { "source": "/vps-setup.sh", "destination": "/install.sh", "permanent": false }
+    { "source": "/nvim-setup.sh", "destination": "/install.sh", "permanent": false }
   ]
 }

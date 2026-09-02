@@ -40,7 +40,6 @@ export default defineConfig({
     '/nvim': '/install.sh',
     '/nvim.sh': '/install.sh',
     '/nvim-setup.sh': '/install.sh',
-    '/vps-setup.sh': '/install.sh',
   },
   integrations: [
     mdx(),
