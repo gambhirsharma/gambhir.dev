@@ -11,6 +11,9 @@
 #   2. clones/pulls https://github.com/gambhirsharma/vps-setup.git
 #   3. runs install.sh from the clone (which runs vps-setup.sh + nvim-setup.sh)
 set -euo pipefail
+# never prompt for git credentials on headless VPS — fail fast and fallback to tarball
+export GIT_TERMINAL_PROMPT=0
+export GCM_INTERACTIVE=never
 
 VPS_SETUP_REPO="${VPS_SETUP_REPO:-https://github.com/gambhirsharma/vps-setup.git}"
 VPS_SETUP_DIR="${VPS_SETUP_DIR:-$HOME/vps-setup}"
@@ -119,6 +122,23 @@ ensure_git() {
   info "git installed: $(git --version)"
 }
 
+download_tarball() {
+  local dest="$1"
+  local url="https://github.com/gambhirsharma/vps-setup/archive/${VPS_SETUP_BRANCH}.tar.gz"
+  info "git clone failed or not available — downloading tarball $url"
+  mkdir -p "$dest"
+  if ! curl -fsSL "$url" | tar -xz --strip-components=1 -C "$dest"; then
+    err "tarball download failed from $url"
+    err "check if repo is public and branch '$VPS_SETUP_BRANCH' exists"
+    exit 1
+  fi
+  # init git so future pulls work (optional)
+  if command -v git >/dev/null 2>&1; then
+    git -C "$dest" init -q 2>/dev/null || true
+    git -C "$dest" remote add origin "$VPS_SETUP_REPO" 2>/dev/null || true
+  fi
+}
+
 clone_or_update() {
   # handle VPS_SETUP_USE_TMP=1 for testing
   if [[ "${VPS_SETUP_USE_TMP:-0}" == "1" ]]; then
@@ -127,24 +147,34 @@ clone_or_update() {
 
   if [[ -d "$VPS_SETUP_DIR/.git" ]]; then
     info "updating existing clone at $VPS_SETUP_DIR"
-    git -C "$VPS_SETUP_DIR" fetch origin "$VPS_SETUP_BRANCH" --depth 1 2>/dev/null || git -C "$VPS_SETUP_DIR" fetch origin
-    git -C "$VPS_SETUP_DIR" checkout "$VPS_SETUP_BRANCH" 2>/dev/null || true
-    git -C "$VPS_SETUP_DIR" pull --ff-only origin "$VPS_SETUP_BRANCH" 2>/dev/null || {
-      warn "fast-forward pull failed — resetting to origin/$VPS_SETUP_BRANCH"
-      git -C "$VPS_SETUP_DIR" reset --hard "origin/$VPS_SETUP_BRANCH"
-    }
+    if ! git -C "$VPS_SETUP_DIR" fetch origin "$VPS_SETUP_BRANCH" --depth 1 2>/dev/null; then
+      warn "git fetch failed — re-downloading tarball"
+      rm -rf "$VPS_SETUP_DIR"
+      download_tarball "$VPS_SETUP_DIR"
+    else
+      git -C "$VPS_SETUP_DIR" checkout "$VPS_SETUP_BRANCH" 2>/dev/null || true
+      git -C "$VPS_SETUP_DIR" pull --ff-only origin "$VPS_SETUP_BRANCH" 2>/dev/null || {
+        warn "fast-forward pull failed — resetting to origin/$VPS_SETUP_BRANCH"
+        git -C "$VPS_SETUP_DIR" reset --hard "origin/$VPS_SETUP_BRANCH" 2>/dev/null || {
+          warn "git reset failed — re-downloading tarball"
+          rm -rf "$VPS_SETUP_DIR"
+          download_tarball "$VPS_SETUP_DIR"
+        }
+      }
+    fi
   elif [[ -d "$VPS_SETUP_DIR" ]]; then
     warn "$VPS_SETUP_DIR exists but is not a git repo — moving to ${VPS_SETUP_DIR}.bak.$(date +%Y%m%d%H%M%S)"
     mv "$VPS_SETUP_DIR" "${VPS_SETUP_DIR}.bak.$(date +%Y%m%d%H%M%S)"
     info "cloning $VPS_SETUP_REPO -> $VPS_SETUP_DIR (branch $VPS_SETUP_BRANCH)"
-    git clone --branch "$VPS_SETUP_BRANCH" --depth 1 "$VPS_SETUP_REPO" "$VPS_SETUP_DIR"
+    if ! git clone --branch "$VPS_SETUP_BRANCH" --depth 1 "$VPS_SETUP_REPO" "$VPS_SETUP_DIR" 2>/dev/null; then
+      download_tarball "$VPS_SETUP_DIR"
+    fi
   else
     info "cloning $VPS_SETUP_REPO -> $VPS_SETUP_DIR (branch $VPS_SETUP_BRANCH)"
-    # ensure parent exists
     mkdir -p "$(dirname "$VPS_SETUP_DIR")"
     if ! git clone --branch "$VPS_SETUP_BRANCH" --depth 1 "$VPS_SETUP_REPO" "$VPS_SETUP_DIR" 2>/dev/null; then
-      warn "shallow clone failed — trying full clone"
-      git clone --branch "$VPS_SETUP_BRANCH" "$VPS_SETUP_REPO" "$VPS_SETUP_DIR"
+      warn "git clone failed (no prompt — GIT_TERMINAL_PROMPT=0) — trying tarball"
+      download_tarball "$VPS_SETUP_DIR"
     fi
   fi
   info "clone ready: $VPS_SETUP_DIR ($(git -C "$VPS_SETUP_DIR" rev-parse --short HEAD 2>/dev/null || echo 'unknown'))"
