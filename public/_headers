@@ -1,0 +1,21 @@
+/vps
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+  X-Content-Type-Options: nosniff
+
+/vps.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+  X-Content-Type-Options: nosniff
+
+/install.sh
+  Content-Type: text/x-shellscript; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/bootstrap.sh
+  Content-Type: text/x-shellscript; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/vps-setup.sh
+  Content-Type: text/x-shellscript; charset=utf-8
+  Cache-Control: public, max-age=3600
