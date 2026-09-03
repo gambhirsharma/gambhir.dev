@@ -2,8 +2,8 @@
   "name": "gambhir.dev",
   "type": "module",
   "version": "1.1.0",
-  "description": "Gambhir Shamra Personal website",
-  "author": "Gambhir Sharma <gambhir786191ss@gmail.com> (https://github.com/gambhirsharma/)",
+  "description": "Gambhir Sharma Personal website",
+  "author": "Gambhir <hey@gambhir.dev> (https://github.com/gambhirsharma/)",
   "license": "MIT",
   "keywords": [
     "astro",
