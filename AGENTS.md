@@ -9,12 +9,18 @@ changes that touch anything under `src/content/blog/` (including `notes/` and `t
 
 1. **Never commit or push those changes directly to `main`.**
 2. Determine the branch prefix from the file's location:
-   - `src/content/blog/notes/**` → `blog/note/<slug>`
-   - everything else under `src/content/blog/**` (top-level posts, `talks/`, etc.) → `blog/article/<slug>`
+   - `src/content/blog/notes/**` → `blog-note/<slug>`
+   - everything else under `src/content/blog/**` (top-level posts, `talks/`, etc.) → `blog-article/<slug>`
    - `<slug>` is the post's frontmatter `title`, kebab-cased (lowercase, spaces/punctuation → `-`).
-     Example: title "Otel Intro" in `notes/` → branch `blog/note/otel-intro`.
-   - Note: `blog(note): <title>` is not usable as a literal git branch name — `:` and spaces are
-     invalid in refs — so the slash form above is the git-safe equivalent of that intent.
+     Example: title "Otel Intro" in `notes/` → branch `blog-note/otel-intro`.
+   - Notes on the naming:
+     - `blog(note): <title>` is not usable as a literal git branch name — `:` and spaces are
+       invalid in refs — so this is the git-safe equivalent of that intent.
+     - Use `blog-note/...` / `blog-article/...` (hyphen), **not** `blog/note/...` (slash) — a
+       branch literally named `blog` already exists in this repo's history, and git refs are
+       path-like, so `refs/heads/blog` and `refs/heads/blog/note/...` can't coexist (GitHub
+       rejects the push with "directory file conflict"). Check `git ls-remote --heads origin`
+       for existing conflicting prefixes before introducing a new branch namespace.
 3. If that branch doesn't exist yet, create it from the current `main`. If it already exists
    (e.g. you're continuing an earlier draft), check it out and keep committing on it — don't
    create a second branch for the same post.
