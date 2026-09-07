@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+@AGENTS.md
+
 ## Commands
 
 - `pnpm dev` — start dev server (astro dev --host), port 3000
