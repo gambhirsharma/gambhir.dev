@@ -5,10 +5,12 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { Place, PlaceCategory } from '@/data/map-locations'
 import { categoryLabels } from '@/data/map-locations'
+import type { TrekRoute } from '@/data/treks'
 
 const props = defineProps<{
   currentLocation: Place
   places?: Place[]
+  treks?: TrekRoute[]
   zoom?: number
 }>()
 
@@ -19,6 +21,8 @@ let tileLayer: L.TileLayer | null = null
 let currentMarker: L.CircleMarker | null = null
 let pulseMarker: L.CircleMarker | null = null
 const placeMarkers: L.CircleMarker[] = []
+const trekLines: L.Polyline[] = []
+const trekStartMarkers: L.CircleMarker[] = []
 
 // Minimal tile layers - using CartoDB Positron/Dark Matter for clean, minimal look
 const cartoApiKey = import.meta.env.PUBLIC_MAP_API_KEY
@@ -38,6 +42,57 @@ function getMarkerColor(category: PlaceCategory) {
     hometown: isDark.value ? '#fbbf24' : '#f59e0b', // Amber/Yellow for hometown
   }
   return colors[category]
+}
+
+function getTrekColor() {
+  return isDark.value ? '#fb923c' : '#ea580c' // Orange for trek routes
+}
+
+function getTrekTooltip(trek: TrekRoute) {
+  const date = new Date(trek.date).toLocaleDateString('en', { month: 'short', year: 'numeric' })
+  const stats = `${trek.distanceKm} km · ${trek.elevationGainM} m ↑ · ${date}`
+  return `<strong>${trek.name}</strong><br><span style="opacity: 0.7; font-size: 10px;">Trek · ${stats}</span>`
+}
+
+function addTreks() {
+  props.treks?.forEach((trek) => {
+    if (trek.coords.length < 2)
+      return
+
+    const tooltipOptions: L.TooltipOptions = {
+      permanent: false,
+      direction: 'top',
+      offset: [0, -8],
+      className: 'location-tooltip tooltip-trek',
+    }
+
+    const line = L.polyline(trek.coords, {
+      color: getTrekColor(),
+      weight: 2.5,
+      opacity: 0.85,
+      lineCap: 'round',
+      lineJoin: 'round',
+    }).addTo(map!)
+    line.bindTooltip(getTrekTooltip(trek), { ...tooltipOptions, sticky: true })
+
+    const startMarker = L.circleMarker(trek.coords[0], {
+      radius: 3,
+      fillColor: getTrekColor(),
+      color: '#fff',
+      weight: 0.5,
+      opacity: 1,
+      fillOpacity: 0.9,
+    }).addTo(map!)
+    startMarker.bindTooltip(getTrekTooltip(trek), tooltipOptions)
+
+    // Zoom into the route when clicked
+    const zoomToRoute = () => map?.fitBounds(line.getBounds(), { padding: [24, 24] })
+    line.on('click', zoomToRoute)
+    startMarker.on('click', zoomToRoute)
+
+    trekLines.push(line)
+    trekStartMarkers.push(startMarker)
+  })
 }
 
 function initMap() {
@@ -61,6 +116,9 @@ function initMap() {
     maxZoom: 10,
     minZoom: 2,
   }).addTo(map)
+
+  // Trek routes go at the bottom so markers stay clickable on top of them
+  addTreks()
 
   // Add place markers first (so current location appears on top)
   if (props.places && props.places.length > 0) {
@@ -95,6 +153,8 @@ function initMap() {
     opacity: 0,
     fillOpacity: 0.3,
     className: 'pulse-ring',
+    // Purely decorative, don't swallow clicks/hovers meant for nearby markers or trek routes
+    interactive: false,
   }).addTo(map)
 
   // Create solid center marker for current location
@@ -143,6 +203,10 @@ function updateTheme() {
       }
     })
   }
+
+  // Update trek routes
+  trekLines.forEach(line => line.setStyle({ color: getTrekColor() }))
+  trekStartMarkers.forEach(marker => marker.setStyle({ fillColor: getTrekColor() }))
 }
 
 watch(isDark, () => {

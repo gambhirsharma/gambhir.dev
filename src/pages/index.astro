@@ -7,6 +7,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
 import mapLocations from '@/data/map-locations'
+import treks from '@/data/treks'
+import { buildTrekRoutes } from '@/utils/treks'
+
+const trekRoutes = buildTrekRoutes(treks)
 ---
 
 <BaseLayout description={siteConfig.description}>
@@ -68,6 +72,7 @@ import mapLocations from '@/data/map-locations'
         client:only="vue"
         currentLocation={mapLocations.currentLocation}
         places={mapLocations.places}
+        treks={trekRoutes}
         zoom={5}
       />
     </div>
