@@ -1,6 +1,6 @@
 export interface Trek {
   name: string
-  date: string // ISO date, e.g. '2025-08-14'
+  date?: string // ISO date, e.g. '2025-08-14'
   gpx: string // file name inside src/data/treks/
   distanceKm?: number // overrides the value computed from the GPX
   elevationGainM?: number // overrides the value computed from the GPX
@@ -11,7 +11,7 @@ export interface Trek {
 // Processed trek passed to the map (built from the GPX at build time)
 export interface TrekRoute {
   name: string
-  date: string
+  date?: string
   distanceKm: number
   elevationGainM: number
   description?: string
@@ -26,6 +26,11 @@ export interface TrekRoute {
 //   date: '2025-08-14',
 //   gpx: 'tre-cime.gpx',
 // },
-export const treks: Trek[] = []
+export const treks: Trek[] = [
+  {
+    name: 'Monte Catillo Nature Reserve Loop',
+    gpx: 'tivoli-monte-catillo.gpx',
+  },
+]
 
 export default treks

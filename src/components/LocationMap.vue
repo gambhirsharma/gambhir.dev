@@ -49,9 +49,10 @@ function getTrekColor() {
 }
 
 function getTrekTooltip(trek: TrekRoute) {
-  const date = new Date(trek.date).toLocaleDateString('en', { month: 'short', year: 'numeric' })
-  const stats = `${trek.distanceKm} km · ${trek.elevationGainM} m ↑ · ${date}`
-  return `<strong>${trek.name}</strong><br><span style="opacity: 0.7; font-size: 10px;">Trek · ${stats}</span>`
+  const stats = [`${trek.distanceKm} km`, `${trek.elevationGainM} m ↑`]
+  if (trek.date)
+    stats.push(new Date(trek.date).toLocaleDateString('en', { month: 'short', year: 'numeric' }))
+  return `<strong>${trek.name}</strong><br><span style="opacity: 0.7; font-size: 10px;">Trek · ${stats.join(' · ')}</span>`
 }
 
 function addTreks() {
