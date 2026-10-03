@@ -2,7 +2,7 @@ import type { Trek, TrekRoute } from '@/data/treks'
 
 // Build-time only: GPX files are inlined as raw strings here, so this module must
 // never be imported from a client-side component.
-const gpxFiles = import.meta.glob<string>('../data/treks/*.gpx', {
+const gpxFiles = import.meta.glob<string>('../data/treks/gpx/*.gpx', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -127,7 +127,7 @@ export function buildTrekRoutes(treks: Trek[]): TrekRoute[] {
   return treks.map((trek) => {
     const xml = Object.entries(gpxFiles).find(([path]) => path.endsWith(`/${trek.gpx}`))?.[1]
     if (!xml)
-      throw new Error(`[treks] GPX file "${trek.gpx}" for "${trek.name}" not found in src/data/treks/`)
+      throw new Error(`[treks] GPX file "${trek.gpx}" for "${trek.name}" not found in src/data/treks/gpx/`)
 
     const points = parseGpx(xml)
     if (points.length < 2)
