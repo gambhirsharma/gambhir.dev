@@ -29,6 +29,7 @@ export interface TrekRoute {
 export const treks: Trek[] = [
   {
     name: 'Monte Catillo Nature Reserve Loop',
+    date: '2026-09-30',
     gpx: 'tivoli-monte-catillo.gpx',
   },
 ]
