@@ -1,0 +1,39 @@
+---
+import type { TrekStats } from '@/data/treks'
+
+interface Props {
+  stats: TrekStats
+}
+
+const { stats } = Astro.props
+
+const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
+
+const summary = [
+  `${stats.count} ${stats.count === 1 ? 'trek' : 'treks'}`,
+  `${fmt(stats.totalDistanceKm)} km walked`,
+  `${fmt(stats.totalElevationGainM)} m climbed`,
+  stats.highestPointM > 0 && `highest point ${fmt(stats.highestPointM)} m`,
+]
+  .filter(Boolean)
+  .join(' · ')
+---
+
+{
+  stats.count > 0 && (
+    <p class="trek-stats">
+      <i class="i-lucide-mountain" />
+      <span>{summary}</span>
+    </p>
+  )
+}
+
+<style>
+  .trek-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -0.5rem 0 1.5rem;
+    font-size: 0.9rem;
+  }
+</style>

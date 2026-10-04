@@ -128,27 +128,12 @@ function maxElevation(points: TrackPoint[]) {
   return eles.length ? Math.round(Math.max(...eles)) : undefined
 }
 
-function longestStreakDays(dates: string[]) {
-  const days = [...new Set(dates.map(d => d.slice(0, 10)))]
-    .map(d => Date.parse(`${d}T00:00:00Z`) / 86400000)
-    .sort((a, b) => a - b)
-  let best = days.length ? 1 : 0
-  let current = best
-  for (let i = 1; i < days.length; i++) {
-    current = days[i] - days[i - 1] === 1 ? current + 1 : 1
-    best = Math.max(best, current)
-  }
-  return best
-}
-
 export function getTrekStats(routes: TrekRoute[]): TrekStats {
   return {
     count: routes.length,
     totalDistanceKm: round(routes.reduce((sum, r) => sum + r.distanceKm, 0), 1),
     totalElevationGainM: routes.reduce((sum, r) => sum + r.elevationGainM, 0),
-    longestTrekKm: Math.max(0, ...routes.map(r => r.distanceKm)),
     highestPointM: Math.max(0, ...routes.map(r => r.maxElevationM ?? 0)),
-    longestStreakDays: longestStreakDays(routes.flatMap(r => (r.date ? [r.date] : []))),
   }
 }
 

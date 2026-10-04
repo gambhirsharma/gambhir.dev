@@ -20,14 +20,12 @@ export interface TrekRoute {
   coords: [number, number][]
 }
 
-// Totals across all treks, used to unlock achievements
+// Totals across all treks, shown below the map
 export interface TrekStats {
   count: number
   totalDistanceKm: number
   totalElevationGainM: number
-  longestTrekKm: number
   highestPointM: number
-  longestStreakDays: number // most treks on consecutive days
 }
 
 // To add a trek: drop the GPX export into src/data/treks/gpx/ named
