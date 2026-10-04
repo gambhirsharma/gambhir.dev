@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import ListPosts from '@/components/ListPosts.vue'
+import ReadingList from '@/components/ReadingList.astro'
 import siteConfig from '@/site-config'
 import { getPosts } from '@/utils/posts'
 
@@ -39,5 +40,19 @@ function activeLink(pathname: string) {
       ))
     }
   </div>
-  <ListPosts list={posts} />
+  {
+    path === 'papers' ? (
+      <>
+        <ReadingList />
+        {posts.length > 0 && (
+          <>
+            <h2 class="text-xs uppercase tracking-widest op-40 font-normal mb-4 select-none">notes</h2>
+            <ListPosts list={posts} />
+          </>
+        )}
+      </>
+    ) : (
+      <ListPosts list={posts} />
+    )
+  }
 </BaseLayout>

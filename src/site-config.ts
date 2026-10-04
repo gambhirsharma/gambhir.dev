@@ -76,6 +76,10 @@ export const siteConfig = {
         text: 'Talks',
         href: '/blog/talks',
       },
+      {
+        text: 'Papers',
+        href: '/blog/papers',
+      },
     ],
   },
   footer: {

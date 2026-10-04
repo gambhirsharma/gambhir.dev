@@ -47,3 +47,16 @@ export interface OpenSourceContribution {
 }
 
 export type OpenSourceData = OpenSourceContribution[]
+
+export interface ReadingItem {
+  title: string
+  url: string
+  authors?: string // short form, e.g. 'Liu et al.'
+  year?: number
+  kind: 'paper' | 'thesis' | 'article'
+  status: 'reading' | 'read' | 'queued' // queued = bookmarked / want to read
+  topic?: string // free-form tag, e.g. '6g', 'k8s'
+  note?: string // slug of a post in src/content/blog/papers/, e.g. 'papers/isac-survey'
+}
+
+export type ReadingData = ReadingItem[]

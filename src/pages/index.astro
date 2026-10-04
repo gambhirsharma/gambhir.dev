@@ -10,9 +10,11 @@ import { HomeData } from '@/content/websiteData'
 import mapLocations from '@/data/map-locations'
 import treks from '@/data/treks'
 import { buildTrekRoutes, getTrekStats } from '@/utils/treks'
+import reading from '@/data/reading'
 
 const trekRoutes = buildTrekRoutes(treks)
 const trekStats = getTrekStats(trekRoutes)
+const currentlyReading = reading.filter((x) => x.status === 'reading').slice(0, 3)
 ---
 
 <BaseLayout description={siteConfig.description}>
@@ -155,6 +157,40 @@ const trekStats = getTrekStats(trekRoutes)
       </p>
     </div>
 
+    {
+      currentlyReading.length > 0 && (
+        <>
+          <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="i-lucide-book-open" />
+            reading
+          </h2>
+          <ul class="reading-list">
+            {currentlyReading.map((x) => (
+              <li>
+                <a href={x.url} target="_blank" class="reading-title">
+                  {x.title}
+                </a>
+                <span class="reading-meta">
+                  {[x.kind, x.authors, x.year].filter(Boolean).join(' · ')}
+                  {x.note && (
+                    <>
+                      {' · '}
+                      <a href={`/posts/${x.note}`}>notes</a>
+                    </>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <a href="/blog/papers" style="color: var(--text-primary-green-color); border-bottom-width: 0">
+              reading list ↗
+            </a>
+          </p>
+        </>
+      )
+    }
+
     <!-- <p> -->
     <!--   I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a> -->
     <!-- </p> -->
@@ -192,6 +228,43 @@ const trekStats = getTrekStats(trekRoutes)
       align-items: center;
       gap: 0.5rem;
     }
+  }
+
+  .reading-list {
+    list-style: none;
+    padding-left: 0;
+    li {
+      padding-left: 0;
+      margin: 0.6rem 0;
+    }
+    li::before {
+      display: none;
+    }
+  }
+
+  .reading-list .reading-title {
+    color: #8a8a8a;
+    border-bottom: 1px solid rgba(138, 138, 138, 0.4);
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  :global(html.dark) .reading-list .reading-title {
+    color: #7a7a7a;
+  }
+
+  .reading-list .reading-title:hover,
+  :global(html.dark) .reading-list .reading-title:hover {
+    color: var(--text-primary-green-color);
+    border-color: var(--text-primary-green-color);
+  }
+
+  .reading-meta {
+    display: block;
+    font-size: 0.85em;
+    color: grey;
   }
 
   .map-container {
