@@ -3,14 +3,16 @@ import CurrentTime from '@/components/CurrentTime.vue'
 import LocationMap from '@/components/LocationMap.vue'
 import BirthdayBalloons from '@/components/BirthdayBalloons.vue'
 import BirthdayBadge from '@/components/BirthdayBadge.vue'
+import TrekAchievements from '@/components/TrekAchievements.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
 import mapLocations from '@/data/map-locations'
 import treks from '@/data/treks'
-import { buildTrekRoutes } from '@/utils/treks'
+import { buildTrekRoutes, getTrekStats } from '@/utils/treks'
 
 const trekRoutes = buildTrekRoutes(treks)
+const trekStats = getTrekStats(trekRoutes)
 ---
 
 <BaseLayout description={siteConfig.description}>
@@ -76,6 +78,7 @@ const trekRoutes = buildTrekRoutes(treks)
         zoom={5}
       />
     </div>
+    <TrekAchievements stats={trekStats} />
     <p></p>
     <!-- <p> -->
     <!--   I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges. -->

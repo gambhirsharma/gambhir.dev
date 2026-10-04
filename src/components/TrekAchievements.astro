@@ -1,0 +1,117 @@
+---
+import type { TrekStats } from '@/data/treks'
+import achievements from '@/data/treks/achievements'
+
+interface Props {
+  stats: TrekStats
+}
+
+const { stats } = Astro.props
+
+const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
+
+const badges = achievements
+  .map((a) => {
+    const progress = a.progress(stats)
+    const unlocked = progress >= a.target
+    const status = unlocked ? 'Unlocked' : `${fmt(progress)} / ${fmt(a.target)}${a.unit ? ` ${a.unit}` : ''}`
+    return { ...a, unlocked, status }
+  })
+  // Unlocked first, otherwise keep the order from the data file
+  .sort((a, b) => Number(b.unlocked) - Number(a.unlocked))
+
+const unlockedCount = badges.filter((b) => b.unlocked).length
+
+const summary = [
+  `${stats.count} ${stats.count === 1 ? 'trek' : 'treks'}`,
+  `${fmt(stats.totalDistanceKm)} km walked`,
+  `${fmt(stats.totalElevationGainM)} m climbed`,
+  stats.highestPointM > 0 && `highest point ${fmt(stats.highestPointM)} m`,
+]
+  .filter(Boolean)
+  .join(' · ')
+---
+
+{
+  stats.count > 0 && (
+    <section class="trek-achievements">
+      <p class="trek-stats">
+        <i class="i-lucide-mountain" />
+        <span>{summary}</span>
+      </p>
+      <p class="trek-unlocked">
+        achievements {unlockedCount}/{badges.length}
+      </p>
+      <ul class="badges">
+        {badges.map((b) => (
+          <li
+            class:list={['badge', { locked: !b.unlocked }]}
+            title={`${b.description} — ${b.status}`}
+            aria-label={`${b.title}: ${b.description} (${b.status})`}
+          >
+            <i class:list={[b.icon]} />
+            <span>{b.title}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .trek-achievements {
+    margin: -0.5rem 0 1.5rem;
+  }
+
+  .trek-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.25rem;
+    font-size: 0.9rem;
+  }
+
+  .trek-unlocked {
+    margin: 0 0 0.6rem;
+    font-size: 0.75rem;
+    color: grey;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--text-primary-green-color);
+    color: var(--text-primary-green-color);
+    font-size: 0.75rem;
+    cursor: default;
+  }
+
+  .badge::before {
+    content: none;
+  }
+
+  .badge.locked {
+    border-color: var(--border-color, #e5e7eb);
+    color: grey;
+    opacity: 0.6;
+  }
+
+  :global(html.dark) .badge.locked {
+    border-color: #374151;
+  }
+</style>

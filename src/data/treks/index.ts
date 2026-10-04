@@ -14,9 +14,20 @@ export interface TrekRoute {
   date?: string
   distanceKm: number
   elevationGainM: number
+  maxElevationM?: number // highest point reached, if the GPX has elevation data
   description?: string
   post?: string
   coords: [number, number][]
+}
+
+// Totals across all treks, used to unlock achievements
+export interface TrekStats {
+  count: number
+  totalDistanceKm: number
+  totalElevationGainM: number
+  longestTrekKm: number
+  highestPointM: number
+  longestStreakDays: number // most treks on consecutive days
 }
 
 // To add a trek: drop the GPX export into src/data/treks/gpx/ named

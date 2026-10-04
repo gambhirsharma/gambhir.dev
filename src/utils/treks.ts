@@ -1,4 +1,4 @@
-import type { Trek, TrekRoute } from '@/data/treks'
+import type { Trek, TrekRoute, TrekStats } from '@/data/treks'
 
 // Build-time only: GPX files are inlined as raw strings here, so this module must
 // never be imported from a client-side component.
@@ -123,6 +123,35 @@ function simplify(points: TrackPoint[], tolerance: number) {
 
 const round = (n: number, digits: number) => Number(n.toFixed(digits))
 
+function maxElevation(points: TrackPoint[]) {
+  const eles = points.map(p => p.ele).filter((e): e is number => e !== undefined && !Number.isNaN(e))
+  return eles.length ? Math.round(Math.max(...eles)) : undefined
+}
+
+function longestStreakDays(dates: string[]) {
+  const days = [...new Set(dates.map(d => d.slice(0, 10)))]
+    .map(d => Date.parse(`${d}T00:00:00Z`) / 86400000)
+    .sort((a, b) => a - b)
+  let best = days.length ? 1 : 0
+  let current = best
+  for (let i = 1; i < days.length; i++) {
+    current = days[i] - days[i - 1] === 1 ? current + 1 : 1
+    best = Math.max(best, current)
+  }
+  return best
+}
+
+export function getTrekStats(routes: TrekRoute[]): TrekStats {
+  return {
+    count: routes.length,
+    totalDistanceKm: round(routes.reduce((sum, r) => sum + r.distanceKm, 0), 1),
+    totalElevationGainM: routes.reduce((sum, r) => sum + r.elevationGainM, 0),
+    longestTrekKm: Math.max(0, ...routes.map(r => r.distanceKm)),
+    highestPointM: Math.max(0, ...routes.map(r => r.maxElevationM ?? 0)),
+    longestStreakDays: longestStreakDays(routes.flatMap(r => (r.date ? [r.date] : []))),
+  }
+}
+
 export function buildTrekRoutes(treks: Trek[]): TrekRoute[] {
   return treks.map((trek) => {
     const xml = Object.entries(gpxFiles).find(([path]) => path.endsWith(`/${trek.gpx}`))?.[1]
@@ -141,6 +170,7 @@ export function buildTrekRoutes(treks: Trek[]): TrekRoute[] {
       date: trek.date,
       distanceKm: trek.distanceKm ?? round(dists[dists.length - 1] / 1000, 1),
       elevationGainM: trek.elevationGainM ?? Math.round(elevationGain(points)),
+      maxElevationM: maxElevation(points),
       description: trek.description,
       post: trek.post,
       coords: route.map(p => [round(p.lat, 5), round(p.lng, 5)]),

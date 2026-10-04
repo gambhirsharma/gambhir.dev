@@ -8,6 +8,7 @@ import {
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
+import achievements from './src/data/treks/achievements'
 
 export default defineConfig({
   shortcuts: [
@@ -77,5 +78,7 @@ export default defineConfig({
     'i-ri-home-line',
     'i-ri-magic-line',
     'i-ri-palette-line',
+    // Trek achievement badges (icons come from the data file)
+    ...achievements.map(a => a.icon),
   ],
 })
