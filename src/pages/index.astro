@@ -3,10 +3,16 @@ import CurrentTime from '@/components/CurrentTime.vue'
 import LocationMap from '@/components/LocationMap.vue'
 import BirthdayBalloons from '@/components/BirthdayBalloons.vue'
 import BirthdayBadge from '@/components/BirthdayBadge.vue'
+import TrekStats from '@/components/TrekStats.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
 import mapLocations from '@/data/map-locations'
+import treks from '@/data/treks'
+import { buildTrekRoutes, getTrekStats } from '@/utils/treks'
+
+const trekRoutes = buildTrekRoutes(treks)
+const trekStats = getTrekStats(trekRoutes)
 ---
 
 <BaseLayout description={siteConfig.description}>
@@ -68,9 +74,11 @@ import mapLocations from '@/data/map-locations'
         client:only="vue"
         currentLocation={mapLocations.currentLocation}
         places={mapLocations.places}
+        treks={trekRoutes}
         zoom={5}
       />
     </div>
+    <TrekStats stats={trekStats} />
     <p></p>
     <!-- <p> -->
     <!--   I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges. -->
