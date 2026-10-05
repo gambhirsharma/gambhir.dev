@@ -5,15 +5,6 @@ import type { ReadingData } from '@/types'
 // To write longer notes on one, add a post to src/content/blog/papers/ and set `note` to its slug.
 const reading: ReadingData = [
   {
-    title: 'Integrated Sensing and Communications: Toward Dual-Functional Wireless Networks for 6G and Beyond',
-    url: 'https://arxiv.org/abs/2108.07165',
-    authors: 'Liu et al.',
-    year: 2022,
-    kind: 'paper',
-    status: 'reading',
-    topic: '6g',
-  },
-  {
     title: 'The rsync algorithm',
     url: 'https://rsync.samba.org/tech_report/',
     authors: 'Tridgell & Mackerras',
@@ -39,6 +30,15 @@ const reading: ReadingData = [
     kind: 'article',
     status: 'queued',
     topic: 'k8s',
+  },
+  {
+    title: 'Integrated Sensing and Communications: Toward Dual-Functional Wireless Networks for 6G and Beyond',
+    url: 'https://arxiv.org/abs/2108.07165',
+    authors: 'Liu et al.',
+    year: 2022,
+    kind: 'paper',
+    status: 'queued',
+    topic: '6g',
   },
 ]
 
