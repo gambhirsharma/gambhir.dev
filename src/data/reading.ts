@@ -14,6 +14,15 @@ const reading: ReadingData = [
     topic: 'algorithms',
   },
   {
+    title: 'KubeSpace: A Low-Latency and Stable Control Plane for LEO Satellite Container Orchestration',
+    url: 'https://arxiv.org/abs/2601.21383',
+    authors: 'Zhao et al.',
+    year: 2026,
+    kind: 'paper',
+    status: 'reading',
+    topic: 'k8s',
+  },
+  {
     title: 'Extend Cloud to Edge with KubeEdge',
     url: 'https://ieeexplore.ieee.org/document/8567697',
     authors: 'Xiong et al.',
