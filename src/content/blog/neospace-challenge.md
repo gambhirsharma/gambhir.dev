@@ -1,6 +1,6 @@
 ---
 title: NeoSpace Challenge 2026
-description: How team Lynq won the Best Business Case Award at the NeoSpace Challenge in Luxembourg with a 5G satellite network simulated on MeluXina
+description: Winning Best Business Case in Luxembourg with a 5G satellite alarm network
 date: 2026-10-27
 duration: 2min
 image:
