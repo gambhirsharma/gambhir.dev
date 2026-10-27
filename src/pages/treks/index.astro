@@ -1,0 +1,147 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import LocationMap from '@/components/LocationMap.vue'
+import TrekStats from '@/components/TrekStats.astro'
+import mapLocations from '@/data/map-locations'
+import treks from '@/data/treks'
+import { buildTrekRoutes, formatTrekDate, getTrekStats } from '@/utils/treks'
+
+const trekRoutes = buildTrekRoutes(treks)
+const trekStats = getTrekStats(trekRoutes)
+// Newest first for the list, the data file is kept oldest first
+const trekList = [...trekRoutes].reverse()
+
+const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
+---
+
+<BaseLayout title="Treks" description="Treks and hikes I have done, with distance, elevation and route">
+  <h1 class="mb-10 text-title">Treks</h1>
+  <div class="map-container">
+    <LocationMap client:only="vue" currentLocation={mapLocations.currentLocation} treks={trekRoutes} zoom={3} />
+  </div>
+  <TrekStats stats={trekStats} />
+
+  <div class="trek-list">
+    {
+      trekList.map((trek) => (
+        <section class="trek">
+          <h2 class="trek-name">{trek.name}</h2>
+          <div class="trek-meta">
+            {trek.date && (
+              <span>
+                <i class="i-lucide-calendar" />
+                {formatTrekDate(trek.date)}
+              </span>
+            )}
+            {trek.region && (
+              <span>
+                <i class="i-lucide-map-pin" />
+                {trek.region}
+              </span>
+            )}
+          </div>
+          <dl class="trek-stats-grid">
+            <div>
+              <dt>distance</dt>
+              <dd>{fmt(trek.distanceKm)} km</dd>
+            </div>
+            {trek.elevationGainM !== undefined && (
+              <div>
+                <dt>elevation gain</dt>
+                <dd>{fmt(trek.elevationGainM)} m</dd>
+              </div>
+            )}
+            {trek.maxElevationM !== undefined && (
+              <div>
+                <dt>highest point</dt>
+                <dd>{fmt(trek.maxElevationM)} m</dd>
+              </div>
+            )}
+            {trek.duration && (
+              <div>
+                <dt>duration</dt>
+                <dd>{trek.duration}</dd>
+              </div>
+            )}
+          </dl>
+          {trek.description && <p class="trek-description">{trek.description}</p>}
+          {!trek.hasTrack && <p class="trek-note">no GPS track recorded, the map shows the approximate start point</p>}
+          {trek.post && (
+            <a href={trek.post} class="prose-link">
+              read more ↗
+            </a>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .map-container {
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, #e5e7eb);
+  }
+
+  :global(html.dark) .map-container {
+    border-color: #374151;
+  }
+
+  .trek-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .trek-name {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+  }
+
+  .trek-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    font-size: 0.9rem;
+    color: grey;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  }
+
+  .trek-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+
+    dt {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: grey;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+
+  .trek-description {
+    margin: 0.5rem 0;
+  }
+
+  .trek-note {
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: grey;
+  }
+</style>

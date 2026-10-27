@@ -49,15 +49,17 @@ function getTrekColor() {
 }
 
 function getTrekTooltip(trek: TrekRoute) {
-  const stats = [`${trek.distanceKm} km`, `${trek.elevationGainM} m ↑`]
+  const stats = [`${trek.distanceKm} km`]
+  if (trek.elevationGainM !== undefined)
+    stats.push(`${trek.elevationGainM} m ↑`)
   if (trek.date)
-    stats.push(new Date(trek.date).toLocaleDateString('en', { month: 'short', year: 'numeric' }))
+    stats.push(new Date(trek.date).toLocaleDateString('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }))
   return `<strong>${trek.name}</strong><br><span style="opacity: 0.7; font-size: 10px;">Trek · ${stats.join(' · ')}</span>`
 }
 
 function addTreks() {
   props.treks?.forEach((trek) => {
-    if (trek.coords.length < 2)
+    if (trek.coords.length === 0)
       return
 
     const tooltipOptions: L.TooltipOptions = {
@@ -67,14 +69,17 @@ function addTreks() {
       className: 'location-tooltip tooltip-trek',
     }
 
-    const line = L.polyline(trek.coords, {
-      color: getTrekColor(),
-      weight: 2.5,
-      opacity: 0.85,
-      lineCap: 'round',
-      lineJoin: 'round',
-    }).addTo(map!)
-    line.bindTooltip(getTrekTooltip(trek), { ...tooltipOptions, sticky: true })
+    // Treks without a GPX only have an approximate start point, so there's no line to draw
+    const line = trek.coords.length >= 2
+      ? L.polyline(trek.coords, {
+          color: getTrekColor(),
+          weight: 2.5,
+          opacity: 0.85,
+          lineCap: 'round',
+          lineJoin: 'round',
+        }).addTo(map!)
+      : null
+    line?.bindTooltip(getTrekTooltip(trek), { ...tooltipOptions, sticky: true })
 
     const startMarker = L.circleMarker(trek.coords[0], {
       radius: 3,
@@ -87,11 +92,14 @@ function addTreks() {
     startMarker.bindTooltip(getTrekTooltip(trek), tooltipOptions)
 
     // Zoom into the route when clicked
-    const zoomToRoute = () => map?.fitBounds(line.getBounds(), { padding: [24, 24] })
-    line.on('click', zoomToRoute)
+    const zoomToRoute = () => line
+      ? map?.fitBounds(line.getBounds(), { padding: [24, 24] })
+      : map?.setView(trek.coords[0], 10)
+    line?.on('click', zoomToRoute)
     startMarker.on('click', zoomToRoute)
 
-    trekLines.push(line)
+    if (line)
+      trekLines.push(line)
     trekStartMarkers.push(startMarker)
   })
 }

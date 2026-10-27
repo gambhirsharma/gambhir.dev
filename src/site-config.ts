@@ -60,6 +60,10 @@ export const siteConfig = {
         text: 'Projects',
         href: '/projects',
       },
+      {
+        text: 'Treks',
+        href: '/treks',
+      },
     ],
   },
   page: {

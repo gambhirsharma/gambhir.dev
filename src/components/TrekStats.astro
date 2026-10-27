@@ -3,9 +3,10 @@ import type { TrekStats } from '@/data/treks'
 
 interface Props {
   stats: TrekStats
+  href?: string // makes the summary a link, e.g. to the treks page
 }
 
-const { stats } = Astro.props
+const { stats, href } = Astro.props
 
 const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
 
@@ -23,7 +24,13 @@ const summary = [
   stats.count > 0 && (
     <p class="trek-stats">
       <i class="i-lucide-mountain" />
-      <span>{summary}</span>
+      {href ? (
+        <a href={href} class="prose-link">
+          {summary}
+        </a>
+      ) : (
+        <span>{summary}</span>
+      )}
     </p>
   )
 }

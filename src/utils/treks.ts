@@ -132,13 +132,47 @@ export function getTrekStats(routes: TrekRoute[]): TrekStats {
   return {
     count: routes.length,
     totalDistanceKm: round(routes.reduce((sum, r) => sum + r.distanceKm, 0), 1),
-    totalElevationGainM: routes.reduce((sum, r) => sum + r.elevationGainM, 0),
+    totalElevationGainM: routes.reduce((sum, r) => sum + (r.elevationGainM ?? 0), 0),
     highestPointM: Math.max(0, ...routes.map(r => r.maxElevationM ?? 0)),
   }
 }
 
+// Formats a trek date ('2026-09-29' or month-only '2026-01'), in UTC so the day doesn't shift
+export function formatTrekDate(date: string, opts: Intl.DateTimeFormatOptions = {}) {
+  const monthOnly = date.length === 7
+  return new Date(date).toLocaleDateString('en', {
+    day: monthOnly ? undefined : 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+    ...opts,
+  })
+}
+
 export function buildTrekRoutes(treks: Trek[]): TrekRoute[] {
   return treks.map((trek) => {
+    const details = {
+      name: trek.name,
+      date: trek.date,
+      region: trek.region,
+      duration: trek.duration,
+      description: trek.description,
+      post: trek.post,
+    }
+
+    if (!trek.gpx) {
+      if (!trek.location || trek.distanceKm === undefined)
+        throw new Error(`[treks] "${trek.name}" has no GPX, so it needs both "location" and "distanceKm"`)
+      return {
+        ...details,
+        distanceKm: trek.distanceKm,
+        elevationGainM: trek.elevationGainM,
+        maxElevationM: trek.maxElevationM,
+        hasTrack: false,
+        coords: [trek.location],
+      }
+    }
+
     const xml = Object.entries(gpxFiles).find(([path]) => path.endsWith(`/${trek.gpx}`))?.[1]
     if (!xml)
       throw new Error(`[treks] GPX file "${trek.gpx}" for "${trek.name}" not found in src/data/treks/gpx/`)
@@ -151,13 +185,12 @@ export function buildTrekRoutes(treks: Trek[]): TrekRoute[] {
     const route = simplify(trimEnds(points, dists), SIMPLIFY_TOLERANCE)
 
     return {
-      name: trek.name,
-      date: trek.date,
+      ...details,
       distanceKm: trek.distanceKm ?? round(dists[dists.length - 1] / 1000, 1),
-      elevationGainM: trek.elevationGainM ?? Math.round(elevationGain(points)),
-      maxElevationM: maxElevation(points),
-      description: trek.description,
-      post: trek.post,
+      // A GPX without elevation data has an unknown gain, not a gain of 0
+      elevationGainM: trek.elevationGainM ?? (maxElevation(points) !== undefined ? Math.round(elevationGain(points)) : undefined),
+      maxElevationM: trek.maxElevationM ?? maxElevation(points),
+      hasTrack: true,
       coords: route.map(p => [round(p.lat, 5), round(p.lng, 5)]),
     }
   })
