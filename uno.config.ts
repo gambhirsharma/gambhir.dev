@@ -69,6 +69,7 @@ export default defineConfig({
     'i-lucide-images',
     'i-lucide-server-cog',
     'i-lucide-radar',
+    'i-lucide-satellite',
     'i-mingcute-fitness-line',
     'i-fluent-food-16-regular',
     'i-hugeicons-blush-brush-02',

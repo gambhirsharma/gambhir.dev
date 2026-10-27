@@ -46,6 +46,12 @@ export const projectData: ProjectData = [
         href: 'https://github.com/gambhirsharma/ISAC-k8s',
       },
       {
+        text: 'Lynq NTN-Pulse',
+        description: '5G satellite alarm network, NeoSpace Challenge winner',
+        icon: 'i-lucide-satellite',
+        href: '/posts/neospace-challenge',
+      },
+      {
         text: 'Vercel Clone',
         description: 'deploy your react/nextjs project',
         icon: 'i-lucide-server-cog',
