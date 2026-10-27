@@ -86,3 +86,25 @@ html:not(dark) {
     content: url('/wave.png');
   }
 }
+
+/* Photo gallery inside blog posts */
+.prose .photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin: 2em 0;
+}
+.prose .photo-gallery a {
+  display: block;
+  border-bottom: none;
+}
+.prose .photo-gallery img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin: 0;
+  transition: opacity 0.2s;
+}
+.prose .photo-gallery a:hover img {
+  opacity: 0.85;
+}
