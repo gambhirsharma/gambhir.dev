@@ -77,6 +77,42 @@ export const mapLocations: MapLocationsData = {
       lng: 22.9444,
       category: 'visited',
     },
+    {
+      name: 'Luxembourg City, Luxembourg',
+      lat: 49.6116,
+      lng: 6.1319,
+      category: 'visited',
+    },
+    {
+      name: 'Frankfurt, Germany',
+      lat: 50.1109,
+      lng: 8.6821,
+      category: 'visited',
+    },
+    {
+      name: 'Munich, Germany',
+      lat: 48.1351,
+      lng: 11.582,
+      category: 'visited',
+    },
+    {
+      name: 'Ljubljana, Slovenia',
+      lat: 46.0569,
+      lng: 14.5058,
+      category: 'visited',
+    },
+    {
+      name: 'Bled, Slovenia',
+      lat: 46.3683,
+      lng: 14.1146,
+      category: 'visited',
+    },
+    {
+      name: 'Bohinj, Slovenia',
+      lat: 46.2775,
+      lng: 13.8869,
+      category: 'visited',
+    },
 
     // Places I want to visit
     {
