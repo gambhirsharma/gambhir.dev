@@ -24,13 +24,15 @@ const summary = [
   stats.count > 0 && (
     <p class="trek-stats">
       <i class="i-lucide-mountain" />
-      {href ? (
-        <a href={href} class="prose-link">
-          {summary}
-        </a>
-      ) : (
-        <span>{summary}</span>
-      )}
+      <span class="trek-summary">
+        {href ? (
+          <a href={href} class="prose-link">
+            {summary}
+          </a>
+        ) : (
+          summary
+        )}
+      </span>
     </p>
   )
 }
@@ -50,15 +52,19 @@ const summary = [
       margin-top: 0.15em;
     }
 
-    /* On the home page this sits inside .prose, where .prose a applies the
-       `prose-link` shortcut (text-nowrap). The summary is long enough to
-       overflow narrow screens, so let it wrap and break long tokens. */
-    a,
-    span {
+    /* The wrapper is the flex item, so it can shrink and wrap. The link
+       inside stays an inline box: that way its border-bottom underline is
+       painted under every wrapped line, not just under the last one. */
+    .trek-summary {
       min-width: 0;
-      white-space: normal;
       overflow-wrap: anywhere;
       text-wrap: pretty;
+    }
+
+    /* On the home page this sits inside .prose, where .prose a applies the
+       `prose-link` shortcut (text-nowrap), so allow the text to wrap. */
+    a {
+      white-space: normal;
     }
   }
 </style>
