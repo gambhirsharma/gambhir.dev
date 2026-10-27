@@ -49,7 +49,7 @@ export const projectData: ProjectData = [
         text: 'Lynq NTN-Pulse',
         description: '5G satellite alarm network, NeoSpace Challenge winner',
         icon: 'i-lucide-satellite',
-        href: '/posts/neospace-challenge',
+        href: '/posts/notes/neospace-challenge',
       },
       {
         text: 'Vercel Clone',
