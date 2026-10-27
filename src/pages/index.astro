@@ -246,6 +246,11 @@ const currentlyReading = reading.filter((x) => x.status === 'reading').slice(0, 
     color: #8a8a8a;
     border-bottom: 1px solid rgba(138, 138, 138, 0.4);
     text-decoration: none;
+    /* .prose a applies the `prose-link` shortcut, which is `text-nowrap`.
+       Long paper titles must wrap on small screens instead of overflowing. */
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
     transition:
       color 0.2s,
       border-color 0.2s;
