@@ -38,9 +38,27 @@ const summary = [
 <style>
   .trek-stats {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     margin: -0.5rem 0 1.5rem;
     font-size: 0.9rem;
+    line-height: 1.5;
+
+    /* keep the mountain icon on the first line, next to the text */
+    i {
+      flex: none;
+      margin-top: 0.15em;
+    }
+
+    /* On the home page this sits inside .prose, where .prose a applies the
+       `prose-link` shortcut (text-nowrap). The summary is long enough to
+       overflow narrow screens, so let it wrap and break long tokens. */
+    a,
+    span {
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      text-wrap: pretty;
+    }
   }
 </style>
