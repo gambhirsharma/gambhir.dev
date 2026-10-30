@@ -27,7 +27,9 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   <article class="home">
     <section class="hero">
       <div class="hero-id">
-        <span class="avatar"><img src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" /></span>
+        <button id="banana-trigger" class="avatar" type="button" aria-label="Profile photo">
+          <img src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" />
+        </button>
         <div class="hero-text">
           <h1>
             {firstName}
@@ -204,6 +206,79 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   </article>
 </BaseLayout>
 
+<script>
+  const trigger = document.querySelector<HTMLButtonElement>('#banana-trigger')
+  const requiredClicks = 8
+  const maxClickGap = 400
+  let clicks = 0
+  let lastClick = 0
+  let celebrating = false
+
+  function playGameOver() {
+    const AudioContext = window.AudioContext || window.webkitAudioContext
+    if (!AudioContext) {
+      return
+    }
+
+    const context = new AudioContext()
+    const notes = [440, 370, 294, 196]
+    const start = context.currentTime
+    notes.forEach((frequency, index) => {
+      const oscillator = context.createOscillator()
+      const gain = context.createGain()
+      oscillator.type = 'square'
+      oscillator.frequency.setValueAtTime(frequency, start + index * 0.14)
+      gain.gain.setValueAtTime(0.08, start + index * 0.14)
+      gain.gain.exponentialRampToValueAtTime(0.001, start + index * 0.14 + 0.18)
+      oscillator.connect(gain).connect(context.destination)
+      oscillator.start(start + index * 0.14)
+      oscillator.stop(start + index * 0.14 + 0.2)
+    })
+    window.setTimeout(() => context.close(), 900)
+  }
+
+  function startBananaRain() {
+    if (celebrating) {
+      return
+    }
+    celebrating = true
+    playGameOver()
+
+    const overlay = document.createElement('div')
+    overlay.className = 'banana-rain'
+    overlay.setAttribute('aria-hidden', 'true')
+
+    for (let index = 0; index < 64; index++) {
+      const banana = document.createElement('img')
+      banana.className = 'falling-banana'
+      banana.src = '/banana.svg'
+      banana.alt = ''
+      banana.style.setProperty('--x', `${Math.random() * 100}%`)
+      banana.style.setProperty('--delay', `${Math.random() * 1.8}s`)
+      banana.style.setProperty('--duration', `${1.5 + Math.random() * 1.4}s`)
+      banana.style.setProperty('--rotation', `${-80 + Math.random() * 160}deg`)
+      banana.style.setProperty('--size', `${34 + Math.random() * 42}px`)
+      overlay.append(banana)
+    }
+
+    document.body.append(overlay)
+    window.setTimeout(() => {
+      overlay.remove()
+      celebrating = false
+    }, 7000)
+  }
+
+  trigger?.addEventListener('click', () => {
+    const now = performance.now()
+    clicks = now - lastClick <= maxClickGap ? clicks + 1 : 1
+    lastClick = now
+    if (clicks >= requiredClicks) {
+      clicks = 0
+      startBananaRain()
+    }
+  })
+</script>
+
 <style>
   .home {
     display: flex;
@@ -264,6 +339,8 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
       0 0 0 4px var(--c-bg),
       0 0 0 5px var(--c-avatar-ring);
     overflow: hidden;
+    padding: 0;
+    background: transparent;
     transition: box-shadow 0.4s ease;
     /* same banana cursor as the links */
     cursor:
@@ -325,6 +402,52 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     .avatar img,
     .avatar::after {
       transition: none;
+    }
+  }
+
+  :global(.banana-rain) {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border: 8px solid rgb(255 255 255 / 18%);
+    background: linear-gradient(to top, rgb(255 213 43 / 24%) 0 34%, transparent 58%);
+    box-shadow: inset 0 0 48px rgb(255 255 255 / 24%);
+    animation: banana-bucket-fill 6.8s ease-out both;
+  }
+
+  :global(.falling-banana) {
+    position: absolute;
+    top: -96px;
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    object-fit: contain;
+    animation: banana-fall var(--duration) var(--delay) cubic-bezier(0.25, 0.7, 0.45, 1) forwards;
+  }
+
+  @keyframes banana-fall {
+    to {
+      transform: translateY(112vh) rotate(calc(var(--rotation) + 360deg));
+    }
+  }
+
+  @keyframes banana-bucket-fill {
+    0% {
+      background-size: 100% 0%;
+    }
+    72%,
+    100% {
+      background-size: 100% 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.falling-banana),
+    :global(.banana-rain) {
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
     }
   }
 
