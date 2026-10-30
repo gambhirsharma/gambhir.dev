@@ -179,16 +179,26 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     }
 
     <section class="contact">
-      <h2>let's talk</h2>
-      <a class="contact-mail" href={`mailto:${siteConfig.email}`}>{siteConfig.emailDisplay} →</a>
-      <div class="contact-links">
-        {
-          siteConfig.socialLinks.map((link) => (
-            <a href={link.href} target="_blank">
-              {link.text}
-            </a>
-          ))
-        }
+      <div class="contact-body">
+        <h2>let's talk</h2>
+        <p>devops, platform &amp; distributed systems roles. or just say hi.</p>
+        <a class="btn btn-primary contact-cta" href={`mailto:${siteConfig.email}`}>
+          {siteConfig.emailDisplay}
+          <span aria-hidden="true">→</span>
+        </a>
+        <div class="contact-links">
+          {
+            siteConfig.socialLinks.map((link) => (
+              <a href={link.href} target="_blank">
+                {link.text} <span aria-hidden="true">↗</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      <div class="contact-art" aria-hidden="true">
+        <span class="art-status"><span class="art-dot"></span>available now</span>
+        <span class="art-word">open<br />to work</span>
       </div>
     </section>
   </article>
@@ -656,47 +666,180 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     }
   }
 
-  /* contact */
+  /* contact: copy on the left, a green gradient panel on the right that
+     fades into the card (stacks as a banner on top on small screens) */
   .contact {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 40%);
+    margin-top: 16px;
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    background: var(--c-surface);
+    overflow: hidden;
+  }
+
+  .contact-body {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 16px;
-    padding: 28px;
-    border: 1px solid var(--c-border);
-    border-radius: 10px;
-    background: var(--c-surface);
+    align-items: flex-start;
+    gap: 14px;
+    padding: 32px 28px;
 
     h2 {
-      font-size: 20px;
+      font-size: 26px;
       font-weight: 700;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
       color: var(--c-strong);
+    }
+
+    p {
+      max-width: 34ch;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--c-body);
+      text-wrap: pretty;
     }
   }
 
-  .home .contact-mail {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--c-accent);
-  }
-
-  .home .contact-mail:hover {
-    color: var(--c-accent-hover);
+  .contact-cta {
+    margin-top: 4px;
   }
 
   .contact-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 6px 20px;
     font-size: 14px;
   }
 
   .home .contact-links a {
     color: var(--c-secondary);
+
+    span {
+      opacity: 0.6;
+    }
   }
 
   .home .contact-links a:hover {
     color: var(--c-strong);
+  }
+
+  .contact-art {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 24px;
+    min-height: 220px;
+    /* low-alpha glows over the card surface, so it tints rather than paints */
+    background:
+      radial-gradient(85% 75% at 100% 0%, var(--c-art-glow) 0%, transparent 70%),
+      radial-gradient(70% 80% at 95% 100%, var(--c-art-glow-2) 0%, transparent 70%);
+    /* soft left edge so the panel melts into the card */
+    mask-image: linear-gradient(to right, transparent 0%, #000 40%);
+  }
+
+  /* dot grid over the gradient, echoing the page background */
+  .contact-art::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(var(--c-art-dots) 1px, transparent 1px);
+    background-size: 14px 14px;
+    mask-image: linear-gradient(to bottom left, #000 10%, transparent 75%);
+  }
+
+  .art-status,
+  .art-word {
+    position: relative;
+  }
+
+  .art-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--c-accent-tint);
+    background: var(--c-accent-tint);
+    color: var(--c-accent);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .art-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    animation: pulse 2s ease-out infinite;
+  }
+
+  .art-word {
+    font-size: clamp(30px, 6vw, 40px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-align: right;
+    background: var(--c-art-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  :global(html.dark) .contact {
+    --c-art-glow: #4ade8042;
+    --c-art-glow-2: #0ea5e929;
+    --c-art-dots: #ffffff17;
+    --c-art-text: linear-gradient(180deg, #f3f4f6 10%, #86efac 100%);
+  }
+
+  :global(html:not(.dark)) .contact {
+    --c-art-glow: #22c55e2e;
+    --c-art-glow-2: #0ea5e91a;
+    --c-art-dots: #0000001a;
+    --c-art-text: linear-gradient(180deg, #0d1117 10%, #15803d 100%);
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 var(--c-accent-ring);
+    }
+    100% {
+      box-shadow: 0 0 0 8px transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art-dot {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .contact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* content sits in the solid top part, the bottom fades into the card */
+    .contact-art {
+      order: -1;
+      min-height: 140px;
+      padding: 20px 22px;
+      flex-direction: row;
+      align-items: flex-start;
+      mask-image: linear-gradient(to top, transparent 0%, #000 40%);
+    }
+
+    .art-word {
+      font-size: 30px;
+    }
+
+    .contact-body {
+      padding: 4px 22px 26px;
+    }
   }
 </style>
