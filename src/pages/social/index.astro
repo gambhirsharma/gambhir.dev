@@ -7,9 +7,12 @@ interface LinkRow {
   text: string
   icon: string
   display: string
-  // no href renders a plain row, for handles without a public profile URL
   href?: string
+  // text put on the clipboard; a row with no href copies when clicked
+  copy?: string
 }
+
+const escapeHtml = (text: string) => text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 
 // https://www.github.com/foo/ -> github.com/foo
 const prettyUrl = (href: string) => href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
@@ -38,6 +41,7 @@ const socials: LinkRow[] = [
     text: 'Discord',
     icon: 'i-simple-icons-discord',
     display: 'gambhir_sharma',
+    copy: 'gambhir_sharma',
   },
 ]
 
@@ -47,12 +51,14 @@ const emails: LinkRow[] = [
     href: `mailto:${siteConfig.email}`,
     icon: 'i-lucide-mail',
     display: siteConfig.email,
+    copy: siteConfig.email,
   },
   {
     text: 'Uni Email',
     href: 'mailto:gambhir.sharma@students.uniroma2.eu',
     icon: 'i-lucide-graduation-cap',
     display: 'gambhir.sharma@students.uniroma2.eu',
+    copy: 'gambhir.sharma@students.uniroma2.eu',
   },
 ]
 
@@ -74,28 +80,87 @@ const sections = [
           </div>
           {section.links.map((link) => {
             const external = link.href?.startsWith('http')
-            const Tag = link.href ? 'a' : 'div'
+            // prefer wrapping long emails/handles right after the last @
+            const at = link.display.lastIndexOf('@') + 1
+            const [head, tail] = [link.display.slice(0, at), link.display.slice(at)]
             return (
-              <Tag
-                class="link-row"
-                href={link.href}
-                target={external ? '_blank' : undefined}
-                rel={external ? 'noopener noreferrer' : undefined}
-              >
+              <div class="link-row">
                 <i class:list={[link.icon, 'link-icon']} aria-hidden="true" />
-                <span class="link-label">{link.text}</span>
-                <span class="link-handle">{link.display}</span>
-                <span class="link-arrow" aria-hidden="true">
-                  {link.href && (external ? '↗' : '→')}
+                {link.href ? (
+                  <a
+                    class="link-label link-target"
+                    href={link.href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.text}
+                  </a>
+                ) : (
+                  <button
+                    class="link-label link-target"
+                    type="button"
+                    data-copy={link.copy}
+                    aria-label={`Copy ${link.text} handle ${link.display}`}
+                  >
+                    {link.text}
+                  </button>
+                )}
+                <span class="link-handle" set:html={`${escapeHtml(head)}<wbr>${escapeHtml(tail)}`} />
+                <span class="link-actions">
+                  {link.href && link.copy && (
+                    <button class="copy-btn" type="button" data-copy={link.copy} aria-label={`Copy ${link.display}`}>
+                      <i class="i-lucide-copy" aria-hidden="true" />
+                      <i class="i-lucide-check" aria-hidden="true" />
+                    </button>
+                  )}
+                  {link.href ? (
+                    <span class="link-arrow" aria-hidden="true">
+                      {external ? '↗' : '→'}
+                    </span>
+                  ) : (
+                    <span class="copy-btn" aria-hidden="true">
+                      <i class="i-lucide-copy" />
+                      <i class="i-lucide-check" />
+                    </span>
+                  )}
                 </span>
-              </Tag>
+              </div>
             )
           })}
         </section>
       ))
     }
+    <p id="copy-status" class="sr-only" aria-live="polite"></p>
   </article>
 </BaseLayout>
+
+<script>
+  // Delegated on document so it keeps working across view transitions
+  document.addEventListener('click', async (event) => {
+    const target = (event.target as Element | null)?.closest<HTMLElement>('[data-copy]')
+    const value = target?.dataset.copy
+    if (!target || !value) {
+      return
+    }
+    const row = target.closest<HTMLElement>('.link-row')
+    const copied = await navigator.clipboard.writeText(value).then(
+      () => true,
+      () => false,
+    )
+    if (!copied) {
+      return
+    }
+    const status = document.getElementById('copy-status')
+    if (status) {
+      status.textContent = `Copied ${value}`
+    }
+    if (row) {
+      row.dataset.copied = ''
+      window.clearTimeout(Number(row.dataset.copiedTimer))
+      row.dataset.copiedTimer = String(window.setTimeout(() => delete row.dataset.copied, 1600))
+    }
+  })
+</script>
 
 <style>
   .social {
@@ -135,18 +200,18 @@ const sections = [
   }
 
   /* Same rhythm as the home page project cards: flat rows, 14px above and
-     below, with an inset divider only between items. */
+     below, with an inset divider only between items. The label is the real
+     link/button; its ::after stretches over the row so the whole row is one
+     click target, and the copy button sits above it. */
   .link-row {
     position: relative;
     display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr) 14px;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 4px 12px;
     padding: 14px 12px;
     margin: 0 -12px;
     border-radius: 8px;
-    color: var(--c-strong);
-    text-decoration: none;
     transition: background-color 0.2s;
   }
 
@@ -160,32 +225,64 @@ const sections = [
     transition: opacity 0.2s;
   }
 
-  a.link-row:hover {
+  .link-row:hover {
     background: var(--c-hover-row);
-    cursor:
-      url('/kela.svg') 5 7,
-      pointer;
   }
 
-  a.link-row:hover::before,
-  a.link-row:hover + .link-row::before {
+  .link-row:hover::before,
+  .link-row:hover + .link-row::before {
     opacity: 0;
   }
 
+  /* muted at rest, brand accent on hover, like the home page meta icons */
   .link-icon {
     font-size: 18px;
+    color: var(--c-secondary);
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-icon,
+  .link-row[data-copied] .link-icon {
     color: var(--c-accent);
   }
 
   .link-label {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
     font-size: 17px;
     font-weight: 600;
+    text-align: left;
     color: var(--c-strong);
+    text-decoration: none;
     white-space: nowrap;
     transition: color 0.2s;
   }
 
-  a.link-row:hover .link-label {
+  .link-target {
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:focus-visible::after {
+      outline: 2px solid var(--c-accent);
+      outline-offset: -2px;
+    }
+  }
+
+  .link-row:hover .link-label {
     color: var(--c-accent);
   }
 
@@ -195,24 +292,102 @@ const sections = [
     font-size: 14px;
     color: var(--c-tertiary);
     overflow-wrap: anywhere;
-  }
-
-  .link-arrow {
-    font-size: 14px;
-    color: var(--c-tertiary);
     transition: color 0.2s;
   }
 
-  a.link-row:hover .link-arrow {
+  .link-row:hover .link-handle {
+    color: var(--c-secondary);
+  }
+
+  .link-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    min-width: 14px;
+    font-size: 14px;
+    color: var(--c-tertiary);
+  }
+
+  .link-arrow {
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-arrow {
     color: var(--c-accent);
+  }
+
+  .copy-btn {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    /* 28px hit area, but only 14px of layout so it lines up with the arrows */
+    margin: -7px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    font-size: 14px;
+    color: inherit;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+
+    i {
+      grid-area: 1 / 1;
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+    }
+  }
+
+  button.copy-btn {
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
+  }
+
+  button.copy-btn:hover {
+    background: var(--c-hover);
+    color: var(--c-strong);
+  }
+
+  .i-lucide-check {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  .link-row[data-copied] {
+    .copy-btn {
+      color: var(--c-accent);
+    }
+
+    .i-lucide-copy {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    .i-lucide-check {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .copy-btn i {
+      transition: none;
+    }
   }
 
   /* Narrow screens: handle drops under the label instead of squeezing it */
   @media (max-width: 560px) {
     .link-row {
-      grid-template-columns: auto minmax(0, 1fr) 14px;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       grid-template-areas:
-        'icon label arrow'
+        'icon label actions'
         '. handle .';
     }
 
@@ -224,8 +399,8 @@ const sections = [
       grid-area: label;
     }
 
-    .link-arrow {
-      grid-area: arrow;
+    .link-actions {
+      grid-area: actions;
     }
 
     .link-handle {
