@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import Hero from '@/components/Hero.astro'
 import siteConfig from '@/site-config'
 
 interface LinkRow {
@@ -56,18 +57,18 @@ const emails: LinkRow[] = [
 ]
 
 const sections = [
-  { title: 'socials', links: socials },
+  { title: 'find me', links: socials },
   { title: 'email', links: emails },
 ]
 ---
 
 <BaseLayout title="Social" description="Where to find Gambhir Sharma online">
   <article class="social">
-    <h1>find me</h1>
+    <Hero />
 
     {
-      sections.map((section) => (
-        <section class="block">
+      sections.map((section, i) => (
+        <section class:list={['block', { first: i === 0 }]}>
           <div class="block-head">
             <h2>{section.title}</h2>
           </div>
@@ -104,17 +105,8 @@ const sections = [
     font-size: 16px;
     color: var(--c-body);
 
-    h1,
     h2 {
       margin: 0;
-    }
-
-    h1 {
-      font-size: clamp(28px, 7vw, 34px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      color: var(--c-strong);
     }
   }
 
@@ -134,6 +126,12 @@ const sections = [
       letter-spacing: -0.01em;
       color: var(--c-text);
     }
+  }
+
+  /* the hero already draws a line above the first section */
+  .first .block-head {
+    padding-top: 0;
+    border-top: 0;
   }
 
   /* Same rhythm as the home page project cards: flat rows, 14px above and
