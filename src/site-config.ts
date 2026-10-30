@@ -23,7 +23,7 @@ export const siteConfig = {
     },
     {
       text: 'Twitter / X',
-      href: 'https://www.twitter.com/gambhir_sharma',
+      href: 'https://x.com/gambhir_sharma',
       icon: 'i-simple-icons-x',
       header: 'i-ri-twitter-x-line',
     },

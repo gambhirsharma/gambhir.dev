@@ -2,143 +2,238 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import siteConfig from '@/site-config'
 
-const socials = [
-  ...siteConfig.socialLinks.map((l) => ({ ...l, external: true, display: l.href.replace('https://', '') })),
+interface LinkRow {
+  text: string
+  icon: string
+  display: string
+  // no href renders a plain row, for handles without a public profile URL
+  href?: string
+}
+
+// https://www.github.com/foo/ -> github.com/foo
+const prettyUrl = (href: string) => href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+
+const socials: LinkRow[] = [
+  ...siteConfig.socialLinks.map((l) => ({ text: l.text, href: l.href, icon: l.icon, display: prettyUrl(l.href) })),
   {
     text: 'CodePen',
-    href: 'https://www.codepen.io/gambhirsharma',
+    href: 'https://codepen.io/gambhirsharma',
     icon: 'i-simple-icons-codepen',
-    external: true,
     display: 'codepen.io/gambhirsharma',
   },
   {
     text: 'Mastodon',
     href: 'https://mastodon.social/@gambhir',
     icon: 'i-simple-icons-mastodon',
-    external: true,
     display: '@gambhir@mastodon.social',
-  },
-  {
-    text: 'Discord',
-    href: 'https://discord.com',
-    icon: 'i-simple-icons-discord',
-    external: true,
-    display: 'gambhir_sharma',
   },
   {
     text: 'Bluesky',
     href: 'https://bsky.app/profile/gambhirsharma.bsky.social',
     icon: 'i-simple-icons-bluesky',
-    external: true,
     display: 'gambhirsharma.bsky.social',
+  },
+  {
+    text: 'Discord',
+    icon: 'i-simple-icons-discord',
+    display: 'gambhir_sharma',
   },
 ]
 
-const emails = [
+const emails: LinkRow[] = [
   {
     text: 'Email',
     href: `mailto:${siteConfig.email}`,
-    icon: 'i-ri-mail-line',
-    external: false,
+    icon: 'i-lucide-mail',
     display: siteConfig.email,
   },
   {
     text: 'Uni Email',
     href: 'mailto:gambhir.sharma@students.uniroma2.eu',
-    icon: 'i-ri-graduation-cap-line',
-    external: false,
+    icon: 'i-lucide-graduation-cap',
     display: 'gambhir.sharma@students.uniroma2.eu',
   },
 ]
+
+const sections = [
+  { title: 'socials', links: socials },
+  { title: 'email', links: emails },
+]
 ---
 
-<BaseLayout title="Social">
-  <article class="prose">
+<BaseLayout title="Social" description="Where to find Gambhir Sharma online">
+  <article class="social">
     <h1>find me</h1>
-    <div class="social-list">
-      {
-        socials.map((link) => (
-          <div>
-            <a
-              href={link.href}
-              target={link.external ? '_blank' : undefined}
-              rel={link.external ? 'noopener noreferrer' : undefined}
-              class="social-link"
-            >
-              <i class:list={[link.icon, 'social-icon']} />
-              <span class="social-label">{link.text}</span>
-              <span class="social-url">{link.display}</span>
-            </a>
+
+    {
+      sections.map((section) => (
+        <section class="block">
+          <div class="block-head">
+            <h2>{section.title}</h2>
           </div>
-        ))
-      }
-    </div>
-    <hr class="hr-line" />
-    <div class="social-list">
-      {
-        emails.map((link) => (
-          <div>
-            <a href={link.href} class="social-link">
-              <i class:list={[link.icon, 'social-icon']} />
-              <span class="social-label">{link.text}</span>
-              <span class="social-url">{link.display}</span>
-            </a>
-          </div>
-        ))
-      }
-    </div>
+          {section.links.map((link) => {
+            const external = link.href?.startsWith('http')
+            const Tag = link.href ? 'a' : 'div'
+            return (
+              <Tag
+                class="link-row"
+                href={link.href}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
+              >
+                <i class:list={[link.icon, 'link-icon']} aria-hidden="true" />
+                <span class="link-label">{link.text}</span>
+                <span class="link-handle">{link.display}</span>
+                <span class="link-arrow" aria-hidden="true">
+                  {link.href && (external ? '↗' : '→')}
+                </span>
+              </Tag>
+            )
+          })}
+        </section>
+      ))
+    }
   </article>
 </BaseLayout>
 
 <style>
-  .social-list {
-    padding: 0;
-    margin: 2rem 0;
+  .social {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 32px;
+    font-size: 16px;
+    color: var(--c-body);
+
+    h1,
+    h2 {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(28px, 7vw, 34px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--c-strong);
+    }
   }
 
-  .social-link {
+  .block {
     display: flex;
+    flex-direction: column;
+  }
+
+  .block-head {
+    padding-top: 20px;
+    margin-bottom: 8px;
+    border-top: 1px solid var(--c-border);
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--c-text);
+    }
+  }
+
+  /* Same rhythm as the home page project cards: flat rows, 14px above and
+     below, with an inset divider only between items. */
+  .link-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) 14px;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color, #e5e7eb);
+    gap: 4px 12px;
+    padding: 14px 12px;
+    margin: 0 -12px;
     border-radius: 8px;
-    text-decoration: none !important;
-    transition:
-      border-color 0.15s ease,
-      background-color 0.15s ease;
+    color: var(--c-strong);
+    text-decoration: none;
+    transition: background-color 0.2s;
   }
 
-  .social-link:hover {
-    border-color: var(--text-primary-green-color);
-    background-color: var(--current_time_bg-color);
+  .link-row + .link-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    right: 12px;
+    border-top: 1px solid var(--c-border-row);
+    transition: opacity 0.2s;
   }
 
-  .social-icon {
-    font-size: 1.25rem;
-    flex-shrink: 0;
-    color: var(--text-primary-green-color);
+  a.link-row:hover {
+    background: var(--c-hover-row);
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
   }
 
-  .social-label {
-    font-weight: 500;
-    min-width: 5rem;
+  a.link-row:hover::before,
+  a.link-row:hover + .link-row::before {
+    opacity: 0;
   }
 
-  .social-url {
-    color: grey;
-    font-size: 0.875rem;
-    margin-left: auto;
+  .link-icon {
+    font-size: 18px;
+    color: var(--c-accent);
   }
 
-  :global(html.dark) .social-link {
-    border-color: #374151;
+  .link-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--c-strong);
+    white-space: nowrap;
+    transition: color 0.2s;
   }
 
-  :global(html.dark) .social-link:hover {
-    border-color: var(--text-primary-green-color);
+  a.link-row:hover .link-label {
+    color: var(--c-accent);
+  }
+
+  .link-handle {
+    justify-self: end;
+    text-align: right;
+    font-size: 14px;
+    color: var(--c-tertiary);
+    overflow-wrap: anywhere;
+  }
+
+  .link-arrow {
+    font-size: 14px;
+    color: var(--c-tertiary);
+    transition: color 0.2s;
+  }
+
+  a.link-row:hover .link-arrow {
+    color: var(--c-accent);
+  }
+
+  /* Narrow screens: handle drops under the label instead of squeezing it */
+  @media (max-width: 560px) {
+    .link-row {
+      grid-template-columns: auto minmax(0, 1fr) 14px;
+      grid-template-areas:
+        'icon label arrow'
+        '. handle .';
+    }
+
+    .link-icon {
+      grid-area: icon;
+    }
+
+    .link-label {
+      grid-area: label;
+    }
+
+    .link-arrow {
+      grid-area: arrow;
+    }
+
+    .link-handle {
+      grid-area: handle;
+      justify-self: start;
+      text-align: left;
+    }
   }
 </style>
