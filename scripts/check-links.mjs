@@ -26,21 +26,16 @@ function normalize(url) {
   }
 }
 
+// Short links are the `redirects` in vercel.json, which is what the live site serves.
 async function readShortLinks() {
   if (!config.redirectsFile)
     return []
-  const text = await readFile(config.redirectsFile, 'utf8').catch(() => '')
-  return text.split('\n')
-    .map(line => line.trim())
-    .filter(line => line && !line.startsWith('#'))
-    .map((line) => {
-      const [from, to] = line.split(/\s+/)
-      return {
-        url: new URL(from, config.redirectsBase).href,
-        expect: new URL(to, config.redirectsBase).href,
-        group: 'Short links',
-      }
-    })
+  const { redirects = [] } = JSON.parse(await readFile(config.redirectsFile, 'utf8'))
+  return redirects.map(r => ({
+    url: new URL(r.source, config.redirectsBase).href,
+    expect: new URL(r.destination, config.redirectsBase).href,
+    group: 'Short links',
+  }))
 }
 
 async function checkUrl(target) {
@@ -63,16 +58,22 @@ async function checkUrl(target) {
   const status = info.http_code ?? 0
   const finalUrl = info.url_effective ?? target.url
   const ms = s => Math.round((s ?? 0) * 1000)
-  const accept = target.accept ?? []
-  const okStatus = (status >= 200 && status < 300) || accept.includes(status) || config.extraAccept?.includes(status)
+  const okStatus = (status >= 200 && status < 300) || target.accept?.includes(status)
+  // Sites like x.com and LinkedIn refuse requests from CI (403, 999) even
+  // though they load fine in a browser. For those, reaching the right URL is
+  // all we can verify, so their status code is reported but not judged.
+  const botBlocked = config.botBlockedHosts?.includes(new URL(finalUrl).host)
 
   let problem = null
+  let note = ''
   if (!status)
     problem = info.errormsg || 'no response'
-  else if (!okStatus)
-    problem = `HTTP ${status}`
   else if (target.expect && normalize(finalUrl) !== normalize(target.expect))
     problem = `ended at ${finalUrl}, expected ${target.expect}`
+  else if (!okStatus && botBlocked)
+    note = `HTTP ${status} (site blocks bots, URL is correct)`
+  else if (!okStatus)
+    problem = `HTTP ${status}`
 
   const totalMs = ms(info.time_total)
   return {
@@ -86,7 +87,7 @@ async function checkUrl(target) {
     ttfbMs: ms(info.time_starttransfer),
     totalMs,
     result: problem ? 'fail' : totalMs > config.slowMs ? 'slow' : 'ok',
-    note: problem ?? '',
+    note: problem ?? note,
   }
 }
 

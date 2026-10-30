@@ -1,8 +1,8 @@
 {
   "slowMs": 2000,
   "timeoutSec": 20,
-  "extraAccept": [999],
-  "redirectsFile": "public/_redirects",
+  "botBlockedHosts": ["x.com", "www.linkedin.com", "codepen.io"],
+  "redirectsFile": "vercel.json",
   "redirectsBase": "https://gambhir.dev",
   "urls": [
     { "url": "https://gambhir.dev", "expect": "https://gambhir.dev/" },

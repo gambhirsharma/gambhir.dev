@@ -10,7 +10,7 @@ on:
       - .github/workflows/link-check.yml
       - .github/link-check/**
       - scripts/check-links.mjs
-      - public/_redirects
+      - vercel.json
 
 permissions:
   contents: read
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 22
 
-      # Domains, subdomains, short links from public/_redirects, and email.
+      # Domains, subdomains, short links from vercel.json, and email.
       # The list lives in .github/link-check/targets.json.
       - name: Check domains, short links, and email
         id: targets
@@ -48,7 +48,9 @@ jobs:
           echo "Found $(echo "$pages" | wc -l) pages"
           echo "urls=$(echo "$pages" | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
 
-      # Every link found on every page of the live site.
+      # Every link found on every page of the live site. The excluded hosts
+      # block CI runners (403) but load fine in a browser, so checking them
+      # only produces noise.
       - name: Check every link on the site
         id: lychee
         uses: lycheeverse/lychee-action@v2
@@ -62,6 +64,11 @@ jobs:
             --max-retries 2
             --accept '100..=103,200..=299,429,999'
             --user-agent 'gambhir.dev-link-check (+https://github.com/gambhirsharma/gambhir.dev)'
+            --exclude '^https?://(www\.)?(x|twitter)\.com'
+            --exclude '^https?://(www\.)?codepen\.io'
+            --exclude '^https?://(www\.)?ericsson\.com'
+            --exclude '^https?://queue\.acm\.org'
+            --exclude '^https?://downloads\.khinsider\.com'
             ${{ steps.pages.outputs.urls }}
 
       - name: Upload report
