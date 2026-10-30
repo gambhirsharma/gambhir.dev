@@ -1001,10 +1001,10 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
 
-    :global(.trek-stats) {
-      margin: 0;
-    }
+  .treks :global(.trek-stats) {
+    padding: 0 2px;
   }
 
   .map-container {
