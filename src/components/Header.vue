@@ -5,7 +5,20 @@ import ThemeToggle from './ThemeToggle.vue'
 import siteConfig from '@/site-config'
 import { getLinkTarget } from '@/utils/link'
 
+const props = defineProps<{
+  currentPath?: string
+}>()
+
 const navLinks = siteConfig.header.navLinks || []
+
+// The nav link whose href is the longest prefix of the current path, so
+// /blog/notes/ highlights "Notes" rather than "Blog"
+const activeHref = computed(() => {
+  const path = (props.currentPath || '').replace(/\/$/, '') || '/'
+  return navLinks
+    .filter(link => path === link.href || path.startsWith(`${link.href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href
+})
 
 const socialLinks = computed(() => {
   return siteConfig.socialLinks.filter((link: Record<string, any>) => {
@@ -65,7 +78,8 @@ onMounted(() => {
     <nav class="header-nav">
       <a
         v-for="link in navLinks" :key="link.text" :aria-label="`${link.text}`" :target="getLinkTarget(link.href)"
-        class="header-link" :href="link.href"
+        class="header-link nav-item" :class="{ active: link.href === activeHref }" :href="link.href"
+        :aria-current="link.href === activeHref ? 'page' : undefined"
       >
         {{ link.text }}
       </a>
@@ -100,7 +114,7 @@ onMounted(() => {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px clamp(24px, 5vw, 56px);
+  gap: 14px clamp(16px, 5vw, 56px);
   padding: clamp(20px, 4vw, 28px) clamp(20px, 5vw, 64px);
 }
 
@@ -111,14 +125,17 @@ onMounted(() => {
   color: var(--c-text);
 }
 
-/* On small screens the nav gets its own row under the logo and icons */
+/* On small screens the nav gets its own row under the logo and icons,
+   spread edge to edge and set off by a hairline */
 .header-nav {
   order: 2;
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px clamp(16px, 3vw, 24px);
-  font-size: 16px;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-border-row);
+  font-size: 15px;
 }
 
 @media (min-width: 640px) {
@@ -126,13 +143,32 @@ onMounted(() => {
     order: 0;
     width: auto;
     margin-right: auto;
+    justify-content: flex-start;
+    gap: 8px clamp(16px, 3vw, 24px);
+    padding-top: 0;
+    border-top: 0;
+    font-size: 16px;
   }
+}
+
+.nav-item {
+  white-space: nowrap;
+  text-decoration: underline 2px transparent;
+  text-underline-offset: 8px;
+  transition:
+    color 0.2s,
+    text-decoration-color 0.2s;
+}
+
+.nav-item.active {
+  color: var(--c-strong);
+  text-decoration-color: var(--c-accent);
 }
 
 .header-icons {
   display: flex;
   align-items: center;
-  gap: 26px;
+  gap: clamp(14px, 4vw, 26px);
 }
 
 .header-link {
