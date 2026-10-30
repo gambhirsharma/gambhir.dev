@@ -1,6 +1,7 @@
 {
   "slowMs": 2000,
   "timeoutSec": 20,
+  "concurrency": 4,
   "botBlockedHosts": ["x.com", "www.linkedin.com", "codepen.io"],
   "redirectsFile": "vercel.json",
   "redirectsBase": "https://gambhir.dev",

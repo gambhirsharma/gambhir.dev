@@ -173,9 +173,24 @@ async function checkEmail(address) {
   }
 }
 
+// Run a few checks at a time. Firing every request at once queues them up in
+// the runner's DNS resolver and inflates every latency number.
+async function mapLimit(items, limit, fn) {
+  const results = Array.from({ length: items.length })
+  let next = 0
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++
+      results[i] = await fn(items[i])
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker))
+  return results
+}
+
 const targets = [...config.urls, ...await readShortLinks()]
 const results = [
-  ...await Promise.all(targets.map(checkUrl)),
+  ...await mapLimit(targets, config.concurrency ?? 4, checkUrl),
   ...await Promise.all((config.emails ?? []).map(checkEmail)),
 ]
 
