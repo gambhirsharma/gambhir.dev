@@ -40,7 +40,7 @@ export default defineConfig({
     presetTypography(),
     presetWebFonts({
       fonts: {
-        sans: 'Inter:400,600,800',
+        sans: 'Inter:400,500,600,700,800',
         mono: 'DM Mono:400,600',
       },
     }),
