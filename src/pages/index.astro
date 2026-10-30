@@ -27,7 +27,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   <article class="home">
     <section class="hero">
       <div class="hero-id">
-        <img class="avatar" src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" />
+        <span class="avatar"><img src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" /></span>
         <div class="hero-text">
           <h1>
             {firstName}
@@ -251,7 +251,10 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     gap: 20px;
   }
 
+  /* Photo is a green/teal duotone at rest and turns full colour on hover */
   .avatar {
+    position: relative;
+    display: block;
     flex-shrink: 0;
     width: clamp(72px, 19vw, 116px);
     height: clamp(72px, 19vw, 116px);
@@ -260,7 +263,69 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     box-shadow:
       0 0 0 4px var(--c-bg),
       0 0 0 5px var(--c-avatar-ring);
-    object-fit: cover;
+    overflow: hidden;
+    transition: box-shadow 0.4s ease;
+    /* same banana cursor as the links */
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: 0;
+      object-fit: cover;
+      filter: var(--avatar-filter);
+      transition:
+        filter 0.5s ease,
+        transform 0.5s ease;
+    }
+
+    /* a light gradient tint over the darkened greyscale photo */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #4ade80 0%, #14b8a6 55%, #0ea5e9 100%);
+      mix-blend-mode: color;
+      opacity: 0.18;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+  }
+
+  /* washed light grey on the light theme, deeper grey on the dark one */
+  :global(html:not(.dark)) .avatar {
+    --avatar-filter: grayscale(1) contrast(0.8) brightness(1.25);
+  }
+
+  :global(html.dark) .avatar {
+    --avatar-filter: grayscale(1) contrast(1) brightness(0.72);
+  }
+
+  .avatar:hover {
+    box-shadow:
+      0 0 0 4px var(--c-bg),
+      0 0 0 5px var(--c-accent),
+      0 0 24px 4px var(--c-accent-ring);
+
+    img {
+      filter: none;
+      transform: scale(1.05);
+    }
+
+    &::after {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .avatar img,
+    .avatar::after {
+      transition: none;
+    }
   }
 
   .hero-text {
