@@ -2,7 +2,9 @@
 Personal website
 
 ## Screenshots
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/585369f9-e088-4da6-9346-6f979e4f65fa" />
+<!-- old image --> 
+<!-- <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/585369f9-e088-4da6-9346-6f979e4f65fa" /> --> 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2cbada32-367a-44b7-9666-da0180730bf9" />
 
 <details>
   <summary>Gallary</summary>
