@@ -1,0 +1,20 @@
+{
+  "slowMs": 2000,
+  "timeoutSec": 20,
+  "concurrency": 4,
+  "botBlockedHosts": ["x.com", "www.linkedin.com", "codepen.io"],
+  "redirectsFile": "vercel.json",
+  "redirectsBase": "https://gambhir.dev",
+  "urls": [
+    { "url": "https://gambhir.dev", "expect": "https://gambhir.dev/" },
+    { "url": "https://www.gambhir.dev", "expect": "https://www.gambhir.dev/" },
+    { "url": "https://craft.gambhir.dev" },
+    { "url": "https://social.gambhir.dev", "expect": "https://gambhir.dev/social" },
+    { "url": "https://github.gambhir.dev", "expect": "https://github.com/gambhirsharma" },
+    { "url": "https://linkedin.gambhir.dev", "expect": "https://www.linkedin.com/in/gambhir-sharma/" },
+    { "url": "https://x.gambhir.dev", "expect": "https://x.com/gambhir_sharma" },
+    { "url": "https://raw.gambhir.dev", "expect": "https://github.com/gambhirsharma/gambhir.dev" },
+    { "url": "https://cv.gambhir.dev", "expect": "https://gambhir.dev/cv.pdf" }
+  ],
+  "emails": ["hey@gambhir.dev"]
+}
