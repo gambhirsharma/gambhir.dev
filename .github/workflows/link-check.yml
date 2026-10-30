@@ -69,6 +69,7 @@ jobs:
             --exclude '^https?://(www\.)?ericsson\.com'
             --exclude '^https?://queue\.acm\.org'
             --exclude '^https?://downloads\.khinsider\.com'
+            --exclude '^https?://chat\.gambhir\.dev'
             ${{ steps.pages.outputs.urls }}
 
       - name: Upload report

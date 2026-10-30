@@ -9,7 +9,6 @@
     { "url": "https://gambhir.dev", "expect": "https://gambhir.dev/" },
     { "url": "https://www.gambhir.dev", "expect": "https://www.gambhir.dev/" },
     { "url": "https://craft.gambhir.dev" },
-    { "url": "https://chat.gambhir.dev" },
     { "url": "https://social.gambhir.dev", "expect": "https://gambhir.dev/social" },
     { "url": "https://github.gambhir.dev", "expect": "https://github.com/gambhirsharma" },
     { "url": "https://linkedin.gambhir.dev", "expect": "https://www.linkedin.com/in/gambhir-sharma/" },
