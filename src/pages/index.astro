@@ -1,10 +1,9 @@
 ---
-import CurrentTime from '@/components/CurrentTime.vue'
 import LocationMap from '@/components/LocationMap.vue'
 import BirthdayBalloons from '@/components/BirthdayBalloons.vue'
-import BirthdayBadge from '@/components/BirthdayBadge.vue'
 import TrekStats from '@/components/TrekStats.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import Hero from '@/components/Hero.astro'
 import siteConfig from '@/site-config'
 import { HomeData } from '@/content/websiteData'
 import mapLocations from '@/data/map-locations'
@@ -16,8 +15,6 @@ const trekRoutes = buildTrekRoutes(treks)
 const trekStats = getTrekStats(trekRoutes)
 const currentlyReading = reading.filter((x) => x.status === 'reading').slice(0, 3)
 
-const [firstName, ...lastNames] = siteConfig.title.split(' ')
-
 // 2025-09-01 -> 2025.09
 const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISOString().slice(0, 7).replace('-', '.'))
 ---
@@ -25,43 +22,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
 <BaseLayout description={siteConfig.description}>
   <BirthdayBalloons client:load birthday={siteConfig.birthday} />
   <article class="home">
-    <section class="hero">
-      <div class="hero-id">
-        <button id="banana-trigger" class="avatar" type="button" aria-label="Profile photo">
-          <img src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" />
-        </button>
-        <div class="hero-text">
-          <h1>
-            {firstName}
-            <span>{lastNames.join(' ')}</span><BirthdayBadge client:load birthday={siteConfig.birthday} />
-          </h1>
-          <p class="tagline">devops&nbsp;· distributed&nbsp;systems&nbsp;· open&nbsp;source</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href={`mailto:${siteConfig.email}`}>
-              {siteConfig.emailDisplay}
-              <span aria-hidden="true">→</span>
-            </a>
-            <a class="btn btn-secondary" href="/cv.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">
-              Curriculum Vitae <span class="arrow" aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="hero-meta">
-        <span class="meta-row meta-time">
-          <span class="meta-icon"><span class="live-dot"></span></span>
-          <CurrentTime client:load timeZone={siteConfig.location.timeZone} />
-        </span>
-        <span class="meta-row">
-          <i class="meta-icon i-lucide-map-pin"></i>
-          {siteConfig.location.place.toLowerCase()}
-        </span>
-        <span class="meta-row">
-          <i class="meta-icon i-lucide-briefcase"></i>
-          <span>prev devops <a href="https://www.cgi.com/en" target="_blank">@CGI</a></span>
-        </span>
-      </div>
-    </section>
+    <Hero />
 
     <div class="bio">
       <p>
@@ -694,142 +655,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     }
   }
 
-  /* hero */
-  .hero {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 24px 40px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--c-border);
-  }
-
-  .hero-id {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-  }
-
-  /* Photo is a green/teal duotone at rest and turns full colour on hover */
-  .avatar {
-    position: relative;
-    display: block;
-    flex-shrink: 0;
-    width: clamp(72px, 19vw, 116px);
-    height: clamp(72px, 19vw, 116px);
-    border-radius: 50%;
-    border: 1px solid var(--c-avatar-border);
-    box-shadow:
-      0 0 0 4px var(--c-bg),
-      0 0 0 5px var(--c-avatar-ring);
-    overflow: hidden;
-    padding: 0;
-    background: transparent;
-    transition: box-shadow 0.4s ease;
-    /* same banana cursor as the links */
-    cursor:
-      url('/kela.svg') 5 7,
-      pointer;
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      border-radius: 0;
-      object-fit: cover;
-      filter: var(--avatar-filter);
-      transition:
-        filter 0.5s ease,
-        transform 0.5s ease;
-    }
-
-    /* a light gradient tint over the darkened greyscale photo */
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #4ade80 0%, #14b8a6 55%, #0ea5e9 100%);
-      mix-blend-mode: color;
-      opacity: 0.18;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-    }
-  }
-
-  /* washed light grey on the light theme, deeper grey on the dark one */
-  :global(html:not(.dark)) .avatar {
-    --avatar-filter: grayscale(1) contrast(0.8) brightness(1.25);
-  }
-
-  :global(html.dark) .avatar {
-    --avatar-filter: grayscale(1) contrast(1) brightness(0.72);
-  }
-
-  .avatar:hover {
-    box-shadow:
-      0 0 0 4px var(--c-bg),
-      0 0 0 5px var(--c-accent),
-      0 0 24px 4px var(--c-accent-ring);
-
-    img {
-      filter: none;
-      transform: scale(1.05);
-    }
-
-    &::after {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .avatar img,
-    .avatar::after {
-      transition: none;
-    }
-  }
-
-  :global(.banana-rain) {
-    position: fixed;
-    z-index: 9999;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .hero-text {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-
-    h1 {
-      font-size: clamp(28px, 7vw, 34px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      color: var(--c-strong);
-
-      span {
-        font-weight: 400;
-        color: var(--c-secondary);
-      }
-    }
-  }
-
-  .tagline {
-    font-size: 14px;
-    color: var(--c-tertiary);
-  }
-
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 8px;
-  }
-
+  /* contact card button (the hero buttons are styled in Hero.astro) */
   .home .btn {
     display: flex;
     align-items: center;
@@ -852,127 +678,20 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     color: #0d1117;
   }
 
-  .home .btn-secondary {
-    border: 1px solid var(--c-border-btn);
-    color: var(--c-text);
-
-    .arrow {
-      opacity: 0.6;
-    }
-  }
-
-  .home .btn-secondary:hover {
-    background: var(--c-hover);
-    color: var(--c-strong);
-  }
-
-  .hero-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-left: 20px;
-    border-left: 1px solid var(--c-border);
-    font-size: 14px;
-    line-height: 1.5;
-    white-space: nowrap;
-    color: var(--c-body);
-
-    a {
-      font-weight: 600;
-    }
-  }
-
-  .meta-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .meta-time {
-    color: var(--c-text);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .meta-icon {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    color: var(--c-tertiary);
-  }
-
-  span.meta-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .live-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--c-accent);
-    box-shadow: 0 0 0 3px var(--c-accent-ring);
-  }
-
-  /* Small screens: name and tagline sit next to the avatar, the buttons share
-     one full-width row under them, and the meta block becomes a single
-     wrapping line instead of an indented column. */
   @media (max-width: 639px) {
-    .hero {
-      gap: 20px;
-    }
-
-    .hero-id {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      gap: 4px 16px;
-      align-items: center;
-      width: 100%;
-    }
-
-    .hero-text {
-      display: contents;
-    }
-
-    .avatar {
-      grid-row: 1 / span 2;
-    }
-
-    .hero-text h1 {
-      align-self: end;
-    }
-
-    .tagline {
-      align-self: start;
-      font-size: 13px;
-    }
-
-    .hero-actions {
-      grid-column: 1 / -1;
-      display: grid;
-      /* two side by side, stacked once they no longer fit (~320px) */
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      margin-top: 16px;
-    }
-
     .home .btn {
       justify-content: center;
       padding: 9px 10px;
     }
+  }
 
-    .hero-meta {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 6px 18px;
-      width: 100%;
-      padding-left: 0;
-      border-left: 0;
-      font-size: 13px;
-    }
-
-    .meta-row {
-      gap: 6px;
-    }
+  :global(.banana-rain) {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 
   /* bio */

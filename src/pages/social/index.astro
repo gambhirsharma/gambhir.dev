@@ -1,144 +1,412 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import Hero from '@/components/Hero.astro'
 import siteConfig from '@/site-config'
 
-const socials = [
-  ...siteConfig.socialLinks.map((l) => ({ ...l, external: true, display: l.href.replace('https://', '') })),
+interface LinkRow {
+  text: string
+  icon: string
+  display: string
+  href?: string
+  // text put on the clipboard; a row with no href copies when clicked
+  copy?: string
+}
+
+const escapeHtml = (text: string) => text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
+
+// https://www.github.com/foo/ -> github.com/foo
+const prettyUrl = (href: string) => href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+
+const socials: LinkRow[] = [
+  ...siteConfig.socialLinks.map((l) => ({ text: l.text, href: l.href, icon: l.icon, display: prettyUrl(l.href) })),
   {
     text: 'CodePen',
     href: 'https://codepen.io/gambhirsharma',
     icon: 'i-simple-icons-codepen',
-    external: true,
     display: 'codepen.io/gambhirsharma',
   },
   {
     text: 'Mastodon',
     href: 'https://mastodon.social/@gambhir',
     icon: 'i-simple-icons-mastodon',
-    external: true,
     display: '@gambhir@mastodon.social',
-  },
-  {
-    text: 'Discord',
-    href: 'https://discord.com',
-    icon: 'i-simple-icons-discord',
-    external: true,
-    display: 'gambhir_sharma',
   },
   {
     text: 'Bluesky',
     href: 'https://bsky.app/profile/gambhirsharma.bsky.social',
     icon: 'i-simple-icons-bluesky',
-    external: true,
     display: 'gambhirsharma.bsky.social',
+  },
+  {
+    text: 'Discord',
+    icon: 'i-simple-icons-discord',
+    display: 'gambhir_sharma',
+    copy: 'gambhir_sharma',
   },
 ]
 
-const emails = [
+const emails: LinkRow[] = [
   {
     text: 'Email',
     href: `mailto:${siteConfig.email}`,
-    icon: 'i-ri-mail-line',
-    external: false,
+    icon: 'i-lucide-mail',
     display: siteConfig.email,
+    copy: siteConfig.email,
   },
   {
     text: 'Uni Email',
     href: 'mailto:gambhir.sharma@students.uniroma2.eu',
-    icon: 'i-ri-graduation-cap-line',
-    external: false,
+    icon: 'i-lucide-graduation-cap',
     display: 'gambhir.sharma@students.uniroma2.eu',
+    copy: 'gambhir.sharma@students.uniroma2.eu',
   },
+]
+
+const sections = [
+  { title: 'find me', links: socials },
+  { title: 'email', links: emails },
 ]
 ---
 
-<BaseLayout title="Social">
-  <article class="prose">
-    <h1>find me</h1>
-    <div class="social-list">
-      {
-        socials.map((link) => (
-          <div>
-            <a
-              href={link.href}
-              target={link.external ? '_blank' : undefined}
-              rel={link.external ? 'noopener noreferrer' : undefined}
-              class="social-link"
-            >
-              <i class:list={[link.icon, 'social-icon']} />
-              <span class="social-label">{link.text}</span>
-              <span class="social-url">{link.display}</span>
-            </a>
+<BaseLayout title="Social" description="Where to find Gambhir Sharma online">
+  <article class="social">
+    <Hero />
+
+    {
+      sections.map((section, i) => (
+        <section class:list={['block', { first: i === 0 }]}>
+          <div class="block-head">
+            <h2>{section.title}</h2>
           </div>
-        ))
-      }
-    </div>
-    <hr class="hr-line" />
-    <div class="social-list">
-      {
-        emails.map((link) => (
-          <div>
-            <a href={link.href} class="social-link">
-              <i class:list={[link.icon, 'social-icon']} />
-              <span class="social-label">{link.text}</span>
-              <span class="social-url">{link.display}</span>
-            </a>
-          </div>
-        ))
-      }
-    </div>
+          {section.links.map((link) => {
+            const external = link.href?.startsWith('http')
+            // prefer wrapping long emails/handles right after the last @
+            const at = link.display.lastIndexOf('@') + 1
+            const [head, tail] = [link.display.slice(0, at), link.display.slice(at)]
+            return (
+              <div class="link-row">
+                <i class:list={[link.icon, 'link-icon']} aria-hidden="true" />
+                {link.href ? (
+                  <a
+                    class="link-label link-target"
+                    href={link.href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.text}
+                  </a>
+                ) : (
+                  <button
+                    class="link-label link-target"
+                    type="button"
+                    data-copy={link.copy}
+                    aria-label={`Copy ${link.text} handle ${link.display}`}
+                  >
+                    {link.text}
+                  </button>
+                )}
+                <span class="link-handle" set:html={`${escapeHtml(head)}<wbr>${escapeHtml(tail)}`} />
+                <span class="link-actions">
+                  {link.href && link.copy && (
+                    <button class="copy-btn" type="button" data-copy={link.copy} aria-label={`Copy ${link.display}`}>
+                      <i class="i-lucide-copy" aria-hidden="true" />
+                      <i class="i-lucide-check" aria-hidden="true" />
+                    </button>
+                  )}
+                  {link.href ? (
+                    <span class="link-arrow" aria-hidden="true">
+                      {external ? '↗' : '→'}
+                    </span>
+                  ) : (
+                    <span class="copy-btn" aria-hidden="true">
+                      <i class="i-lucide-copy" />
+                      <i class="i-lucide-check" />
+                    </span>
+                  )}
+                </span>
+              </div>
+            )
+          })}
+        </section>
+      ))
+    }
+    <p id="copy-status" class="sr-only" aria-live="polite"></p>
   </article>
 </BaseLayout>
 
+<script>
+  // Delegated on document so it keeps working across view transitions
+  document.addEventListener('click', async (event) => {
+    const target = (event.target as Element | null)?.closest<HTMLElement>('[data-copy]')
+    const value = target?.dataset.copy
+    if (!target || !value) {
+      return
+    }
+    const row = target.closest<HTMLElement>('.link-row')
+    const copied = await navigator.clipboard.writeText(value).then(
+      () => true,
+      () => false,
+    )
+    if (!copied) {
+      return
+    }
+    const status = document.getElementById('copy-status')
+    if (status) {
+      status.textContent = `Copied ${value}`
+    }
+    if (row) {
+      row.dataset.copied = ''
+      window.clearTimeout(Number(row.dataset.copiedTimer))
+      row.dataset.copiedTimer = String(window.setTimeout(() => delete row.dataset.copied, 1600))
+    }
+  })
+</script>
+
 <style>
-  .social-list {
-    padding: 0;
-    margin: 2rem 0;
+  .social {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 32px;
+    font-size: 16px;
+    color: var(--c-body);
+
+    h2 {
+      margin: 0;
+    }
   }
 
-  .social-link {
+  .block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .block-head {
+    padding-top: 20px;
+    margin-bottom: 8px;
+    border-top: 1px solid var(--c-border);
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--c-text);
+    }
+  }
+
+  /* the hero already draws a line above the first section */
+  .first .block-head {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Same rhythm as the home page project cards: flat rows, 14px above and
+     below, with an inset divider only between items. The label is the real
+     link/button; its ::after stretches over the row so the whole row is one
+     click target, and the copy button sits above it. */
+  .link-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 14px 12px;
+    margin: 0 -12px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+  }
+
+  .link-row + .link-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    right: 12px;
+    border-top: 1px solid var(--c-border-row);
+    transition: opacity 0.2s;
+  }
+
+  .link-row:hover {
+    background: var(--c-hover-row);
+  }
+
+  .link-row:hover::before,
+  .link-row:hover + .link-row::before {
+    opacity: 0;
+  }
+
+  /* muted at rest, brand accent on hover, like the home page meta icons */
+  .link-icon {
+    font-size: 18px;
+    color: var(--c-secondary);
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-icon,
+  .link-row[data-copied] .link-icon {
+    color: var(--c-accent);
+  }
+
+  .link-label {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--c-strong);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .link-target {
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:focus-visible::after {
+      outline: 2px solid var(--c-accent);
+      outline-offset: -2px;
+    }
+  }
+
+  .link-row:hover .link-label {
+    color: var(--c-accent);
+  }
+
+  .link-handle {
+    justify-self: end;
+    text-align: right;
+    font-size: 14px;
+    color: var(--c-tertiary);
+    overflow-wrap: anywhere;
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-handle {
+    color: var(--c-secondary);
+  }
+
+  .link-actions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color, #e5e7eb);
-    border-radius: 8px;
-    text-decoration: none !important;
+    justify-content: flex-end;
+    gap: 12px;
+    min-width: 14px;
+    font-size: 14px;
+    color: var(--c-tertiary);
+  }
+
+  .link-arrow {
+    transition: color 0.2s;
+  }
+
+  .link-row:hover .link-arrow {
+    color: var(--c-accent);
+  }
+
+  .copy-btn {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    /* 28px hit area, but only 14px of layout so it lines up with the arrows */
+    margin: -7px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    font-size: 14px;
+    color: inherit;
     transition:
-      border-color 0.15s ease,
-      background-color 0.15s ease;
+      color 0.2s,
+      background-color 0.2s;
+
+    i {
+      grid-area: 1 / 1;
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+    }
   }
 
-  .social-link:hover {
-    border-color: var(--text-primary-green-color);
-    background-color: var(--current_time_bg-color);
+  button.copy-btn {
+    cursor:
+      url('/kela.svg') 5 7,
+      pointer;
   }
 
-  .social-icon {
-    font-size: 1.25rem;
-    flex-shrink: 0;
-    color: var(--text-primary-green-color);
+  button.copy-btn:hover {
+    background: var(--c-hover);
+    color: var(--c-strong);
   }
 
-  .social-label {
-    font-weight: 500;
-    min-width: 5rem;
+  .i-lucide-check {
+    opacity: 0;
+    transform: scale(0.6);
   }
 
-  .social-url {
-    color: grey;
-    font-size: 0.875rem;
-    margin-left: auto;
+  .link-row[data-copied] {
+    .copy-btn {
+      color: var(--c-accent);
+    }
+
+    .i-lucide-copy {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    .i-lucide-check {
+      opacity: 1;
+      transform: none;
+    }
   }
 
-  :global(html.dark) .social-link {
-    border-color: #374151;
+  @media (prefers-reduced-motion: reduce) {
+    .copy-btn i {
+      transition: none;
+    }
   }
 
-  :global(html.dark) .social-link:hover {
-    border-color: var(--text-primary-green-color);
+  /* Narrow screens: handle drops under the label instead of squeezing it */
+  @media (max-width: 560px) {
+    .link-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        'icon label actions'
+        '. handle .';
+    }
+
+    .link-icon {
+      grid-area: icon;
+    }
+
+    .link-label {
+      grid-area: label;
+    }
+
+    .link-actions {
+      grid-area: actions;
+    }
+
+    .link-handle {
+      grid-area: handle;
+      justify-self: start;
+      text-align: left;
+    }
   }
 </style>
