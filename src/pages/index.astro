@@ -278,6 +278,32 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     window.setTimeout(() => context.close(), 2600)
   }
 
+  // freeze the page where it is while bananas are on screen; returns the undo
+  function lockScroll() {
+    const root = document.documentElement
+    const body = document.body
+    const scrollbar = window.innerWidth - root.clientWidth
+    const previous = {
+      rootOverflow: root.style.overflow,
+      bodyOverflow: body.style.overflow,
+      paddingRight: body.style.paddingRight,
+    }
+    root.style.overflow = 'hidden'
+    body.style.overflow = 'hidden'
+    // keep the layout from jumping when the scrollbar disappears
+    body.style.paddingRight = `${scrollbar}px`
+    const block = (event: Event) => event.preventDefault()
+    window.addEventListener('wheel', block, { passive: false })
+    window.addEventListener('touchmove', block, { passive: false })
+    return () => {
+      root.style.overflow = previous.rootOverflow
+      body.style.overflow = previous.bodyOverflow
+      body.style.paddingRight = previous.paddingRight
+      window.removeEventListener('wheel', block)
+      window.removeEventListener('touchmove', block)
+    }
+  }
+
   function rasterise(image: HTMLImageElement, size: number, shade = 0) {
     const sprite = document.createElement('canvas')
     sprite.width = size
@@ -324,6 +350,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     canvas.className = 'banana-rain'
     canvas.setAttribute('aria-hidden', 'true')
     document.body.append(canvas)
+    const unlockScroll = lockScroll()
     const context = canvas.getContext('2d')!
     // settled bananas are painted once onto this layer instead of every frame
     const pile = document.createElement('canvas')
@@ -575,6 +602,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     function finish() {
       window.removeEventListener('resize', resize)
       canvas.remove()
+      unlockScroll()
       celebrating = false
     }
 
