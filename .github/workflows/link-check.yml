@@ -1,0 +1,116 @@
+name: Link check
+
+on:
+  schedule:
+    # Every night at 02:30 UTC (08:00 IST).
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/link-check.yml
+      - .github/link-check/**
+      - scripts/check-links.mjs
+      - public/_redirects
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # Domains, subdomains, short links from public/_redirects, and email.
+      # The list lives in .github/link-check/targets.json.
+      - name: Check domains, short links, and email
+        id: targets
+        continue-on-error: true
+        run: node scripts/check-links.mjs
+
+      - name: Collect pages from the sitemap
+        id: pages
+        run: |
+          pages=$(curl -fsSL https://gambhir.dev/sitemap-index.xml \
+            | grep -o '<loc>[^<]*' | sed 's/<loc>//' \
+            | xargs -n1 curl -fsSL \
+            | grep -o '<loc>[^<]*' | sed 's/<loc>//' | sort -u)
+          echo "Found $(echo "$pages" | wc -l) pages"
+          echo "urls=$(echo "$pages" | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+
+      # Every link found on every page of the live site.
+      - name: Check every link on the site
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          fail: false
+          output: link-check-report/site.md
+          args: >-
+            --no-progress
+            --max-concurrency 8
+            --timeout 20
+            --max-retries 2
+            --accept '100..=103,200..=299,429,999'
+            --user-agent 'gambhir.dev-link-check (+https://github.com/gambhirsharma/gambhir.dev)'
+            ${{ steps.pages.outputs.urls }}
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: link-check-report
+          path: link-check-report/
+          retention-days: 30
+
+      # Open (or comment on) one "link-check" issue while anything is broken,
+      # and close it once everything passes again.
+      - name: Report to issue
+        if: always() && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGETS_FAILED: ${{ steps.targets.outcome != 'success' }}
+          LYCHEE_EXIT: ${{ steps.lychee.outputs.exit_code }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          failed=false
+          [ "$TARGETS_FAILED" = "true" ] && failed=true
+          [ "$LYCHEE_EXIT" != "0" ] && failed=true
+          today=$(date -u +%F)
+          existing=$(gh issue list --label link-check --state open --json number -q '.[0].number' 2>/dev/null || true)
+
+          if [ "$failed" = "true" ]; then
+            {
+              echo "Link check found problems on $today. [Workflow run]($RUN_URL)"
+              echo
+              cat link-check-report/targets.md 2>/dev/null || echo "_Domain check did not produce a report; see the run log._"
+              echo
+              echo "## Links on the site"
+              echo
+              cat link-check-report/site.md 2>/dev/null || echo "_Site link check did not produce a report; see the run log._"
+            } | head -c 60000 > issue-body.md
+
+            if [ -n "$existing" ]; then
+              gh issue comment "$existing" --body-file issue-body.md
+            else
+              gh label create link-check --color d73a4a --description "Broken links or domains found by the scheduled check" 2>/dev/null || true
+              gh issue create --title "Link check: broken links or domains" --label link-check --body-file issue-body.md
+            fi
+          elif [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "Everything passes again as of $today. [Workflow run]($RUN_URL)"
+          fi
+
+      - name: Fail if anything is broken
+        if: steps.targets.outcome != 'success' || steps.lychee.outputs.exit_code != '0'
+        run: |
+          echo "::error::Some links, domains, or email checks failed. See the job summary."
+          exit 1
