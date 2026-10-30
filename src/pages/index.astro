@@ -283,7 +283,11 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     sprite.width = size
     sprite.height = size
     const context = sprite.getContext('2d')!
-    context.drawImage(image, 0, 0, size, size)
+    // fit inside the square without squashing the icon
+    const scale = size / Math.max(image.naturalWidth, image.naturalHeight)
+    const w = image.naturalWidth * scale
+    const h = image.naturalHeight * scale
+    context.drawImage(image, (size - w) / 2, (size - h) / 2, w, h)
     if (shade) {
       context.globalCompositeOperation = 'source-atop'
       context.fillStyle = `rgb(150 95 0 / ${shade})`
@@ -306,7 +310,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     }
 
     const image = new Image()
-    image.src = '/banana.svg'
+    image.src = '/kela.svg'
     const loaded = await image.decode().then(
       () => true,
       () => false,
@@ -338,7 +342,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
 
     // pre-rendered at on-screen size so each frame is just cheap blits
     const sprite = rasterise(image, Math.ceil(radius * 3.4 * dpr))
-    const shadedSprite = rasterise(image, Math.ceil(radius * 3.6 * dpr), 0.55)
+    const shadedSprite = rasterise(image, Math.ceil(radius * 3.6 * dpr), 0.3)
     const bananas: Banana[] = []
     function resize() {
       width = window.innerWidth
@@ -519,9 +523,9 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
       pileContext.globalCompositeOperation = 'destination-over'
       drawSprite(pileContext, shadedSprite, banana, banana.angle + 2.1, banana.r * 3.6)
       pileContext.setTransform(dpr, 0, 0, dpr, 0, 0)
-      pileContext.fillStyle = '#b07c0c'
+      pileContext.fillStyle = '#d9a21a'
       pileContext.beginPath()
-      pileContext.arc(banana.x, banana.y, banana.r * 1.4, 0, Math.PI * 2)
+      pileContext.arc(banana.x, banana.y, banana.r * 1.5, 0, Math.PI * 2)
       pileContext.fill()
     }
 
@@ -546,12 +550,12 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
 
       // the deep, shadowed part of the pile fills the gaps so nothing shows through
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
-      context.fillStyle = '#b07c0c'
+      context.fillStyle = '#d9a21a'
       context.beginPath()
       for (const banana of visible) {
         if (banana.rest >= 1) {
-          context.moveTo(banana.x + banana.r * 1.4, banana.y)
-          context.arc(banana.x, banana.y, banana.r * 1.4, 0, Math.PI * 2)
+          context.moveTo(banana.x + banana.r * 1.5, banana.y)
+          context.arc(banana.x, banana.y, banana.r * 1.5, 0, Math.PI * 2)
         }
       }
       context.fill()
