@@ -214,58 +214,415 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   let lastClick = 0
   let celebrating = false
 
-  function playGameOver() {
+  interface Banana {
+    x: number
+    y: number
+    px: number
+    py: number
+    r: number
+    angle: number
+    spin: number
+    rest: number
+    still: number
+    frozen: boolean
+    touching: boolean
+  }
+
+  const step = 1 / 120
+  const gravity = 2400
+  const solverIterations = 6
+
+  function createAudio() {
     const AudioContext = window.AudioContext || window.webkitAudioContext
     if (!AudioContext) {
+      return null
+    }
+    // created inside the click so browsers allow it to play later
+    const context = new AudioContext()
+    void context.resume()
+    return context
+  }
+
+  // descending "wah wah wah waaah" in retro square wave
+  function playGameOver(context: AudioContext | null) {
+    if (!context) {
       return
     }
-
-    const context = new AudioContext()
-    const notes = [440, 370, 294, 196]
-    const start = context.currentTime
+    const notes = [392, 370, 349, 330]
+    const start = context.currentTime + 0.05
     notes.forEach((frequency, index) => {
+      const last = index === notes.length - 1
+      const at = start + index * 0.34
+      const length = last ? 1.1 : 0.3
       const oscillator = context.createOscillator()
       const gain = context.createGain()
       oscillator.type = 'square'
-      oscillator.frequency.setValueAtTime(frequency, start + index * 0.14)
-      gain.gain.setValueAtTime(0.08, start + index * 0.14)
-      gain.gain.exponentialRampToValueAtTime(0.001, start + index * 0.14 + 0.18)
+      oscillator.frequency.setValueAtTime(frequency, at)
+      if (last) {
+        const vibrato = context.createOscillator()
+        const depth = context.createGain()
+        vibrato.frequency.value = 6
+        depth.gain.value = 9
+        vibrato.connect(depth).connect(oscillator.frequency)
+        vibrato.start(at)
+        vibrato.stop(at + length)
+      }
+      gain.gain.setValueAtTime(0.0001, at)
+      gain.gain.exponentialRampToValueAtTime(0.09, at + 0.02)
+      gain.gain.setValueAtTime(0.09, at + length * 0.6)
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + length)
       oscillator.connect(gain).connect(context.destination)
-      oscillator.start(start + index * 0.14)
-      oscillator.stop(start + index * 0.14 + 0.2)
+      oscillator.start(at)
+      oscillator.stop(at + length + 0.02)
     })
-    window.setTimeout(() => context.close(), 900)
+    window.setTimeout(() => context.close(), 2600)
   }
 
-  function startBananaRain() {
+  function rasterise(image: HTMLImageElement, size: number, shade = 0) {
+    const sprite = document.createElement('canvas')
+    sprite.width = size
+    sprite.height = size
+    const context = sprite.getContext('2d')!
+    context.drawImage(image, 0, 0, size, size)
+    if (shade) {
+      context.globalCompositeOperation = 'source-atop'
+      context.fillStyle = `rgb(150 95 0 / ${shade})`
+      context.fillRect(0, 0, size, size)
+    }
+    return sprite
+  }
+
+  async function startBananaRain() {
     if (celebrating) {
       return
     }
     celebrating = true
-    playGameOver()
+    const audio = createAudio()
 
-    const overlay = document.createElement('div')
-    overlay.className = 'banana-rain'
-    overlay.setAttribute('aria-hidden', 'true')
-
-    for (let index = 0; index < 64; index++) {
-      const banana = document.createElement('img')
-      banana.className = 'falling-banana'
-      banana.src = '/banana.svg'
-      banana.alt = ''
-      banana.style.setProperty('--x', `${Math.random() * 100}%`)
-      banana.style.setProperty('--delay', `${Math.random() * 1.8}s`)
-      banana.style.setProperty('--duration', `${1.5 + Math.random() * 1.4}s`)
-      banana.style.setProperty('--rotation', `${-80 + Math.random() * 160}deg`)
-      banana.style.setProperty('--size', `${34 + Math.random() * 42}px`)
-      overlay.append(banana)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      playGameOver(audio)
+      celebrating = false
+      return
     }
 
-    document.body.append(overlay)
-    window.setTimeout(() => {
-      overlay.remove()
+    const image = new Image()
+    image.src = '/banana.svg'
+    const loaded = await image.decode().then(
+      () => true,
+      () => false,
+    )
+    if (!loaded) {
+      audio?.close()
       celebrating = false
-    }, 7000)
+      return
+    }
+    const canvas = document.createElement('canvas')
+    canvas.className = 'banana-rain'
+    canvas.setAttribute('aria-hidden', 'true')
+    document.body.append(canvas)
+    const context = canvas.getContext('2d')!
+    // settled bananas are painted once onto this layer instead of every frame
+    const pile = document.createElement('canvas')
+    const pileContext = pile.getContext('2d')!
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    let width = 0
+    let height = 0
+
+    // size bananas so roughly a thousand bury the viewport (random circle packing is ~85% dense)
+    const area = window.innerWidth * window.innerHeight
+    let radius = Math.min(28, Math.max(13, Math.min(window.innerWidth, window.innerHeight) / 26))
+    radius = Math.max(radius, Math.sqrt(area / (Math.PI * 0.85 * 1100)))
+    const estimate = area / (Math.PI * radius * radius * 0.85)
+    const spawnRate = estimate / 4.5
+    const maxBananas = estimate * 2.5
+
+    // pre-rendered at on-screen size so each frame is just cheap blits
+    const sprite = rasterise(image, Math.ceil(radius * 3.4 * dpr))
+    const shadedSprite = rasterise(image, Math.ceil(radius * 3.6 * dpr), 0.55)
+    const bananas: Banana[] = []
+    function resize() {
+      width = window.innerWidth
+      height = window.innerHeight
+      canvas.width = pile.width = width * dpr
+      canvas.height = pile.height = height * dpr
+      bananas.filter((banana) => banana.frozen).forEach(paintIntoPile)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+    const grid = new Map<number, number[]>()
+    const cell = radius * 2.4
+    let phase: 'raining' | 'full' | 'draining' = 'raining'
+    let phaseTime = 0
+    let spawnBudget = 0
+    let elapsed = 0
+    let accumulator = 0
+    let lastFrame = performance.now()
+
+    // buried once the resting pile reaches above the top edge across the whole width
+    function isBuried() {
+      const columns = Array.from({ length: Math.ceil(width / cell) }, () => Infinity)
+      for (const banana of bananas) {
+        if (banana.rest >= 1) {
+          const column = Math.min(columns.length - 1, Math.floor(banana.x / cell))
+          columns[column] = Math.min(columns[column], banana.y)
+        }
+      }
+      return columns.every((top) => top < 0)
+    }
+
+    function spawn(pileTop: number) {
+      const r = radius * (0.8 + Math.random() * 0.4)
+      const x = r + Math.random() * (width - 2 * r)
+      const y = Math.min(-r, pileTop - 2 * r) - Math.random() * height * 0.3
+      const vx = (Math.random() - 0.5) * 160
+      const vy = 150 + Math.random() * 450
+      bananas.push({
+        x,
+        y,
+        px: x - vx * step,
+        py: y - vy * step,
+        r,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 12,
+        rest: 0,
+        still: 0,
+        frozen: false,
+        touching: false,
+      })
+    }
+
+    function collide() {
+      grid.clear()
+      bananas.forEach((banana, index) => {
+        const key = Math.floor(banana.y / cell) * 4096 + Math.floor(banana.x / cell)
+        const bucket = grid.get(key) ?? []
+        bucket.push(index)
+        grid.set(key, bucket)
+      })
+      for (let i = 0; i < bananas.length; i++) {
+        const a = bananas[i]
+        const gx = Math.floor(a.x / cell)
+        const gy = Math.floor(a.y / cell)
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            const bucket = grid.get((gy + dy) * 4096 + gx + dx)
+            if (!bucket) {
+              continue
+            }
+            for (const j of bucket) {
+              if (j <= i) {
+                continue
+              }
+              const b = bananas[j]
+              if (a.frozen && b.frozen) {
+                continue
+              }
+              const nx = b.x - a.x
+              const ny = b.y - a.y
+              const min = a.r + b.r
+              const distSq = nx * nx + ny * ny
+              if (distSq >= min * min || distSq === 0) {
+                continue
+              }
+              const dist = Math.sqrt(distSq)
+              const overlap = (min - dist) / dist
+              // frozen bananas are immovable, so a falling one takes the whole push
+              const massA = a.frozen ? Infinity : a.r * a.r
+              const massB = b.frozen ? Infinity : b.r * b.r
+              const shareA = a.frozen ? 0 : b.frozen ? 1 : massB / (massA + massB)
+              const shareB = 1 - shareA
+              a.x -= nx * overlap * shareA
+              a.y -= ny * overlap * shareA
+              b.x += nx * overlap * shareB
+              b.y += ny * overlap * shareB
+              a.touching = true
+              b.touching = true
+            }
+          }
+        }
+      }
+    }
+
+    function simulate() {
+      for (const banana of bananas) {
+        if (banana.frozen) {
+          continue
+        }
+        // verlet integration: velocity is implied by the previous position
+        const vx = (banana.x - banana.px) * 0.998
+        const vy = (banana.y - banana.py) * 0.998
+        banana.px = banana.x
+        banana.py = banana.y
+        banana.x += vx
+        banana.y += vy + gravity * step * step
+        banana.touching = false
+      }
+
+      for (let iteration = 0; iteration < solverIterations; iteration++) {
+        collide()
+        for (const banana of bananas) {
+          if (banana.frozen) {
+            continue
+          }
+          const wallX = Math.min(width - banana.r, Math.max(banana.r, banana.x))
+          if (wallX !== banana.x) {
+            banana.x = wallX
+            banana.touching = true
+          }
+          if (phase !== 'draining' && banana.y > height - banana.r) {
+            banana.y = height - banana.r
+            // floor friction
+            banana.px = banana.x - (banana.x - banana.px) * 0.85
+            banana.touching = true
+          }
+        }
+      }
+
+      for (const banana of bananas) {
+        if (banana.frozen) {
+          continue
+        }
+        if (banana.touching) {
+          // roll along with the pile
+          const rolling = (banana.x - banana.px) / step / banana.r
+          banana.spin += (rolling - banana.spin) * 0.25
+        }
+        banana.angle += banana.spin * step
+        banana.rest = Math.min(1, Math.max(0, banana.rest + (banana.touching ? 3 : -3) * step))
+
+        const speed = Math.hypot(banana.x - banana.px, banana.y - banana.py) / step
+        banana.still = phase !== 'draining' && banana.rest >= 1 && speed < 20 ? banana.still + step : 0
+        if (banana.still > 0.4) {
+          banana.frozen = true
+          paintIntoPile(banana)
+        }
+      }
+    }
+
+    function drawSprite(
+      target: CanvasRenderingContext2D,
+      image: HTMLCanvasElement,
+      banana: Banana,
+      angle: number,
+      size: number,
+    ) {
+      const cos = Math.cos(angle) * dpr
+      const sin = Math.sin(angle) * dpr
+      target.setTransform(cos, sin, -sin, cos, banana.x * dpr, banana.y * dpr)
+      target.drawImage(image, -size / 2, -size / 2, size, size)
+    }
+
+    function paintIntoPile(banana: Banana) {
+      pileContext.globalCompositeOperation = 'source-over'
+      drawSprite(pileContext, sprite, banana, banana.angle, banana.r * 3.4)
+      // shade and gap filler go behind everything already in the pile
+      pileContext.globalCompositeOperation = 'destination-over'
+      drawSprite(pileContext, shadedSprite, banana, banana.angle + 2.1, banana.r * 3.6)
+      pileContext.setTransform(dpr, 0, 0, dpr, 0, 0)
+      pileContext.fillStyle = '#b07c0c'
+      pileContext.beginPath()
+      pileContext.arc(banana.x, banana.y, banana.r * 1.4, 0, Math.PI * 2)
+      pileContext.fill()
+    }
+
+    function draw() {
+      context.setTransform(1, 0, 0, 1, 0, 0)
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      if (phase !== 'draining') {
+        context.drawImage(pile, 0, 0)
+        context.setTransform(dpr, 0, 0, dpr, 0, 0)
+        for (const banana of bananas) {
+          if (!banana.frozen && banana.y + banana.r * 2 > 0) {
+            context.globalAlpha = banana.rest
+            drawSprite(context, shadedSprite, banana, banana.angle + 2.1, banana.r * 3.6)
+            context.globalAlpha = 1
+            drawSprite(context, sprite, banana, banana.angle, banana.r * 3.4)
+          }
+        }
+        return
+      }
+
+      const visible = bananas.filter((banana) => banana.y + banana.r * 2 > 0 && banana.y - banana.r * 2 < height)
+
+      // the deep, shadowed part of the pile fills the gaps so nothing shows through
+      context.setTransform(dpr, 0, 0, dpr, 0, 0)
+      context.fillStyle = '#b07c0c'
+      context.beginPath()
+      for (const banana of visible) {
+        if (banana.rest >= 1) {
+          context.moveTo(banana.x + banana.r * 1.4, banana.y)
+          context.arc(banana.x, banana.y, banana.r * 1.4, 0, Math.PI * 2)
+        }
+      }
+      context.fill()
+      for (const banana of visible) {
+        if (banana.rest > 0) {
+          context.globalAlpha = banana.rest
+          drawSprite(context, shadedSprite, banana, banana.angle + 2.1, banana.r * 3.6)
+        }
+      }
+      context.globalAlpha = 1
+      for (const banana of visible) {
+        drawSprite(context, sprite, banana, banana.angle, banana.r * 3.4)
+      }
+    }
+
+    function finish() {
+      window.removeEventListener('resize', resize)
+      canvas.remove()
+      celebrating = false
+    }
+
+    function frame(now: number) {
+      const dt = Math.min((now - lastFrame) / 1000, 1 / 20)
+      lastFrame = now
+      elapsed += dt
+      phaseTime += dt
+
+      if (phase === 'raining') {
+        spawnBudget += spawnRate * Math.min(1, 0.3 + elapsed) * dt
+        let pileTop = Infinity
+        for (const banana of bananas) {
+          if (banana.rest >= 1) {
+            pileTop = Math.min(pileTop, banana.y - banana.r)
+          }
+        }
+        while (spawnBudget >= 1 && bananas.length < maxBananas) {
+          spawn(pileTop)
+          spawnBudget--
+        }
+        if (isBuried() || phaseTime > 16) {
+          phase = 'full'
+          phaseTime = 0
+          playGameOver(audio)
+        }
+      }
+      if (phase === 'full' && phaseTime > 2.5) {
+        // the bottom of the bucket opens
+        phase = 'draining'
+        phaseTime = 0
+        for (const banana of bananas) {
+          banana.frozen = false
+          banana.px = banana.x
+          banana.py = banana.y
+        }
+      }
+
+      accumulator += dt
+      while (accumulator >= step) {
+        simulate()
+        accumulator -= step
+      }
+      draw()
+
+      if (phase === 'draining' && (phaseTime > 5 || bananas.every((banana) => banana.y - banana.r * 2 > height))) {
+        finish()
+        return
+      }
+      requestAnimationFrame(frame)
+    }
+
+    requestAnimationFrame(frame)
   }
 
   trigger?.addEventListener('click', () => {
@@ -409,46 +766,9 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     position: fixed;
     z-index: 9999;
     inset: 0;
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    border: 8px solid rgb(255 255 255 / 18%);
-    background: linear-gradient(to top, rgb(255 213 43 / 24%) 0 34%, transparent 58%);
-    box-shadow: inset 0 0 48px rgb(255 255 255 / 24%);
-    animation: banana-bucket-fill 6.8s ease-out both;
-  }
-
-  :global(.falling-banana) {
-    position: absolute;
-    top: -96px;
-    left: var(--x);
-    width: var(--size);
-    height: var(--size);
-    object-fit: contain;
-    animation: banana-fall var(--duration) var(--delay) cubic-bezier(0.25, 0.7, 0.45, 1) forwards;
-  }
-
-  @keyframes banana-fall {
-    to {
-      transform: translateY(112vh) rotate(calc(var(--rotation) + 360deg));
-    }
-  }
-
-  @keyframes banana-bucket-fill {
-    0% {
-      background-size: 100% 0%;
-    }
-    72%,
-    100% {
-      background-size: 100% 100%;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :global(.falling-banana),
-    :global(.banana-rain) {
-      animation-duration: 0.01ms;
-      animation-iteration-count: 1;
-    }
   }
 
   .hero-text {
