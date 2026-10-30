@@ -15,271 +15,603 @@ import reading from '@/data/reading'
 const trekRoutes = buildTrekRoutes(treks)
 const trekStats = getTrekStats(trekRoutes)
 const currentlyReading = reading.filter((x) => x.status === 'reading').slice(0, 3)
+
+const [firstName, ...lastNames] = siteConfig.title.split(' ')
+
+// 2025-09-01 -> 2025.09
+const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISOString().slice(0, 7).replace('-', '.'))
 ---
 
 <BaseLayout description={siteConfig.description}>
   <BirthdayBalloons client:load birthday={siteConfig.birthday} />
-  <article class="prose">
-    <!-- <p>~/F</p> -->
-    <div class="intro-section">
-      <h1 class="text-title">GAMBHIR SHARMA<BirthdayBadge client:load birthday={siteConfig.birthday} /></h1>
-      <div class="intro-list">
-        <span
-          ><div>
-            <i class="i-lucide-map-pin"></i>
-          </div>{siteConfig.location.place.toLowerCase()}
-          <div><CurrentTime client:load timeZone={siteConfig.location.timeZone} /></div>
+  <article class="home">
+    <section class="hero">
+      <div class="hero-id">
+        <img class="avatar" src="/avatar.jpg" alt={siteConfig.title} width="80" height="80" />
+        <div class="hero-text">
+          <h1>
+            {firstName}
+            <span>{lastNames.join(' ')}</span><BirthdayBadge client:load birthday={siteConfig.birthday} />
+          </h1>
+          <p class="tagline">devops · distributed systems · open source</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href={`mailto:${siteConfig.email}`}>
+              {siteConfig.emailDisplay}
+              <span aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn-secondary" href="/cv.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">
+              Curriculum Vitae <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-meta">
+        <span class="meta-row meta-time">
+          <span class="meta-icon"><span class="live-dot"></span></span>
+          <CurrentTime client:load timeZone={siteConfig.location.timeZone} />
         </span>
-        <span
-          ><div>
-            <i class="i-lucide-briefcase-business"></i>
-          </div>
-          <div>
-            <!-- Open to work: -->
-            prev devops
-            <a href="https://www.cgi.com/en" target="_blank" class="prose-link"> @CGI </a>
-            <!-- <a href="/assets/cv.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">download CV</a> -->
-          </div>
+        <span class="meta-row">
+          <i class="meta-icon i-lucide-map-pin"></i>
+          {siteConfig.location.place.toLowerCase()}
         </span>
-        <span>
-          <div>
-            <i class="i-lucide-newspaper"></i>
-          </div>
-          <a href="/cv.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank" class="prose-link">
-            <i> Curriculum Vitae </i>
-          </a>
+        <span class="meta-row">
+          <i class="meta-icon i-lucide-briefcase"></i>
+          <span>prev devops <a href="https://www.cgi.com/en" target="_blank">@CGI</a></span>
         </span>
       </div>
-      <p>
-        undergrad student at
-        <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata">tor vergata</a> with a passion
-        to build stuff, & strong advocate for free open-source software. &nbsp;
-        <!-- Spend most my time capturing -->
-        <!-- <a target="_blank" href="https://en.wikipedia.org/wiki/Capture_the_flag_(cybersecurity)"> flags </a> -->
-        <!-- at -->
-        <!-- <a target="_blank" href="https://cyberchallenge.it/">cyberchallenge.it</a> -->
-        <!-- with my minimal NeoVim <a target="_blank" href="https://github.com/gambhirsharma/nvim"> config</a>. -->
-        finished internship at <a target="_blank" href="https://www.cgi.com/en">CGI</a> as devops eng scaling earth observatory
-        <a target="_blank" href="https://insula.earth">insula.earth</a> at CGI, frascati.&nbsp; btw i use neovim & here is
-        <a target="_blank" href="https://github.com/gambhirsharma/nvim"> my config </a>
+    </section>
 
-        <br />
-        <br />
+    <div class="bio">
+      <p>
+        undergrad student at <a target="_blank" href="https://en.wikipedia.org/wiki/University_of_Rome_Tor_Vergata"
+          >tor vergata</a
+        > with a passion to build stuff, & strong advocate for free open-source software. finished internship at <a
+          target="_blank"
+          href="https://www.cgi.com/en">CGI</a
+        > as devops eng scaling earth observatory <a target="_blank" href="https://insula.earth">insula.earth</a> at CGI,
+        frascati. btw i use neovim & here is <a target="_blank" href="https://github.com/gambhirsharma/nvim"
+          >my config</a
+        >
+      </p>
+      <p>
         currently working on a distributed edge object detection system for <a
           target="_blank"
           href="https://www.ericsson.com/en/6g/isac">ISAC 6G</a
         > networks using KubeEdge.
       </p>
     </div>
-    <div class="map-container">
-      <LocationMap
-        client:only="vue"
-        currentLocation={mapLocations.currentLocation}
-        places={mapLocations.places}
-        treks={trekRoutes}
-        zoom={5}
-      />
-    </div>
-    <TrekStats stats={trekStats} href="/treks" />
-    <p></p>
-    <!-- <p> -->
-    <!--   I am a self-taught developer and I love to learn new things. I am always open to new opportunities and challenges. -->
-    <!--   I am a quick learner and I love to work in a team. Here is <a -->
-    <!--     href="/assets/cv.pdf" -->
-    <!--     download="Gambhir_Sharma_CV.pdf" -->
-    <!--   > -->
-    <!--     my CV</a -->
-    <!--   > -->
-    <!-- </p> -->
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <h2 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-        <i class="i-lucide-briefcase-business"></i>
-        work
-      </h2>
-      <small
-        style="padding: 8px 8px; border-radius: 4px; background-color: var(--current_time_bg-color); color: var(--current_time_text-color); text-transform: uppercase;"
-      >
-        Open to work!</small
-      >
-    </div>
-    <div style="all: none; padding-left: 0; margin-botton: 15px;">
-      {
-        HomeData.work.length > 0 &&
-          HomeData.work.map((x) => (
-            <div style="all:unset;">
-              <h3>
-                {x.duration.end === 'present' && <i style="color:var(--text-primary-green-color">*</i>}
-                {x.title}
-              </h3>
-              <i style="font-style:unset; color: grey">
-                {x.position} (
-                {x.duration.start instanceof Date ? x.duration.start.toISOString().slice(0, 7) : x.duration.start}
-                {' ⋅ '}
-                {x.duration.end === 'present'
-                  ? 'Present'
-                  : x.duration.end instanceof Date
-                    ? x.duration.end.toISOString().slice(0, 7)
-                    : x.duration.end}
-                )
-              </i>
-              <p style="margin: 0.7rem 0">{x.description}</p>
-            </div>
-          ))
-      }
-    </div>
 
-    <br />
-    <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-      <i class="i-lucide-folder-code"></i>
-      projects
-    </h2>
-    <div style="all: none; padding-left: 0; margin-botton: 15px;">
-      {
-        HomeData.project.length > 0 &&
-          HomeData.project.map((x) => (
-            <div style="all:unset;">
-              <h3>
-                <a href={x.url} target="_blank" class="prose-link">
-                  {x.title}
-                </a>
-              </h3>
-              <div>
-                {x.techstack.map((tech) => (
-                  <i style="margin-right: 5px; color: grey; font-style: normal;"> {tech}</i>
-                ))}
-              </div>
-              <p style="margin: 0.7rem 0">{x.description}</p>
-            </div>
-          ))
-      }
-      <p>
-        <a href="/projects" style="color: var(--text-primary-green-color); border-bottom-width: 0"> all projects ↗ </a>
-      </p>
+    <div class="treks">
+      <div class="map-container">
+        <LocationMap
+          client:only="vue"
+          currentLocation={mapLocations.currentLocation}
+          places={mapLocations.places}
+          treks={trekRoutes}
+          zoom={5}
+        />
+      </div>
+      <TrekStats stats={trekStats} href="/treks" />
     </div>
 
     {
-      currentlyReading.length > 0 && (
-        <>
-          <h2 style="display: flex; align-items: center; gap: 0.5rem;">
-            <i class="i-lucide-book-open" />
-            reading
-          </h2>
-          <ul class="reading-list">
-            {currentlyReading.map((x) => (
-              <li>
-                <a href={x.url} target="_blank" class="reading-title">
-                  {x.title}
-                </a>
-                <span class="reading-meta">
-                  {[x.kind, x.authors, x.year].filter(Boolean).join(' · ')}
-                  {x.note && (
-                    <>
-                      {' · '}
-                      <a href={`/posts/${x.note}`}>notes</a>
-                    </>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p>
-            <a href="/blog/papers" style="color: var(--text-primary-green-color); border-bottom-width: 0">
-              reading list ↗
-            </a>
-          </p>
-        </>
+      HomeData.work.length > 0 && (
+        <section class="block">
+          <div class="block-head">
+            <h2>work</h2>
+            <span class="pill">
+              <span class="pill-dot" />
+              OPEN TO WORK
+            </span>
+          </div>
+          {HomeData.work.map((x) => (
+            <div class="row">
+              <div class="row-title">
+                {x.title} <span>· {x.position}</span>
+              </div>
+              <div class="row-aside">
+                {fmtMonth(x.duration.start)} – {fmtMonth(x.duration.end)}
+              </div>
+              <div class="row-desc">{x.description}</div>
+            </div>
+          ))}
+        </section>
       )
     }
 
-    <!-- <p> -->
-    <!--   I also love crafting cool <a href="https://www.codepen.io/gambhirsharma" target="_blank">codepen</a> -->
-    <!-- </p> -->
-    <hr class="hr-line" />
-    <p>Find me on:</p>
-    <p class="flex gap-x-4 gap-y-2 flex-wrap">
-      {
-        siteConfig.socialLinks.map((link) => (
-          <a aria-label={link.text} href={link.href} target="_blank" class="prose-link">
-            <i class:list={[link.icon]} />
-            {link.text}
-          </a>
-        ))
-      }
-    </p>
-    <p>
-      mail me at
-      <a prose-link aria-label={siteConfig.email} href={`mailto:${siteConfig.email}`}>
-        {siteConfig.emailDisplay}
-      </a>
-    </p>
+    {
+      HomeData.project.length > 0 && (
+        <section class="block">
+          <div class="block-head">
+            <h2>projects</h2>
+            <a class="more" href="/projects">
+              all projects ↗
+            </a>
+          </div>
+          {HomeData.project.map((x) => (
+            <a class="project" href={x.url} target="_blank">
+              <div class="project-head">
+                <span class="row-title">{x.title}</span>
+                <span class="project-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </div>
+              <div class="row-desc">{x.description}</div>
+              <div class="chips">
+                {x.techstack.map((tech) => (
+                  <span class="chip">{tech}</span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </section>
+      )
+    }
+
+    {
+      currentlyReading.length > 0 && (
+        <section class="block">
+          <div class="block-head">
+            <h2>reading</h2>
+            <a class="more" href="/blog/papers">
+              reading list ↗
+            </a>
+          </div>
+          {currentlyReading.map((x) => (
+            <div class="row">
+              <a class="reading-title" href={x.url} target="_blank">
+                {x.title}
+              </a>
+              <div class="row-aside">{x.year}</div>
+              <div class="reading-meta">
+                {[x.kind, x.authors].filter(Boolean).join(' · ')}
+                {x.note && (
+                  <>
+                    {' · '}
+                    <a href={`/posts/${x.note}`}>notes</a>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
+        </section>
+      )
+    }
+
+    <section class="contact">
+      <h2>let's talk</h2>
+      <a class="contact-mail" href={`mailto:${siteConfig.email}`}>{siteConfig.emailDisplay} →</a>
+      <div class="contact-links">
+        {
+          siteConfig.socialLinks.map((link) => (
+            <a href={link.href} target="_blank">
+              {link.text}
+            </a>
+          ))
+        }
+      </div>
+    </section>
   </article>
 </BaseLayout>
 
 <style>
-  .intro-section {
-    .intro-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
+  .home {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    font-size: 16px;
+    color: var(--c-body);
+
+    a {
+      color: var(--c-strong);
+      text-decoration: none;
+      transition:
+        color 0.2s,
+        background-color 0.2s;
     }
-    span {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+
+    a:hover {
+      color: var(--c-accent);
+      cursor:
+        url('/kela.svg') 5 7,
+        pointer;
+    }
+
+    h1,
+    h2,
+    p {
+      margin: 0;
     }
   }
 
-  .reading-list {
-    list-style: none;
-    padding-left: 0;
-    li {
-      padding-left: 0;
-      margin: 0.6rem 0;
-    }
-    li::before {
-      display: none;
+  /* hero */
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .hero-id {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    width: clamp(64px, 16vw, 80px);
+    height: clamp(64px, 16vw, 80px);
+    border-radius: 50%;
+    border: 1px solid var(--c-avatar-border);
+    box-shadow:
+      0 0 0 4px var(--c-bg),
+      0 0 0 5px var(--c-avatar-ring);
+    object-fit: cover;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    h1 {
+      font-size: clamp(28px, 7vw, 34px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--c-strong);
+
+      span {
+        font-weight: 400;
+        color: var(--c-secondary);
+      }
     }
   }
 
-  .reading-list .reading-title {
-    color: #8a8a8a;
-    border-bottom: 1px solid rgba(138, 138, 138, 0.4);
-    text-decoration: none;
-    /* .prose a applies the `prose-link` shortcut, which is `text-nowrap`.
-       Long paper titles must wrap on small screens instead of overflowing. */
-    white-space: normal;
-    overflow-wrap: anywhere;
+  .tagline {
+    font-size: 14px;
+    color: var(--c-tertiary);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .home .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .home .btn-primary {
+    background: #4ade80;
+    color: #0d1117;
+  }
+
+  .home .btn-primary:hover {
+    background: #86efac;
+    color: #0d1117;
+  }
+
+  .home .btn-secondary {
+    border: 1px solid var(--c-border-btn);
+    color: var(--c-text);
+
+    .arrow {
+      opacity: 0.6;
+    }
+  }
+
+  .home .btn-secondary:hover {
+    background: var(--c-hover);
+    color: var(--c-strong);
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 20px;
+    border-left: 1px solid var(--c-border);
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: var(--c-body);
+
+    a {
+      font-weight: 600;
+    }
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .meta-time {
+    color: var(--c-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meta-icon {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    color: var(--c-tertiary);
+  }
+
+  span.meta-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    box-shadow: 0 0 0 3px var(--c-accent-ring);
+  }
+
+  /* bio */
+  .bio {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    line-height: 1.75;
     text-wrap: pretty;
-    transition:
-      color 0.2s,
-      border-color 0.2s;
+
+    a {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: var(--c-underline);
+      text-underline-offset: 4px;
+    }
+
+    a:hover {
+      color: var(--c-accent);
+      text-decoration-color: currentColor;
+    }
   }
 
-  :global(html.dark) .reading-list .reading-title {
-    color: #7a7a7a;
-  }
+  /* treks */
+  .treks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
-  .reading-list .reading-title:hover,
-  :global(html.dark) .reading-list .reading-title:hover {
-    color: var(--text-primary-green-color);
-    border-color: var(--text-primary-green-color);
-  }
-
-  .reading-meta {
-    display: block;
-    font-size: 0.85em;
-    color: grey;
+    :global(.trek-stats) {
+      margin: 0;
+    }
   }
 
   .map-container {
-    margin: 1.5rem 0;
+    aspect-ratio: 2 / 1;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--border-color, #e5e7eb);
+    border: 1px solid var(--c-border-map);
+    background: var(--c-map-bg);
+
+    :global(.location-map) {
+      height: 100%;
+    }
   }
 
-  :global(html.dark) .map-container {
-    border-color: #374151;
+  /* work / projects / reading */
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .block-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--c-border);
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--c-text);
+    }
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--c-accent);
+    background: var(--c-accent-tint);
+  }
+
+  .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent);
+  }
+
+  .home .more {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--c-accent);
+  }
+
+  .home .more:hover {
+    color: var(--c-accent-hover);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--c-border-row);
+  }
+
+  .row-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--c-strong);
+
+    span {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--c-secondary);
+    }
+  }
+
+  .row-aside {
+    align-self: center;
+    font-size: 13px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--c-tertiary);
+  }
+
+  .row-desc {
+    grid-column: 1 / -1;
+    font-size: 15px;
+    color: var(--c-body);
+  }
+
+  .project {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 12px;
+    margin: 0 -12px;
+    border-radius: 8px;
+  }
+
+  .home .project:hover {
+    background: var(--c-hover-row);
+    color: inherit;
+  }
+
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .project-arrow {
+    font-size: 14px;
+    color: var(--c-tertiary);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    padding: 2px 8px;
+    border: 1px solid var(--c-border-chip);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--c-secondary);
+  }
+
+  .home .reading-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--c-text);
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-color: var(--c-underline-soft);
+    text-underline-offset: 4px;
+  }
+
+  .home .reading-title:hover {
+    color: var(--c-accent);
+    text-decoration-color: currentColor;
+  }
+
+  .reading-title + .row-aside {
+    align-self: start;
+  }
+
+  .reading-meta {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--c-tertiary);
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  /* contact */
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 28px;
+    border: 1px solid var(--c-border);
+    border-radius: 10px;
+    background: var(--c-surface);
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--c-strong);
+    }
+  }
+
+  .home .contact-mail {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--c-accent);
+  }
+
+  .home .contact-mail:hover {
+    color: var(--c-accent-hover);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 14px;
+  }
+
+  .home .contact-links a {
+    color: var(--c-secondary);
+  }
+
+  .home .contact-links a:hover {
+    color: var(--c-strong);
   }
 </style>

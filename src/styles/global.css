@@ -108,3 +108,68 @@ html:not(dark) {
 .prose .photo-gallery a:hover img {
   opacity: 0.85;
 }
+
+/* Homepage palette (dark values from the design handoff, light mirrors them) */
+html.dark {
+  --c-bg: #0d1117;
+  --c-strong: #f3f4f6;
+  --c-text: #e5e7eb;
+  --c-body: #aeb4bc;
+  --c-secondary: #9aa1aa;
+  --c-tertiary: #7d848e;
+  --c-stat-hover: #c9cdd3;
+  --c-accent: #4ade80;
+  --c-accent-hover: #86efac;
+  --c-accent-tint: #4ade801a;
+  --c-accent-ring: #4ade8026;
+  --c-border: #ffffff1a;
+  --c-border-row: #ffffff0d;
+  --c-border-btn: #ffffff2e;
+  --c-border-chip: #ffffff1f;
+  --c-border-map: #ffffff14;
+  --c-underline: #ffffff33;
+  --c-underline-soft: #ffffff26;
+  --c-hover: #ffffff0f;
+  --c-hover-row: #ffffff08;
+  --c-surface: #ffffff05;
+  --c-map-bg: #161b22;
+  --c-avatar-border: #ffffff24;
+  --c-avatar-ring: #ffffff14;
+}
+
+html:not(.dark) {
+  --c-bg: #ffffff;
+  --c-strong: #0d1117;
+  --c-text: #1f2937;
+  --c-body: #4b5563;
+  --c-secondary: #5f6670;
+  --c-tertiary: #7d848e;
+  --c-stat-hover: #374151;
+  --c-accent: #15803d;
+  --c-accent-hover: #16a34a;
+  --c-accent-tint: #16a34a1a;
+  --c-accent-ring: #16a34a26;
+  --c-border: #0000001a;
+  --c-border-row: #0000000d;
+  --c-border-btn: #0000002e;
+  --c-border-chip: #0000001f;
+  --c-border-map: #00000014;
+  --c-underline: #00000033;
+  --c-underline-soft: #00000026;
+  --c-hover: #0000000a;
+  --c-hover-row: #00000005;
+  --c-surface: #00000004;
+  --c-map-bg: #f3f5f8;
+  --c-avatar-border: #00000024;
+  --c-avatar-ring: #00000014;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: #4ade8040;
+}

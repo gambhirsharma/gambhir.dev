@@ -11,20 +11,20 @@ export const HomeData: HomePageData = {
     {
       title: 'OnFly Image Optimization',
       description: 'self-hosted onfly image optimization service',
-      techstack: ['Nextjs', 'k8s', 'TypeScipt'],
+      techstack: ['Next.js', 'k8s', 'TypeScript'],
       url: 'https://github.com/gambhirsharma/OnFly-Image-Optimization',
     },
     {
       title: 'craft.gambhir.dev',
-      description: 'crative coding, codepen that I created',
-      techstack: ['PUG', 'SASS', 'Style'],
+      description: 'creative coding, codepen that I created',
+      techstack: ['Pug', 'Sass', 'Style'],
       url: 'https://craft.gambhir.dev',
     },
   ],
   work: [
     {
       title: 'CGI',
-      position: 'devops eng space',
+      position: 'devops eng, space',
       duration: {
         start: new Date('2025-09-01'),
         end: new Date('2026-03-31'),
@@ -42,7 +42,7 @@ export const HomeData: HomePageData = {
     },
     {
       title: 'RepoCraft',
-      position: 'swe | web-dev',
+      position: 'swe, web-dev',
       duration: {
         start: new Date('2023-06-01'),
         end: new Date('2024-02-01'),

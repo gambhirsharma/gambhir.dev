@@ -27,12 +27,6 @@ const { y: scroll } = useWindowScroll()
 const oldScroll = ref(unref(scroll))
 
 onMounted(() => {
-  const navMask = document.querySelector('.nav-drawer-mask') as HTMLElement
-
-  navMask?.addEventListener('touchmove', (event) => {
-    event.preventDefault()
-  })
-
   const headerEl = document.querySelector('#header') as HTMLElement
   if (!headerEl)
     return
@@ -57,75 +51,38 @@ onMounted(() => {
     }
   })
 })
-
-function toggleNavDrawer() {
-  const drawer = document.querySelector('.nav-drawer') as HTMLElement
-  const mask = document.querySelector('.nav-drawer-mask') as HTMLElement
-  if (!drawer || !mask)
-    return
-  if (drawer.style.transform === `translateX(0%)`) {
-    drawer.style.transform = `translateX(-100%)`
-    mask.style.display = `none`
-  }
-  else {
-    drawer.style.transform = `translateX(0%)`
-    mask.style.display = `block`
-  }
-}
 </script>
 
 <template>
   <header
     id="header" :class="{ 'header-bg-blur': scroll > 20 }"
     view-transition-name="site-header"
-    class="!fixed bg-transparent z-899 w-screen h-20 px-6 flex justify-between items-center relative"
+    class="!fixed bg-transparent z-899 w-screen header-bar"
   >
-    <div class="flex items-center h-full">
-      <a href="/" mr-6 aria-label="Header Logo Image">
-        <!--
-        <img width="32" height="32" :src="siteConfig.header.logo.src" :alt="siteConfig.header.logo.alt">
--->
-        <div class="flex items-center gap-2 justify-center lg-mx-10">
-          <h1 class="font-bold text-xl">
-            gambhir.dev
-          </h1>
-          <i class="text-xl" title="Wave">
-            🌊
-          </i>
-        </div>
-      </a>
-      <nav class="sm:flex hidden flex-wrap gap-x-6 position-initial flex-row">
-        <a
-          v-for="link in navLinks" :key="link.text" :aria-label="`${link.text}`" :target="getLinkTarget(link.href)"
-          nav-link :href="link.href"
-        >
-          {{ link.text }}
-        </a>
-      </nav>
-      <div sm:hidden h-full flex items-center @click="toggleNavDrawer()">
-        <menu i-ri-menu-2-fill />
-      </div>
-    </div>
-    <div class="flex gap-x-6">
+    <a href="/" class="logo" aria-label="Home">
+      gambhir.dev <span title="Wave">🌊</span>
+    </a>
+    <nav class="header-nav">
       <a
-        v-for="link in socialLinks" :key="link.text" :aria-label="`${link.text}`" :class="link.icon" nav-link
+        v-for="link in navLinks" :key="link.text" :aria-label="`${link.text}`" :target="getLinkTarget(link.href)"
+        class="header-link" :href="link.href"
+      >
+        {{ link.text }}
+      </a>
+    </nav>
+    <div class="header-icons">
+      <a
+        v-for="link in socialLinks" :key="link.text" :aria-label="`${link.text}`" class="header-link header-icon"
         :target="getLinkTarget(link.href)" :href="link.href"
-      />
-
-      <a nav-link target="_blank" href="/rss.xml" i-ri-rss-line aria-label="RSS" />
-      <ThemeToggle />
+      >
+        <i :class="link.icon" />
+      </a>
+      <a class="header-link header-icon" target="_blank" href="/rss.xml" aria-label="RSS">
+        <i i-ri-rss-line />
+      </a>
+      <ThemeToggle class="header-link header-icon" />
     </div>
   </header>
-  <nav class="nav-drawer sm:hidden">
-    <i i-ri-menu-2-fill />
-    <a
-      v-for="link in navLinks" :key="link.text" :aria-label="`${link.text}`" :target="getLinkTarget(link.href)"
-      nav-link :href="link.href" @click="toggleNavDrawer()"
-    >
-      {{ link.text }}
-    </a>
-  </nav>
-  <div class="nav-drawer-mask" @click="toggleNavDrawer()" />
 </template>
 
 <style scoped>
@@ -138,22 +95,70 @@ function toggleNavDrawer() {
   --at-apply: backdrop-blur-sm;
 }
 
-.nav-drawer {
-  transform: translateX(-100%);
-  --at-apply: box-border fixed h-screen z-999 left-0 top-0 min-w-32vw max-w-50vw bg-main p-6 text-lg flex flex-col gap-5
-    transition-all;
+.header-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px clamp(24px, 5vw, 56px);
+  padding: clamp(20px, 4vw, 28px) clamp(20px, 5vw, 64px);
 }
 
-.nav-drawer-mask {
-  display: none;
-  --at-apply: transition-all;
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+.logo {
+  font-size: 19px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--c-text);
+}
+
+/* On small screens the nav gets its own row under the logo and icons */
+.header-nav {
+  order: 2;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px clamp(16px, 3vw, 24px);
+  font-size: 16px;
+}
+
+@media (min-width: 640px) {
+  .header-nav {
+    order: 0;
+    width: auto;
+    margin-right: auto;
+  }
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.header-link {
+  color: var(--c-secondary);
+  transition:
+    color 0.2s,
+    background-color 0.2s;
+}
+
+.header-link:hover {
+  color: var(--c-strong);
+}
+
+.header-icon {
+  display: flex;
+  padding: 6px;
+  margin: -6px;
+  border-radius: 6px;
+}
+
+.header-icon:hover {
+  background: var(--c-hover);
+}
+
+.header-icon :deep(i) {
+  width: 18px;
+  height: 18px;
 }
 </style>

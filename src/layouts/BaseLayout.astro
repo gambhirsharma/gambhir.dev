@@ -4,7 +4,6 @@ import { ViewTransitions } from 'astro:transitions'
 import BaseHead from '@/components/BaseHead.astro'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import ScrollToTop from '@/components/ScrollToTop.vue'
 
 const { ...head } = Astro.props
 ---
@@ -26,11 +25,10 @@ const { ...head } = Astro.props
   <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
     <Header client:load />
     <main
-      class="grow max-w-3xl mx-auto sm:pt-36 pt-26 pb-16 px-6 relative"
+      class="grow max-w-3xl mx-auto sm:pt-36 pt-34 pb-16 px-6 relative"
       transition:animate={fade({ duration: '0.4s' })}
     >
       <slot />
-      <ScrollToTop client:load />
       <Footer />
     </main>
   </body>

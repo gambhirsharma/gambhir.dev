@@ -10,61 +10,69 @@ const { stats, href } = Astro.props
 
 const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
 
-const summary = [
-  `${stats.count} ${stats.count === 1 ? 'trek' : 'treks'}`,
-  `${fmt(stats.totalDistanceKm)} km walked`,
-  `${fmt(stats.totalElevationGainM)} m climbed`,
-  stats.highestPointM > 0 && `highest point ${fmt(stats.highestPointM)} m`,
+// Each item is [before, value, after], the value is the highlighted part
+const items: Array<[string, string, string]> = [
+  ['', `${stats.count}`, stats.count === 1 ? ' trek' : ' treks'],
+  ['', `${fmt(stats.totalDistanceKm)} km`, ' walked'],
+  ['', `${fmt(stats.totalElevationGainM)} m`, ' climbed'],
 ]
-  .filter(Boolean)
-  .join(' · ')
+if (stats.highestPointM > 0) items.push(['highest ', `${fmt(stats.highestPointM)} m`, ''])
+
+const Tag = href ? 'a' : 'p'
 ---
 
 {
   stats.count > 0 && (
-    <p class="trek-stats">
+    <Tag class="trek-stats" href={href}>
       <i class="i-lucide-mountain" />
-      <span class="trek-summary">
-        {href ? (
-          <a href={href} class="prose-link">
-            {summary}
-          </a>
-        ) : (
-          summary
-        )}
-      </span>
-    </p>
+      {items.map(([before, value, after], i) => (
+        <>
+          {i > 0 && (
+            <span class="sep" aria-hidden="true">
+              ·
+            </span>
+          )}
+          <span>
+            {before}
+            <b>{value}</b>
+            {after}
+          </span>
+        </>
+      ))}
+    </Tag>
   )
 }
 
 <style>
   .trek-stats {
     display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
     margin: -0.5rem 0 1.5rem;
-    font-size: 0.9rem;
+    font-size: 14px;
     line-height: 1.5;
+    color: var(--c-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
 
-    /* keep the mountain icon on the first line, next to the text */
     i {
       flex: none;
-      margin-top: 0.15em;
+      width: 15px;
+      height: 15px;
     }
 
-    /* The wrapper is the flex item, so it can shrink and wrap. The link
-       inside stays an inline box: that way its border-bottom underline is
-       painted under every wrapped line, not just under the last one. */
-    .trek-summary {
-      min-width: 0;
-      overflow-wrap: anywhere;
-      text-wrap: pretty;
+    b {
+      font-weight: 600;
+      color: var(--c-strong);
     }
 
-    /* On the home page this sits inside .prose, where .prose a applies the
-       `prose-link` shortcut (text-nowrap), so allow the text to wrap. */
-    a {
-      white-space: normal;
+    .sep {
+      opacity: 0.4;
     }
+  }
+
+  a.trek-stats:hover {
+    color: var(--c-stat-hover);
   }
 </style>

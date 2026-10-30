@@ -22,13 +22,13 @@ export const siteConfig = {
       header: 'i-ri-github-line',
     },
     {
-      text: 'Twitter',
+      text: 'Twitter / X',
       href: 'https://www.twitter.com/gambhir_sharma',
       icon: 'i-simple-icons-x',
       header: 'i-ri-twitter-x-line',
     },
     {
-      text: 'Linkedin',
+      text: 'LinkedIn',
       href: 'https://www.linkedin.com/in/gambhir-sharma/',
       icon: 'i-simple-icons-linkedin',
     },
