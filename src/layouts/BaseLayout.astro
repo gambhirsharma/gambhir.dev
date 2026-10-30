@@ -25,7 +25,7 @@ const { ...head } = Astro.props
   <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
     <Header client:load currentPath={Astro.url.pathname} />
     <main
-      class="grow max-w-3xl mx-auto sm:pt-36 pt-34 pb-16 px-6 relative"
+      class="grow max-w-3xl mx-auto sm:pt-36 pt-26 pb-16 px-6 relative"
       transition:animate={fade({ duration: '0.4s' })}
     >
       <slot />
