@@ -416,7 +416,6 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   .block {
     display: flex;
     flex-direction: column;
-    gap: 8px;
   }
 
   .block-head {
@@ -425,6 +424,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     justify-content: space-between;
     gap: 12px;
     padding-top: 20px;
+    margin-bottom: 8px;
     border-top: 1px solid var(--c-border);
 
     h2 {
@@ -465,12 +465,18 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     color: var(--c-accent-hover);
   }
 
+  /* Rows (work, reading) and project cards share the same rhythm: 14px above
+     and below, with a divider only between items, never after the last one,
+     so it doesn't stack up against the next section's top border. */
   .row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 4px 16px;
     padding: 14px 0;
-    border-bottom: 1px solid var(--c-border-row);
+  }
+
+  .row + .row {
+    border-top: 1px solid var(--c-border-row);
   }
 
   .row-title {
@@ -500,17 +506,34 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   }
 
   .project {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     padding: 14px 12px;
     margin: 0 -12px;
     border-radius: 8px;
   }
 
+  /* inset by the card padding so it lines up with the row dividers */
+  .project + .project::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    right: 12px;
+    border-top: 1px solid var(--c-border-row);
+    transition: opacity 0.2s;
+  }
+
   .home .project:hover {
     background: var(--c-hover-row);
     color: inherit;
+  }
+
+  .project:hover::before,
+  .project:hover + .project::before {
+    opacity: 0;
   }
 
   .project-head {
@@ -529,6 +552,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    margin-top: 6px;
   }
 
   .chip {
