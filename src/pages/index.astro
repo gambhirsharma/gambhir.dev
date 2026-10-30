@@ -362,7 +362,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     let accumulator = 0
     let lastFrame = performance.now()
 
-    // buried once the resting pile reaches above the top edge across the whole width
+    // good enough once the resting pile covers most of the screen; a few air pockets are fine
     function isBuried() {
       const columns = Array.from({ length: Math.ceil(width / cell) }, () => Infinity)
       for (const banana of bananas) {
@@ -371,7 +371,8 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
           columns[column] = Math.min(columns[column], banana.y)
         }
       }
-      return columns.every((top) => top < 0)
+      const filled = columns.reduce((sum, top) => sum + Math.min(1, Math.max(0, (height - top) / height)), 0)
+      return filled / columns.length >= 0.9
     }
 
     function spawn(pileTop: number) {
@@ -595,13 +596,13 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
           spawn(pileTop)
           spawnBudget--
         }
-        if (isBuried() || phaseTime > 16) {
+        if (isBuried() || phaseTime > 12) {
           phase = 'full'
           phaseTime = 0
           playGameOver(audio)
         }
       }
-      if (phase === 'full' && phaseTime > 2.5) {
+      if (phase === 'full' && phaseTime > 1.5) {
         // the bottom of the bucket opens
         phase = 'draining'
         phaseTime = 0
