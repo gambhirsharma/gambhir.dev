@@ -232,7 +232,14 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   const gravity = 2400
   const solverIterations = 6
 
-  function createAudio() {
+  interface Sound {
+    context: AudioContext
+    buffer: Promise<AudioBuffer | null>
+  }
+
+  const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms))
+
+  function loadSound(): Sound | null {
     const AudioContext = window.AudioContext || window.webkitAudioContext
     if (!AudioContext) {
       return null
@@ -240,42 +247,29 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     // created inside the click so browsers allow it to play later
     const context = new AudioContext()
     void context.resume()
-    return context
+    const buffer = fetch('/game-over.mp3')
+      .then((response) => response.arrayBuffer())
+      .then((data) => context.decodeAudioData(data))
+      .catch(() => null)
+    return { context, buffer }
   }
 
-  // descending "wah wah wah waaah" in retro square wave
-  function playGameOver(context: AudioContext | null) {
-    if (!context) {
+  // resolves once the sound has finished, so the pile can stay until then
+  async function playGameOver(sound: Sound | null) {
+    const buffer = await sound?.buffer
+    if (!sound || !buffer) {
+      void sound?.context.close()
+      await wait(1500)
       return
     }
-    const notes = [392, 370, 349, 330]
-    const start = context.currentTime + 0.05
-    notes.forEach((frequency, index) => {
-      const last = index === notes.length - 1
-      const at = start + index * 0.34
-      const length = last ? 1.1 : 0.3
-      const oscillator = context.createOscillator()
-      const gain = context.createGain()
-      oscillator.type = 'square'
-      oscillator.frequency.setValueAtTime(frequency, at)
-      if (last) {
-        const vibrato = context.createOscillator()
-        const depth = context.createGain()
-        vibrato.frequency.value = 6
-        depth.gain.value = 9
-        vibrato.connect(depth).connect(oscillator.frequency)
-        vibrato.start(at)
-        vibrato.stop(at + length)
-      }
-      gain.gain.setValueAtTime(0.0001, at)
-      gain.gain.exponentialRampToValueAtTime(0.09, at + 0.02)
-      gain.gain.setValueAtTime(0.09, at + length * 0.6)
-      gain.gain.exponentialRampToValueAtTime(0.0001, at + length)
-      oscillator.connect(gain).connect(context.destination)
-      oscillator.start(at)
-      oscillator.stop(at + length + 0.02)
-    })
-    window.setTimeout(() => context.close(), 2600)
+    const source = sound.context.createBufferSource()
+    source.buffer = buffer
+    source.connect(sound.context.destination)
+    const ended = new Promise((resolve) => source.addEventListener('ended', resolve))
+    source.start()
+    // in case playback is blocked and `ended` never fires
+    await Promise.race([ended, wait(buffer.duration * 1000 + 300)])
+    void sound.context.close()
   }
 
   // freeze the page where it is while bananas are on screen; returns the undo
@@ -327,10 +321,10 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
       return
     }
     celebrating = true
-    const audio = createAudio()
+    const sound = loadSound()
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      playGameOver(audio)
+      void playGameOver(sound)
       celebrating = false
       return
     }
@@ -342,7 +336,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
       () => false,
     )
     if (!loaded) {
-      audio?.close()
+      void sound?.context.close()
       celebrating = false
       return
     }
@@ -384,6 +378,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     const cell = radius * 2.4
     let phase: 'raining' | 'full' | 'draining' = 'raining'
     let phaseTime = 0
+    let soundFinished = false
     let spawnBudget = 0
     let elapsed = 0
     let accumulator = 0
@@ -627,10 +622,10 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
         if (isBuried() || phaseTime > 12) {
           phase = 'full'
           phaseTime = 0
-          playGameOver(audio)
+          void playGameOver(sound).then(() => (soundFinished = true))
         }
       }
-      if (phase === 'full' && phaseTime > 1.5) {
+      if (phase === 'full' && soundFinished) {
         // the bottom of the bucket opens
         phase = 'draining'
         phaseTime = 0
