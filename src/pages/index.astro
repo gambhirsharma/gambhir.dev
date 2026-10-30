@@ -33,7 +33,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
             {firstName}
             <span>{lastNames.join(' ')}</span><BirthdayBadge client:load birthday={siteConfig.birthday} />
           </h1>
-          <p class="tagline">devops · distributed systems · open source</p>
+          <p class="tagline">devops&nbsp;· distributed&nbsp;systems&nbsp;· open&nbsp;source</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href={`mailto:${siteConfig.email}`}>
               {siteConfig.emailDisplay}
@@ -366,6 +366,67 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     border-radius: 50%;
     background: var(--c-accent);
     box-shadow: 0 0 0 3px var(--c-accent-ring);
+  }
+
+  /* Small screens: name and tagline sit next to the avatar, the buttons share
+     one full-width row under them, and the meta block becomes a single
+     wrapping line instead of an indented column. */
+  @media (max-width: 639px) {
+    .hero {
+      gap: 20px;
+    }
+
+    .hero-id {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 4px 16px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero-text {
+      display: contents;
+    }
+
+    .avatar {
+      grid-row: 1 / span 2;
+    }
+
+    .hero-text h1 {
+      align-self: end;
+    }
+
+    .tagline {
+      align-self: start;
+      font-size: 13px;
+    }
+
+    .hero-actions {
+      grid-column: 1 / -1;
+      display: grid;
+      /* two side by side, stacked once they no longer fit (~320px) */
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      margin-top: 16px;
+    }
+
+    .home .btn {
+      justify-content: center;
+      padding: 9px 10px;
+    }
+
+    .hero-meta {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      width: 100%;
+      padding-left: 0;
+      border-left: 0;
+      font-size: 13px;
+    }
+
+    .meta-row {
+      gap: 6px;
+    }
   }
 
   /* bio */
