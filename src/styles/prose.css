@@ -154,12 +154,6 @@ html.dark {
   display: none;
 }
 
-html.dark {
-  code {
-    background-color: #202731;
-  }
-}
-
 .prose code::after {
   content: '';
   display: none;
