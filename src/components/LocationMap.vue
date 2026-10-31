@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useDark } from '@vueuse/core'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import type { CircleMarker, Map as LeafletMap, Polyline, TileLayer, TooltipOptions } from 'leaflet'
+// `?url` keeps the stylesheet out of the page's render-blocking CSS: Astro would
+// otherwise hoist even a dynamic `import('leaflet/dist/leaflet.css')` into <head>.
+import leafletCssUrl from 'leaflet/dist/leaflet.css?url'
 import type { Place, PlaceCategory } from '@/data/map-locations'
 import { categoryLabels } from '@/data/map-locations'
 import type { TrekRoute } from '@/data/treks'
@@ -16,13 +18,18 @@ const props = defineProps<{
 
 const isDark = useDark()
 const mapContainer = ref<HTMLElement | null>(null)
-let map: L.Map | null = null
-let tileLayer: L.TileLayer | null = null
-let currentMarker: L.CircleMarker | null = null
-let pulseMarker: L.CircleMarker | null = null
-const placeMarkers: L.CircleMarker[] = []
-const trekLines: L.Polyline[] = []
-const trekStartMarkers: L.CircleMarker[] = []
+// Leaflet touches `window` at import time, so it is loaded lazily in onMounted().
+// That keeps this component SSR-safe and lets the page hydrate it with
+// client:visible without pulling Leaflet (+ its CSS and tiles) into the initial load.
+let L: typeof import('leaflet')
+let disposed = false
+let map: LeafletMap | null = null
+let tileLayer: TileLayer | null = null
+let currentMarker: CircleMarker | null = null
+let pulseMarker: CircleMarker | null = null
+const placeMarkers: CircleMarker[] = []
+const trekLines: Polyline[] = []
+const trekStartMarkers: CircleMarker[] = []
 
 // Minimal tile layers - using CartoDB Positron/Dark Matter for clean, minimal look
 const cartoApiKey = import.meta.env.PUBLIC_MAP_API_KEY
@@ -62,7 +69,7 @@ function addTreks() {
     if (trek.coords.length === 0)
       return
 
-    const tooltipOptions: L.TooltipOptions = {
+    const tooltipOptions: TooltipOptions = {
       permanent: false,
       direction: 'top',
       offset: [0, -8],
@@ -222,11 +229,37 @@ watch(isDark, () => {
   updateTheme()
 })
 
-onMounted(() => {
+function loadLeafletCss(): Promise<void> {
+  const existing = document.querySelector<HTMLLinkElement>('link[data-leaflet-css]')
+  if (existing?.dataset.loaded)
+    return Promise.resolve()
+  return new Promise((resolve) => {
+    const link = existing ?? document.createElement('link')
+    const done = () => {
+      link.dataset.loaded = 'true'
+      resolve()
+    }
+    link.addEventListener('load', done, { once: true })
+    link.addEventListener('error', done, { once: true })
+    if (!existing) {
+      link.rel = 'stylesheet'
+      link.href = leafletCssUrl
+      link.dataset.leafletCss = 'true'
+      document.head.appendChild(link)
+    }
+  })
+}
+
+onMounted(async () => {
+  const [leaflet] = await Promise.all([import('leaflet'), loadLeafletCss()])
+  if (disposed)
+    return
+  L = leaflet.default
   initMap()
 })
 
 onUnmounted(() => {
+  disposed = true
   if (map) {
     map.remove()
     map = null
