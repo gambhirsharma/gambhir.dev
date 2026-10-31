@@ -1,6 +1,8 @@
 ---
 import siteConfig from '@/site-config'
 import '@/styles/global.css'
+// Self-hosted Inter: the @font-face rules live in global.css; the latin file is preloaded below.
+import interLatinWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url'
 import '@/styles/dot.css'
 
 interface Props {
@@ -36,6 +38,7 @@ function formatCanonicalURL(url: string | URL) {
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>{title}</title>
 <meta name="generator" content={Astro.generator} />
+<link rel="preload" as="font" type="font/woff2" href={interLatinWoff2} crossorigin />
 
 <!-- Low Priority Global Metadata -->
 <!--<link rel="icon" type="image/svg+xml" href="/favicon.svg" />-->

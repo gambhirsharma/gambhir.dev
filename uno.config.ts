@@ -4,7 +4,6 @@ import {
   presetIcons,
   presetTypography,
   presetUno,
-  presetWebFonts,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -38,13 +37,14 @@ export default defineConfig({
       },
     }),
     presetTypography(),
-    presetWebFonts({
-      fonts: {
-        sans: 'Inter:400,500,600,700,800',
-        mono: 'DM Mono:400,600',
-      },
-    }),
   ],
+  theme: {
+    fontFamily: {
+      // Self-hosted via @fontsource-variable/inter (imported in BaseHead.astro);
+      // one variable woff2 covers every weight instead of 5 static files from Google Fonts.
+      sans: '"Inter Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    },
+  },
   transformers: [transformerDirectives(), transformerVariantGroup()],
   safelist: [
     'i-ri-file-list-2-line',
