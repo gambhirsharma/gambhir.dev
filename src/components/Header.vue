@@ -98,8 +98,8 @@ onMounted(() => {
       >
         <i i-ri-menu-2-fill />
       </button>
-      <a href="/" class="logo" aria-label="Home">
-        gambhir.dev <span title="Wave">🌊</span>
+      <a href="/" class="logo" aria-label="gambhir.dev – Home">
+        gambhir.dev <span title="Wave" aria-hidden="true">🌊</span>
       </a>
       <nav class="header-nav">
         <a
