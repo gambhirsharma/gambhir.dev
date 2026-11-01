@@ -38,9 +38,7 @@ function getDate(date: string) {
     </p>
     {
       image && (
-        <p>
-          <img width="640" height="360" src={image.src} alt={image.alt || ''} />
-        </p>
+        <img class="post-cover" width="640" height="360" src={image.src} alt={image.alt || ''} fetchpriority="high" />
       )
     }
     <Content />
