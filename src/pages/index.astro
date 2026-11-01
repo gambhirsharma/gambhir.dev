@@ -10,8 +10,6 @@ import mapLocations from '@/data/map-locations'
 import treks from '@/data/treks'
 import { buildTrekRoutes, getTrekStats } from '@/utils/treks'
 import reading from '@/data/reading'
-import { Image } from 'astro:assets'
-import avatar from '@/assets/avatar.jpg'
 
 const trekRoutes = buildTrekRoutes(treks)
 const trekStats = getTrekStats(trekRoutes)
@@ -24,52 +22,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
 <BaseLayout description={siteConfig.description}>
   <BirthdayBalloons client:load birthday={siteConfig.birthday} />
   <article class="home">
-    <section class="hero">
-      <div class="hero-id">
-        <button id="banana-trigger" class="avatar" type="button" aria-label="Profile photo">
-          <Image
-            src={avatar}
-            alt={siteConfig.title}
-            width={116}
-            height={116}
-            widths={[116, 232]}
-            sizes="(max-width: 610px) 19vw, 116px"
-            loading="eager"
-            fetchpriority="high"
-          />
-        </button>
-        <div class="hero-text">
-          <h1>
-            {firstName}
-            <span>{lastNames.join(' ')}</span><BirthdayBadge client:load birthday={siteConfig.birthday} />
-          </h1>
-          <p class="tagline">devops&nbsp;· distributed&nbsp;systems&nbsp;· open&nbsp;source</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href={`mailto:${siteConfig.email}`}>
-              {siteConfig.emailDisplay}
-              <span aria-hidden="true">→</span>
-            </a>
-            <a class="btn btn-secondary" href="/cv.pdf" download="Gambhir_Sharma_CV.pdf" target="_blank">
-              Curriculum Vitae <span class="arrow" aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="hero-meta">
-        <span class="meta-row meta-time">
-          <span class="meta-icon"><span class="live-dot"></span></span>
-          <CurrentTime client:load timeZone={siteConfig.location.timeZone} />
-        </span>
-        <span class="meta-row">
-          <i class="meta-icon i-lucide-map-pin"></i>
-          {siteConfig.location.place.toLowerCase()}
-        </span>
-        <span class="meta-row">
-          <i class="meta-icon i-lucide-briefcase"></i>
-          <span>prev devops <a href="https://www.cgi.com/en" target="_blank">@CGI</a></span>
-        </span>
-      </div>
-    </section>
+    <Hero />
 
     <div class="bio">
       <p>
