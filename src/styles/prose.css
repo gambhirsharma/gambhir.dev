@@ -73,37 +73,35 @@
   background-color: rgba(125, 125, 125, 0.3);
 }
 .prose blockquote {
-  font-weight: 500;
-  font-style: italic;
+  font-style: normal;
   color: inherit;
-  border-left-width: 0.25rem;
-  border-color: rgba(125, 125, 125, 0.3);
-  quotes: '\201C' '\201D' '\2018' '\2019';
-  margin-top: 1.6em;
-  margin-bottom: 1.6em;
-  padding-left: 1em;
+  margin-top: 1.75em;
+  margin-bottom: 1.75em;
+  padding: 0.875em 1.25em;
+  border-left: 3px solid #42b983;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: rgba(66, 185, 131, 0.07);
+}
+.prose blockquote > :first-child {
+  margin-top: 0;
+}
+.prose blockquote > :last-child {
+  margin-bottom: 0;
 }
 .prose blockquote p {
-  border-left: 4px solid #42b983;
-  padding-left: 1em;
-  color: #555;
-  font-style: italic;
-  background: #f9f9f9;
-}
-html.dark {
-  .prose blockquote p {
-    background-color: #121212;
-  }
+  opacity: 0.85;
 }
 
-.prose blockquote p:first-of-type::before {
-  content: open-quote;
-  display: none;
+/* Frontmatter cover image: span the full article column */
+.prose .post-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 0;
+  margin-bottom: 2.5em;
+  border-radius: 0.5rem;
 }
-.prose blockquote p:last-of-type::after {
-  content: close-quote;
-  display: none;
-}
+
 .prose h1 {
   font-weight: 800;
   font-size: 2.25em;
