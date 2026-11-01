@@ -26,7 +26,7 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
     <div class="hero-text">
       <h1>
         {firstName}
-        <span>{lastNames.join(' ')}</span><BirthdayBadge client:load birthday={siteConfig.birthday} />
+        <span>{lastNames.join(' ')}</span><BirthdayBadge client:idle birthday={siteConfig.birthday} />
       </h1>
       <p class="tagline">devops&nbsp;· distributed&nbsp;systems&nbsp;· open&nbsp;source</p>
       <div class="hero-actions">
@@ -43,7 +43,7 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
   <div class="hero-meta">
     <span class="meta-row meta-time">
       <span class="meta-icon"><span class="live-dot"></span></span>
-      <CurrentTime client:load timeZone={siteConfig.location.timeZone} />
+      <CurrentTime client:idle timeZone={siteConfig.location.timeZone} />
     </span>
     <span class="meta-row">
       <i class="meta-icon i-lucide-map-pin"></i>

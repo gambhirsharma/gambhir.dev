@@ -17,7 +17,7 @@ const fmt = (n: number) => n.toLocaleString('en', { maximumFractionDigits: 1 })
 <BaseLayout title="Treks" description="Treks and hikes I have done, with distance, elevation and route">
   <h1 class="mb-10 text-title">Treks</h1>
   <div class="map-container">
-    <LocationMap client:only="vue" currentLocation={mapLocations.currentLocation} treks={trekRoutes} zoom={3} />
+    <LocationMap client:load currentLocation={mapLocations.currentLocation} treks={trekRoutes} zoom={3} />
   </div>
   <TrekStats stats={trekStats} />
 

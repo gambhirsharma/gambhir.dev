@@ -20,7 +20,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
 ---
 
 <BaseLayout description={siteConfig.description}>
-  <BirthdayBalloons client:load birthday={siteConfig.birthday} />
+  <BirthdayBalloons client:idle birthday={siteConfig.birthday} />
   <article class="home">
     <Hero />
 
@@ -47,7 +47,7 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
     <div class="treks">
       <div class="map-container">
         <LocationMap
-          client:only="vue"
+          client:visible
           currentLocation={mapLocations.currentLocation}
           places={mapLocations.places}
           treks={trekRoutes}
