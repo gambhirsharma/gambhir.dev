@@ -2,6 +2,8 @@
 import CurrentTime from '@/components/CurrentTime.vue'
 import BirthdayBadge from '@/components/BirthdayBadge.vue'
 import siteConfig from '@/site-config'
+import { Image } from 'astro:assets'
+import avatar from '@/assets/avatar.jpg'
 
 // the avatar's #banana-trigger id is what the banana rain script on the home page listens to
 const [firstName, ...lastNames] = siteConfig.title.split(' ')
@@ -10,7 +12,16 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
 <section class="hero">
   <div class="hero-id">
     <button id="banana-trigger" class="avatar" type="button" aria-label="Profile photo">
-      <img src="/avatar.jpg" alt={siteConfig.title} width="116" height="116" />
+      <Image
+        src={avatar}
+        alt={siteConfig.title}
+        width={116}
+        height={116}
+        widths={[116, 232]}
+        sizes="(max-width: 610px) 19vw, 116px"
+        loading="eager"
+        fetchpriority="high"
+      />
     </button>
     <div class="hero-text">
       <h1>

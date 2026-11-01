@@ -52,6 +52,7 @@
     "lint-staged": "^15.5.2",
     "lodash-es": "^4.17.21",
     "prettier-plugin-astro": "^0.13.0",
+    "sharp": "^0.35.5",
     "simple-git-hooks": "^2.13.0"
   },
   "simple-git-hooks": {
