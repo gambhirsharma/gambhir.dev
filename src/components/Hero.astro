@@ -112,6 +112,13 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
       0 0 0 4px var(--c-bg),
       0 0 0 5px var(--c-avatar-ring);
     overflow: hidden;
+    /* Safari drops the rounded overflow clip while a child's transform/filter
+       is animating (it gets promoted to its own layer), flashing the square
+       photo. Isolating the stacking context and adding a no-op mask keeps the
+       clip applied to composited children. */
+    isolation: isolate;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
     padding: 0;
     background: transparent;
     transition: box-shadow 0.4s ease;
@@ -125,7 +132,8 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
       width: 100%;
       height: 100%;
       margin: 0;
-      border-radius: 0;
+      /* round the image itself too, so it can never show square corners */
+      border-radius: 50%;
       object-fit: cover;
       filter: var(--avatar-filter);
       transition:
@@ -138,6 +146,7 @@ const [firstName, ...lastNames] = siteConfig.title.split(' ')
       content: '';
       position: absolute;
       inset: 0;
+      border-radius: inherit;
       background: linear-gradient(135deg, #4ade80 0%, #14b8a6 55%, #0ea5e9 100%);
       mix-blend-mode: color;
       opacity: 0.18;
