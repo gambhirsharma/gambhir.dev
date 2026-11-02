@@ -23,6 +23,11 @@ const resolvedImage = image?.src
     }
   : undefined
 
+// The default card gets explicit size/type tags (WhatsApp/Facebook render faster with them)
+// plus the original OG.png as a second og:image, used by crawlers that can't load the first.
+const isDefaultImage = resolvedImage?.src === new URL(siteConfig.image.src, Astro.site).toString()
+const fallbackImage = new URL(siteConfig.fallbackImage.src, Astro.site).toString()
+
 const canonicalURL = new URL(Astro.request.url, Astro.site)
 
 function formatCanonicalURL(url: string | URL) {
@@ -56,7 +61,28 @@ function formatCanonicalURL(url: string | URL) {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 {resolvedImage?.src && <meta property="og:image" content={resolvedImage.src} />}
+{resolvedImage?.src && <meta property="og:image:secure_url" content={resolvedImage.src} />}
+{
+  isDefaultImage && (
+    <>
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+    </>
+  )
+}
 {resolvedImage?.alt && <meta property="og:image:alt" content={resolvedImage.alt} />}
+{
+  isDefaultImage && (
+    <>
+      <meta property="og:image" content={fallbackImage} />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={siteConfig.fallbackImage.alt} />
+    </>
+  )
+}
 
 <!-- X / Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
