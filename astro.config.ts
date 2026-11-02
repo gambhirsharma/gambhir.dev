@@ -63,5 +63,13 @@ export default defineConfig({
       wrap: true,
     },
   },
-
+  vite: {
+    build: {
+      // Components use native CSS nesting (e.g. `.hero { a { ... } }`). Safari < 17.2
+      // drops nested rules that start with a bare element selector, so links,
+      // the avatar filter/gradient and headings went unstyled there. Targeting
+      // older browsers makes esbuild flatten the nesting at build time.
+      cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari14'],
+    },
+  },
 })
