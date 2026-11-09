@@ -5,7 +5,7 @@ export const HomeData: HomePageData = {
     {
       title: 'Lynq NTN-Pulse',
       description: '5G satellite alarm network, NeoSpace Challenge winner',
-      techstack: ['KubeEdge', 'Python', '5G NTN'],
+      techstack: ['KubeEdge', 'k8s', 'HPC', 'Python', '5G NTN'],
       url: 'https://github.com/gambhirsharma/Lynq',
       award: 'NeoSpace 2026 winner',
     },
