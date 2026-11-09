@@ -10,5 +10,7 @@ export default antfu({
   },
   ignores: [
     'src/layouts/BaseLayout.astro',
+    // agent worktrees (e.g. .claude/worktrees/*) are full repo copies, not our sources
+    '.claude/**',
   ],
 })

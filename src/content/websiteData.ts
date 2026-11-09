@@ -3,6 +3,13 @@ import type { HomePageData } from '@/types'
 export const HomeData: HomePageData = {
   project: [
     {
+      title: 'Lynq NTN-Pulse',
+      description: '5G satellite alarm network, NeoSpace Challenge winner',
+      techstack: ['KubeEdge', 'k8s', 'HPC', 'Python', '5G NTN'],
+      url: 'https://github.com/gambhirsharma/Lynq',
+      award: 'NeoSpace 2026 winner',
+    },
+    {
       title: 'ISAC-k8s',
       description: 'distributed 6G ISAC sensing fleet on kubeedge',
       techstack: ['k8s', 'gRPC', 'golang'],

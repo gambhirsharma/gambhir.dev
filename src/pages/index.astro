@@ -93,9 +93,19 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
             </a>
           </div>
           {HomeData.project.map((x) => (
-            <a class="project" href={x.url} target="_blank">
+            <a class:list={['project', { 'project-winner': x.award }]} href={x.url} target="_blank">
               <div class="project-head">
-                <span class="row-title">{x.title}</span>
+                <span class="project-title">
+                  <span class="row-title">{x.title}</span>
+                  {x.award && (
+                    <span class="award" title="hackathon winner">
+                      <span class="award-trophy" aria-hidden="true">
+                        🏆
+                      </span>
+                      {x.award}
+                    </span>
+                  )}
+                </span>
                 <span class="project-arrow" aria-hidden="true">
                   ↗
                 </span>
@@ -624,6 +634,39 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
       startBananaRain()
     }
   })
+
+  // Easter egg: the first time you hover/focus the award-winning project,
+  // gold confetti pops out of its trophy. Once per page load, never on reduced motion.
+  const winner = document.querySelector<HTMLAnchorElement>('.project-winner')
+  let cheered = false
+  async function cheer() {
+    if (cheered || !winner || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+    cheered = true
+    const trophy = winner.querySelector('.award-trophy') ?? winner
+    const rect = trophy.getBoundingClientRect()
+    const origin = {
+      x: (rect.left + rect.width / 2) / window.innerWidth,
+      y: (rect.top + rect.height / 2) / window.innerHeight,
+    }
+    // only download canvas-confetti once someone actually finds the egg
+    const { default: confetti } = await import('canvas-confetti')
+    confetti({
+      particleCount: 70,
+      spread: 75,
+      startVelocity: 32,
+      gravity: 0.9,
+      ticks: 160,
+      scalar: 0.85,
+      origin,
+      colors: ['#fbbf24', '#f59e0b', '#fde68a', '#facc15', '#ffffff'],
+      disableForReducedMotion: true,
+      zIndex: 9999,
+    })
+  }
+  winner?.addEventListener('mouseenter', cheer)
+  winner?.addEventListener('focus', cheer)
 </script>
 
 <style>
@@ -873,6 +916,97 @@ const fmtMonth = (d: Date | 'present') => (d === 'present' ? 'present' : d.toISO
   .project-arrow {
     font-size: 14px;
     color: var(--c-tertiary);
+  }
+
+  .project-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    min-width: 0;
+  }
+
+  /* award-winning project: gold trophy badge with a slow shine */
+  .award {
+    --award-fg: #a16207;
+    --award-bg: #f59e0b1f;
+    --award-ring: #f59e0b4d;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px 2px 7px;
+    overflow: hidden;
+    border: 1px solid var(--award-ring);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: var(--award-fg);
+    background: var(--award-bg);
+  }
+
+  :global(html.dark) .award {
+    --award-fg: #fbbf24;
+    --award-bg: #fbbf241a;
+    --award-ring: #fbbf2440;
+  }
+
+  .award::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 35%, #ffffff59 50%, transparent 65%);
+    transform: translateX(-100%);
+    animation: award-shine 4s ease-in-out 1s infinite;
+    pointer-events: none;
+  }
+
+  .award-trophy {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 1;
+    transform-origin: 50% 90%;
+  }
+
+  .project-winner:hover .award-trophy,
+  .project-winner:focus-visible .award-trophy {
+    animation: trophy-wiggle 0.6s ease-in-out;
+  }
+
+  @keyframes award-shine {
+    0% {
+      transform: translateX(-100%);
+    }
+    40%,
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes trophy-wiggle {
+    0%,
+    100% {
+      transform: rotate(0) scale(1);
+    }
+    25% {
+      transform: rotate(-14deg) scale(1.2);
+    }
+    50% {
+      transform: rotate(10deg) scale(1.2);
+    }
+    75% {
+      transform: rotate(-6deg) scale(1.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .award::after,
+    .project-winner:hover .award-trophy,
+    .project-winner:focus-visible .award-trophy {
+      animation: none;
+    }
   }
 
   .chips {
