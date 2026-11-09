@@ -99,8 +99,7 @@ onMounted(() => {
         <i i-ri-menu-2-fill />
       </button>
       <a href="/" class="logo" aria-label="gambhir.dev – Home">
-        <span>gambhir</span><span class="logo-tld">.dev</span>
-        <i i-lucide-waves class="logo-mark" aria-hidden="true" />
+        gambhir.dev
       </a>
       <nav class="header-nav">
         <a
@@ -130,8 +129,7 @@ onMounted(() => {
   <aside id="nav-drawer" class="drawer" :class="{ open: drawerOpen }" :inert="!drawerOpen" aria-label="Menu">
     <div class="drawer-head">
       <a href="/" class="logo" aria-label="gambhir.dev – Home" @click="closeDrawer">
-        <span>gambhir</span><span class="logo-tld">.dev</span>
-        <i i-lucide-waves class="logo-mark" aria-hidden="true" />
+        gambhir.dev
       </a>
       <button class="header-link header-icon" aria-label="Close menu" @click="closeDrawer">
         <i i-ri-close-line />
@@ -185,52 +183,14 @@ onMounted(() => {
   gap: 16px clamp(24px, 5vw, 56px);
 }
 
-/* Wordmark: "gambhir" in the strong text colour, ".dev" muted, and a line
-   wave icon in the site accent instead of the full-colour 🌊 emoji, so the
-   logo uses the same monochrome + green palette as the rest of the chrome. */
+/* Plain text wordmark in the strong text colour, no emoji or icon, so it
+   matches the monochrome nav. */
 .logo {
-  display: inline-flex;
-  align-items: center;
   font-size: 19px;
   font-weight: 650;
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: var(--c-strong);
-}
-
-.logo-tld {
-  color: var(--c-tertiary);
-  transition: color 0.2s;
-}
-
-.logo-mark {
-  width: 18px;
-  height: 18px;
-  margin-left: 8px;
-  color: var(--c-accent);
-}
-
-.logo:hover .logo-tld {
-  color: var(--c-accent);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .logo:hover .logo-mark {
-    animation: logo-wave 1.2s ease-in-out;
-  }
-}
-
-@keyframes logo-wave {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(2px) translateY(-1px);
-  }
-  75% {
-    transform: translateX(-2px) translateY(1px);
-  }
 }
 
 /* Small screens: menu button + logo + theme toggle; the nav and social
