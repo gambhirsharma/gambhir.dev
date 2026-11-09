@@ -24,6 +24,7 @@ export interface HomePageData {
     description: string
     techstack: Array<string>
     url: string
+    award?: string // e.g. 'hackathon winner' — shows a trophy badge on the home card
   }>
   work: Array<{
     title: string
