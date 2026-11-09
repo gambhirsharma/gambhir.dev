@@ -99,7 +99,7 @@ onMounted(() => {
         <i i-ri-menu-2-fill />
       </button>
       <a href="/" class="logo" aria-label="gambhir.dev – Home">
-        gambhir.dev
+        <span>gambhir</span><span class="logo-tld">.dev</span>
       </a>
       <nav class="header-nav">
         <a
@@ -129,7 +129,7 @@ onMounted(() => {
   <aside id="nav-drawer" class="drawer" :class="{ open: drawerOpen }" :inert="!drawerOpen" aria-label="Menu">
     <div class="drawer-head">
       <a href="/" class="logo" aria-label="gambhir.dev – Home" @click="closeDrawer">
-        gambhir.dev
+        <span>gambhir</span><span class="logo-tld">.dev</span>
       </a>
       <button class="header-link header-icon" aria-label="Close menu" @click="closeDrawer">
         <i i-ri-close-line />
@@ -183,14 +183,18 @@ onMounted(() => {
   gap: 16px clamp(24px, 5vw, 56px);
 }
 
-/* Plain text wordmark in the strong text colour, no emoji or icon, so it
-   matches the monochrome nav. */
+/* Two-tone text wordmark: "gambhir" in the strong text colour, ".dev"
+   muted. No emoji or icon, so it matches the monochrome nav. */
 .logo {
   font-size: 19px;
   font-weight: 650;
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: var(--c-strong);
+}
+
+.logo-tld {
+  color: var(--c-tertiary);
 }
 
 /* Small screens: menu button + logo + theme toggle; the nav and social
