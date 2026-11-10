@@ -99,7 +99,7 @@ onMounted(() => {
         <i i-ri-menu-2-fill />
       </button>
       <a href="/" class="logo" aria-label="gambhir.dev – Home">
-        gambhir.dev <span title="Wave" aria-hidden="true">🌊</span>
+        <span>gambhir</span><span class="logo-tld">.dev</span>
       </a>
       <nav class="header-nav">
         <a
@@ -128,7 +128,9 @@ onMounted(() => {
   <div class="drawer-mask" :class="{ open: drawerOpen }" @click="closeDrawer" />
   <aside id="nav-drawer" class="drawer" :class="{ open: drawerOpen }" :inert="!drawerOpen" aria-label="Menu">
     <div class="drawer-head">
-      <a href="/" class="logo" @click="closeDrawer">gambhir.dev <span title="Wave">🌊</span></a>
+      <a href="/" class="logo" aria-label="gambhir.dev – Home" @click="closeDrawer">
+        <span>gambhir</span><span class="logo-tld">.dev</span>
+      </a>
       <button class="header-link header-icon" aria-label="Close menu" @click="closeDrawer">
         <i i-ri-close-line />
       </button>
@@ -181,11 +183,30 @@ onMounted(() => {
   gap: 16px clamp(24px, 5vw, 56px);
 }
 
+/* Two-tone text wordmark: "gambhir" in the strong text colour, ".dev"
+   muted. No emoji or icon, so it matches the monochrome nav. On hover
+   ".dev" picks up the site's green accent with a soft glow. */
 .logo {
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 650;
+  letter-spacing: -0.02em;
   white-space: nowrap;
-  color: var(--c-text);
+  color: var(--c-strong);
+}
+
+.logo-tld {
+  color: var(--c-tertiary);
+  transition:
+    color 0.2s,
+    text-shadow 0.2s;
+}
+
+.logo:hover .logo-tld,
+.logo:focus-visible .logo-tld {
+  color: var(--c-accent);
+  text-shadow:
+    0 0 6px var(--c-accent-ring),
+    0 0 14px var(--c-accent-ring);
 }
 
 /* Small screens: menu button + logo + theme toggle; the nav and social
