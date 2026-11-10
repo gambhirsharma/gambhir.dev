@@ -184,7 +184,8 @@ onMounted(() => {
 }
 
 /* Two-tone text wordmark: "gambhir" in the strong text colour, ".dev"
-   muted. No emoji or icon, so it matches the monochrome nav. */
+   muted. No emoji or icon, so it matches the monochrome nav. On hover
+   ".dev" picks up the site's green accent with a soft glow. */
 .logo {
   font-size: 19px;
   font-weight: 650;
@@ -195,6 +196,17 @@ onMounted(() => {
 
 .logo-tld {
   color: var(--c-tertiary);
+  transition:
+    color 0.2s,
+    text-shadow 0.2s;
+}
+
+.logo:hover .logo-tld,
+.logo:focus-visible .logo-tld {
+  color: var(--c-accent);
+  text-shadow:
+    0 0 6px var(--c-accent-ring),
+    0 0 14px var(--c-accent-ring);
 }
 
 /* Small screens: menu button + logo + theme toggle; the nav and social
