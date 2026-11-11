@@ -26,5 +26,9 @@ pnpm cv:build
 Open `public/cv.pdf` to review the result. The generator supports multiple pages
 when the content no longer fits on one page.
 
+The profile image is selected by `basics.image` in `resume.json`. The current
+design uses `public/me.png` and mirrors the previous CV's typography, colors,
+compact section layout, contact icons, and rounded photo.
+
 The generated PDF is deterministic: running the command again without changing
 the source data produces the same file.

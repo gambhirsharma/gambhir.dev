@@ -6,6 +6,7 @@
     "email": "gambhiritaly@gmail.com",
     "phone": "+39 351 474 6445",
     "url": "https://gambhir.dev",
+    "image": "public/me.png",
     "summary": "DevOps-Focused Full-Stack Developer with hands-on experience building modern web applications using Next.js, TypeScript, PostgreSQL, and Node.js. Passionate about cloud infrastructure and automation, with projects deployed on AWS and Kubernetes using CI/CD pipelines, Docker, and Helm. Skilled in infrastructure as code, GitOps workflows, and monitoring solutions. Proficient in Python scripting and automating infrastructure tasks through ad hoc tooling. Currently sharpening my cybersecurity skills through CyberChallenge.it CTF, while sharing DevOps and development insights through technical writing and Twitter.",
     "location": {
       "city": "Rome",
@@ -26,6 +27,11 @@
         "network": "X",
         "username": "gambhir_sharma",
         "url": "https://x.com/gambhir_sharma"
+      },
+      {
+        "network": "CodePen",
+        "username": "gambhirsharma",
+        "url": "https://codepen.io/gambhirsharma"
       }
     ]
   },
@@ -56,7 +62,7 @@
       "area": "Engineering",
       "studyType": "Bachelor",
       "startDate": "2024-09",
-      "summary": "Pursuing the Engineering Science program, focusing on quantitative analysis, scientific reasoning, and multidisciplinary engineering concepts."
+      "summary": "Pursuing Engineering Science program at the University of Rome Tor Vergata, focusing on quantitative analysis, scientific reasoning, and multidisciplinary engineering concepts."
     },
     {
       "institution": "CyberChallenge.IT",
@@ -65,14 +71,14 @@
       "studyType": "Training Program",
       "startDate": "2025-02",
       "endDate": "2025-07",
-      "summary": "Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development through the CTF program, broadening my understanding of secure software design."
+      "summary": "Learned a lot from a security point of view through this CTF program. Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development. It really broadened my understanding of secure software design."
     }
   ],
   "projects": [
     {
       "name": "On Fly Image Optimization",
       "url": "https://github.com/gambhirsharma/OnFly-Image-Optimization",
-      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus and Grafana. Deployed using ArgoCD and Helm, with CI/CD pipelines automated through GitHub Actions and Kustomize.",
+      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus & Grafana. Used a custom Dockerfile and ad hoc scripts to build and serve the Next.js app. Deployed using ArgoCD and Helm, with CI/CD pipelines automated via GitHub Actions and Kustomize.",
       "keywords": [
         "TypeScript",
         "Next.js",
@@ -80,7 +86,7 @@
         "S3",
         "GitHub Actions",
         "PostgreSQL",
-        "Kubernetes",
+        "Kubernetes (K8s)",
         "Helm",
         "ArgoCD"
       ]
@@ -95,7 +101,7 @@
       "name": "Vercel Clone",
       "url": "https://github.com/gambhirsharma/vercel-clone",
       "description": "Built a platform that deploys apps from GitHub URLs by building Docker images and deploying them to Kubernetes, automating the CI/CD pipeline.",
-      "keywords": ["Next.js", "Node.js", "Kubernetes", "Docker"]
+      "keywords": ["Next.js", "Node.js", "K8s", "Docker"]
     }
   ],
   "skills": [
