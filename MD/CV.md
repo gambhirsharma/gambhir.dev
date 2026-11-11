@@ -26,6 +26,10 @@ pnpm cv:build
 Open `public/cv.pdf` to review the result. The generator supports multiple pages
 when the content no longer fits on one page.
 
+Optional fields beyond the JSON Resume schema: `projects[].date` (shown on the
+right of the project title), `education[].location` (shown before the dates),
+and `contributions[]` entries with `name`, `summary`, and `url`.
+
 The profile image is selected by `basics.image` in `resume.json`. The current
 design uses `public/me.png` and mirrors the previous CV's typography, colors,
 compact section layout, contact icons, and rounded photo.

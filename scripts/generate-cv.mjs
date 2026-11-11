@@ -52,7 +52,7 @@ addPage(false)
 drawHeader()
 drawSummary()
 
-drawSection('Work Experience')
+drawSection('Experience')
 for (const role of resume.work) {
   drawEntry({
     body: role.summary,
@@ -68,7 +68,7 @@ drawSection('Education')
 for (const item of resume.education) {
   drawEntry({
     body: item.summary,
-    dates: dateRange(item),
+    dates: [item.location, dateRange(item)].filter(Boolean).join(' • '),
     meta: item.studyType,
     subtitle: item.area,
     title: item.institution,
@@ -80,12 +80,12 @@ drawSection('Projects')
 for (const project of resume.projects)
   drawProject(project)
 
+drawSection('Open Source Contribution')
+drawContributions(resume.contributions)
+
 drawSection('Skills')
 for (const skill of resume.skills)
   drawSkill(skill)
-
-drawSection('Open Source Contribution')
-drawContributions(resume.contributions)
 
 doc.end()
 
@@ -172,7 +172,7 @@ function drawHeader() {
     { icon: 'linkedin', link: profiles.LinkedIn?.url },
     { icon: 'x', link: profiles.X?.url },
     { icon: 'codepen', link: profiles.CodePen?.url },
-  ]
+  ].filter(item => item.link || item.text)
 
   drawContactRow(contacts, 65, photoX - 14)
   y = 88
@@ -265,7 +265,7 @@ function drawSummary() {
 
 function drawSection(title) {
   ensureSpace(22)
-  y += 4
+  y += 2
   doc.font('Helvetica-Bold').fontSize(9.4).fillColor(colors.accent)
   doc.text(title, left, y, { lineBreak: false })
   y += 12
@@ -301,11 +301,11 @@ function drawEntry({ body, dates, meta, subtitle, title, url }) {
 
   doc.font('Helvetica').fontSize(9.3).fillColor(colors.ink)
   doc.text(body, left, y, { lineGap: 0.45, width })
-  y = doc.y + 5
+  y = doc.y + 3
 }
 
 function drawProject(project) {
-  const stack = `Tech Stack: ${project.keywords.join(', ')}`
+  const stack = `Tech: ${project.keywords.join(', ')}`
   const descriptionHeight = textHeight(project.description, 'Helvetica', 9.3, width, 0.45)
   const stackHeight = textHeight(stack, 'Helvetica', 9.3, width, 0.3)
   ensureSpace(12 + descriptionHeight + stackHeight + 7)
@@ -316,57 +316,66 @@ function drawProject(project) {
     lineBreak: false,
     underline: Boolean(project.url),
   })
+  if (project.date) {
+    doc.fillColor(colors.ink).text(formatDate(project.date), left, y, {
+      align: 'right',
+      link: null,
+      lineBreak: false,
+      underline: false,
+      width,
+    })
+  }
   y += 11
 
   doc.font('Helvetica').fontSize(9.3).fillColor(colors.ink)
   doc.text(project.description, left, y, { lineGap: 0.45, width })
-  y = doc.y + 4
+  y = doc.y + 1
   doc.text(stack, left, y, { lineGap: 0.3, width })
-  y = doc.y + 6
+  y = doc.y + 4
 }
 
 function drawSkill(skill) {
-  doc.font('Helvetica').fontSize(9.3)
   const label = `${skill.name}: `
   const value = skill.keywords.join(', ')
-  const line = `${label}${value}`
-  const height = doc.heightOfString(line, { lineGap: 0.2, width })
+  const height = textHeight(`${label}${value}`, 'Helvetica', 9.3, width, 0.2)
   ensureSpace(height + 2)
+  doc.fontSize(9.3)
 
-  doc.fillColor(colors.ink).text(line, left, y, { lineGap: 0.2, width })
+  doc.fillColor(colors.ink).font('Helvetica-Bold').text(label, left, y, { continued: true, lineGap: 0.2, width })
+  doc.font('Helvetica').text(value, { lineGap: 0.2 })
   y = doc.y + 1
 }
 
 function drawContributions(items) {
   const gap = 18
   const columnWidth = (width - gap) / 2
-  const rowHeight = 15
-  ensureSpace(Math.ceil(items.length / 2) * rowHeight)
+  const rowHeight = 21
+  const rows = Math.ceil(items.length / 2)
+  ensureSpace(rows * rowHeight)
 
   items.forEach((item, index) => {
     const column = index % 2
     const row = Math.floor(index / 2)
     const x = left + column * (columnWidth + gap)
-    const separator = item.name.indexOf(':')
-    const prefix = separator >= 0 ? item.name.slice(0, separator + 1) : item.name
-    const description = separator >= 0 ? item.name.slice(separator + 1) : ''
+    const itemY = y + row * rowHeight
 
     doc.font('Helvetica').fontSize(9.3).fillColor(colors.link)
-    doc.text(prefix, x, y + row * rowHeight, {
-      continued: true,
+    doc.text(item.name, x, itemY, {
       link: item.url,
       lineBreak: false,
-      underline: true,
-      width: columnWidth,
+      underline: Boolean(item.url),
     })
-    doc.fillColor(colors.ink).text(description, {
-      link: null,
-      lineBreak: false,
-      underline: false,
-    })
+    if (item.summary) {
+      doc.fillColor(colors.ink).text(item.summary, x, itemY + 10.5, {
+        link: null,
+        lineBreak: false,
+        underline: false,
+        width: columnWidth,
+      })
+    }
   })
 
-  y += Math.ceil(items.length / 2) * rowHeight
+  y += rows * rowHeight + 3
 }
 
 function textHeight(text, font, size, availableWidth, lineGap) {

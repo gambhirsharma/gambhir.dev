@@ -2,12 +2,12 @@
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
   "basics": {
     "name": "Gambhir Sharma",
-    "label": "DevOps | Full Stack Developer",
-    "email": "gambhiritaly@gmail.com",
+    "label": "DevOps Engineer",
+    "email": "hey@gambhir.dev",
     "phone": "+39 351 474 6445",
     "url": "https://gambhir.dev",
     "image": "public/me.png",
-    "summary": "DevOps-Focused Full-Stack Developer with hands-on experience building modern web applications using Next.js, TypeScript, PostgreSQL, and Node.js. Passionate about cloud infrastructure and automation, with projects deployed on AWS and Kubernetes using CI/CD pipelines, Docker, and Helm. Skilled in infrastructure as code, GitOps workflows, and monitoring solutions. Proficient in Python scripting and automating infrastructure tasks through ad hoc tooling. Currently sharpening my cybersecurity skills through CyberChallenge.it CTF, while sharing DevOps and development insights through technical writing and Twitter.",
+    "summary": "DevOps Engineer with hands-on experience building and deploying cloud-native applications on Kubernetes and AWS. Experienced in CI/CD automation, GitOps, infrastructure as code, observability, and DevSecOps using tools such as GitHub Actions, Helm, ArgoCD, Prometheus, Grafana, and Terraform. Strong software engineering background with TypeScript, Python, Go, and PostgreSQL, enabling automation and scalable infrastructure solutions. Also experienced with networking and 6G ISAC research.",
     "location": {
       "city": "Rome",
       "countryCode": "IT"
@@ -22,16 +22,6 @@
         "network": "LinkedIn",
         "username": "gambhir-sharma",
         "url": "https://www.linkedin.com/in/gambhir-sharma/"
-      },
-      {
-        "network": "X",
-        "username": "gambhir_sharma",
-        "url": "https://x.com/gambhir_sharma"
-      },
-      {
-        "network": "CodePen",
-        "username": "gambhirsharma",
-        "url": "https://codepen.io/gambhirsharma"
       }
     ]
   },
@@ -43,7 +33,7 @@
       "location": "Rome, Italy | Full-time",
       "startDate": "2025-09",
       "endDate": "2026-03",
-      "summary": "Worked across multiple spheres of DevOps, including CI/CD automation, cloud infrastructure management, and deployment optimization, with a strong DevSecOps focus on vulnerability analysis and remediation, and MLOps experience using Kubeflow and JupyterHub to support scalable ML and Earth observation data platforms."
+      "summary": "Worked across multiple spheres of DevOps, including CI/CD automation, cloud infrastructure management, and deployment optimization, with a strong DevSecOps focus on vulnerability analysis and remediation, and MLOps experience using Kubeflow and JupyterHub to support scalable ML and Earth observation data platforms. Built a full test suite for web UI components on isula.earth, covering validation, regression testing, and troubleshooting of front-end issues."
     },
     {
       "name": "RepoCraft",
@@ -59,10 +49,11 @@
     {
       "institution": "Università degli Studi di Roma Tor Vergata",
       "url": "https://web.uniroma2.it/",
-      "area": "Engineering",
+      "area": "ICT and Internet Engineering",
       "studyType": "Bachelor",
       "startDate": "2024-09",
-      "summary": "Pursuing Engineering Science program at the University of Rome Tor Vergata, focusing on quantitative analysis, scientific reasoning, and multidisciplinary engineering concepts."
+      "summary": "Final-year Engineering student specializing in 6G technologies, Integrated Sensing and Communication (ISAC), computer networking, distributed systems, and edge computing. Final-year thesis focused on 6G ISAC systems and distributed edge networking.",
+      "location": "Rome, Italy"
     },
     {
       "institution": "CyberChallenge.IT",
@@ -71,14 +62,39 @@
       "studyType": "Training Program",
       "startDate": "2025-02",
       "endDate": "2025-07",
-      "summary": "Learned a lot from a security point of view through this CTF program. Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development. It really broadened my understanding of secure software design."
+      "summary": "Learned a lot from a security point of view through this CTF program. Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development. It really broadened my understanding of secure software design.",
+      "location": "Rome, Italy"
     }
   ],
   "projects": [
     {
+      "name": "Lynq NTN-Pulse (Winner, NEOSPACE Europe 2026)",
+      "url": "https://github.com/gambhirsharma/Lynq",
+      "date": "2026-10",
+      "description": "Designed a 112-satellite global 5G IoT constellation (<100 ms p99 latency) and built its Kubernetes/KubeEdge cloud-to-edge orchestration, with canary OTA updates for satellites, gateways and devices.",
+      "keywords": [
+        "Kubernetes",
+        "KubeEdge",
+        "Slurm/HPC (MeluXina)",
+        "Streamlit"
+      ]
+    },
+    {
+      "name": "ISAC-K8s",
+      "url": "https://github.com/gambhirsharma/ISAC-k8s",
+      "description": "Developed a distributed 6G ISAC (Integrated Sensing and Communication) platform using KubeEdge, with federated learning for decentralized model training on edge nodes.",
+      "keywords": [
+        "K8s",
+        "Go",
+        "6G",
+        "gRPC",
+        "KubeEdge"
+      ]
+    },
+    {
       "name": "On Fly Image Optimization",
       "url": "https://github.com/gambhirsharma/OnFly-Image-Optimization",
-      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus & Grafana. Used a custom Dockerfile and ad hoc scripts to build and serve the Next.js app. Deployed using ArgoCD and Helm, with CI/CD pipelines automated via GitHub Actions and Kustomize.",
+      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus & Grafana. Deployed using ArgoCD and Helm, with CI/CD pipelines automated via GitHub Actions and Kustomize.",
       "keywords": [
         "TypeScript",
         "Next.js",
@@ -86,63 +102,131 @@
         "S3",
         "GitHub Actions",
         "PostgreSQL",
-        "Kubernetes (K8s)",
+        "K8s",
         "Helm",
         "ArgoCD"
       ]
     },
     {
-      "name": "Lambda web scraping",
+      "name": "Lambda Web Scraping",
       "url": "https://github.com/gambhirsharma/lazio-disco-bot",
-      "description": "Built a serverless scraper using AWS Lambda, storing logs in DynamoDB and sending real-time alerts via the Telegram API. Fully deployed on AWS for scalability and cost-efficiency.",
-      "keywords": ["AWS", "EC2", "DynamoDB", "Python"]
-    },
-    {
-      "name": "Vercel Clone",
-      "url": "https://github.com/gambhirsharma/vercel-clone",
-      "description": "Built a platform that deploys apps from GitHub URLs by building Docker images and deploying them to Kubernetes, automating the CI/CD pipeline.",
-      "keywords": ["Next.js", "Node.js", "K8s", "Docker"]
+      "description": "Serverless scraper using AWS Lambda, storing logs in DynamoDB and sending real-time alerts via Telegram API. Fully deployed on AWS.",
+      "keywords": [
+        "AWS",
+        "EC2",
+        "DynamoDB",
+        "Python"
+      ]
     }
   ],
   "skills": [
     {
-      "name": "Front-End",
-      "keywords": ["Next.js", "React", "TypeScript", "Tailwind CSS", "ShadCN/UI", "Vue.js", "React Router"]
+      "name": "Software Development",
+      "keywords": [
+        "TypeScript",
+        "Python",
+        "Node.js",
+        "Next.js",
+        "React",
+        "FastAPI",
+        "Flask",
+        "Express.js",
+        "Phoenix (Elixir)",
+        "GraphQL",
+        "tRPC",
+        "Supabase",
+        "Firebase",
+        "Vue.js"
+      ]
     },
     {
-      "name": "Back-End",
-      "keywords": ["Node.js", "Express.js", "FastAPI", "Flask", "Phoenix (Elixir)", "tRPC", "GraphQL", "Kafka", "Supabase", "Firebase"]
+      "name": "DevOps & Infrastructure",
+      "keywords": [
+        "Kubernetes",
+        "Helm",
+        "ArgoCD",
+        "Terraform",
+        "Ansible",
+        "Kustomize",
+        "Chef",
+        "Docker",
+        "Harbor",
+        "Traefik",
+        "Nginx",
+        "Envoy"
+      ]
     },
     {
-      "name": "Cloud",
-      "keywords": ["AWS (CDK, SAM)", "Serverless Framework", "S3", "EC2", "Lambda"]
+      "name": "Networking & Virtualization",
+      "keywords": [
+        "Tailscale",
+        "WireGuard",
+        "Proxmox (KVM)",
+        "Cilium",
+        "Istio",
+        "eBPF",
+        "Linux Traffic Control (tc)",
+        "IPVS",
+        "VXLAN",
+        "NFV/SDN fundamentals"
+      ]
     },
     {
-      "name": "DevOps",
-      "keywords": ["Kubernetes", "Helm", "ArgoCD", "Git", "GitHub Actions", "Terraform", "Linux", "Vim", "Prometheus", "Grafana", "Nginx", "Kustomize", "Ansible", "Chef", "DefectDojo", "Harbor", "Kubeflow", "Traefik"]
+      "name": "Cloud & CI/CD",
+      "keywords": [
+        "AWS",
+        "SAM",
+        "S3",
+        "EC2",
+        "Lambda",
+        "Serverless Framework",
+        "Git",
+        "Jenkins"
+      ]
+    },
+    {
+      "name": "Observability & Security",
+      "keywords": [
+        "Prometheus",
+        "Grafana",
+        "DefectDojo",
+        "OpenTelemetry"
+      ]
+    },
+    {
+      "name": "MLOps & Edge Computing",
+      "keywords": [
+        "Kubeflow",
+        "KubeEdge",
+        "Kafka"
+      ]
     }
   ],
   "contributions": [
     {
-      "name": "#376: CGI Inc.’s LINO CLI tool",
-      "url": "https://github.com/CGI-FR/LINO/issues/376"
-    },
-    {
-      "name": "#1431: Freelens k8s custom theme",
+      "name": "Freelens",
+      "summary": "#1431 Freelens k8s custom theme",
       "url": "https://github.com/freelensapp/freelens/pull/1431"
     },
     {
-      "name": "#1685: Tab Completion to AsyncAPI CLI",
-      "url": "https://github.com/asyncapi/cli/issues/1685"
+      "name": "CGI",
+      "summary": "LINO CLI binary installation for macOS",
+      "url": "https://github.com/CGI-FR/homebrew-lino/pull/1"
     },
     {
-      "name": "Hack Club: maintainer",
+      "name": "Arch Linux",
+      "summary": "Arch Linux package maintainer for keadm-bin",
+      "url": "https://aur.archlinux.org/packages/keadm-bin"
+    },
+    {
+      "name": "Hack Club",
+      "summary": "Former maintainer at Hack Club",
       "url": "https://github.com/orgs/hackclub/teams/leaders?query=gambhirsharma"
     }
   ],
   "meta": {
     "canonical": "https://gambhir.dev/cv.pdf",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "lastModified": "2026-11-11"
   }
 }
