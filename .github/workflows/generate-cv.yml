@@ -1,0 +1,71 @@
+name: Generate CV
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - resume.json
+      - scripts/generate-cv.mjs
+      - package.json
+      - pnpm-lock.yaml
+      - .github/workflows/generate-cv.yml
+  pull_request:
+    paths:
+      - resume.json
+      - scripts/generate-cv.mjs
+      - package.json
+      - pnpm-lock.yaml
+      - .github/workflows/generate-cv.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-cv-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate PDF
+        run: pnpm cv:build
+
+      - name: Upload generated PDF
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: cv-pdf
+          path: public/cv.pdf
+          retention-days: 14
+
+      - name: Commit updated PDF
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if git diff --quiet -- public/cv.pdf; then
+            echo "CV is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cv.pdf
+          git commit -m "chore(cv): regenerate PDF"
+          git push

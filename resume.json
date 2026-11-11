@@ -1,0 +1,142 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Gambhir Sharma",
+    "label": "DevOps | Full Stack Developer",
+    "email": "gambhiritaly@gmail.com",
+    "phone": "+39 351 474 6445",
+    "url": "https://gambhir.dev",
+    "summary": "DevOps-Focused Full-Stack Developer with hands-on experience building modern web applications using Next.js, TypeScript, PostgreSQL, and Node.js. Passionate about cloud infrastructure and automation, with projects deployed on AWS and Kubernetes using CI/CD pipelines, Docker, and Helm. Skilled in infrastructure as code, GitOps workflows, and monitoring solutions. Proficient in Python scripting and automating infrastructure tasks through ad hoc tooling. Currently sharpening my cybersecurity skills through CyberChallenge.it CTF, while sharing DevOps and development insights through technical writing and Twitter.",
+    "location": {
+      "city": "Rome",
+      "countryCode": "IT"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "gambhirsharma",
+        "url": "https://github.com/gambhirsharma"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "gambhir-sharma",
+        "url": "https://www.linkedin.com/in/gambhir-sharma/"
+      },
+      {
+        "network": "X",
+        "username": "gambhir_sharma",
+        "url": "https://x.com/gambhir_sharma"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CGI",
+      "position": "DevOps Space Engineer - Intern",
+      "url": "https://www.cgi.com/en",
+      "location": "Rome, Italy | Full-time",
+      "startDate": "2025-09",
+      "endDate": "2026-03",
+      "summary": "Worked across multiple spheres of DevOps, including CI/CD automation, cloud infrastructure management, and deployment optimization, with a strong DevSecOps focus on vulnerability analysis and remediation, and MLOps experience using Kubeflow and JupyterHub to support scalable ML and Earth observation data platforms."
+    },
+    {
+      "name": "RepoCraft",
+      "position": "Full Stack Developer",
+      "url": "https://www.linkedin.com/company/repocraft",
+      "location": "Remote | Mumbai",
+      "startDate": "2023-06",
+      "endDate": "2024-02",
+      "summary": "Worked on the open-source RepoCraft project, contributing to both frontend and backend. Gained experience building production-grade web apps and exposure to DevOps."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Università degli Studi di Roma Tor Vergata",
+      "url": "https://web.uniroma2.it/",
+      "area": "Engineering",
+      "studyType": "Bachelor",
+      "startDate": "2024-09",
+      "summary": "Pursuing the Engineering Science program, focusing on quantitative analysis, scientific reasoning, and multidisciplinary engineering concepts."
+    },
+    {
+      "institution": "CyberChallenge.IT",
+      "url": "https://cyberchallenge.it/",
+      "area": "Cybersecurity",
+      "studyType": "Training Program",
+      "startDate": "2025-02",
+      "endDate": "2025-07",
+      "summary": "Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development through the CTF program, broadening my understanding of secure software design."
+    }
+  ],
+  "projects": [
+    {
+      "name": "On Fly Image Optimization",
+      "url": "https://github.com/gambhirsharma/OnFly-Image-Optimization",
+      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus and Grafana. Deployed using ArgoCD and Helm, with CI/CD pipelines automated through GitHub Actions and Kustomize.",
+      "keywords": [
+        "TypeScript",
+        "Next.js",
+        "Supabase",
+        "S3",
+        "GitHub Actions",
+        "PostgreSQL",
+        "Kubernetes",
+        "Helm",
+        "ArgoCD"
+      ]
+    },
+    {
+      "name": "Lambda web scraping",
+      "url": "https://github.com/gambhirsharma/lazio-disco-bot",
+      "description": "Built a serverless scraper using AWS Lambda, storing logs in DynamoDB and sending real-time alerts via the Telegram API. Fully deployed on AWS for scalability and cost-efficiency.",
+      "keywords": ["AWS", "EC2", "DynamoDB", "Python"]
+    },
+    {
+      "name": "Vercel Clone",
+      "url": "https://github.com/gambhirsharma/vercel-clone",
+      "description": "Built a platform that deploys apps from GitHub URLs by building Docker images and deploying them to Kubernetes, automating the CI/CD pipeline.",
+      "keywords": ["Next.js", "Node.js", "Kubernetes", "Docker"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Front-End",
+      "keywords": ["Next.js", "React", "TypeScript", "Tailwind CSS", "ShadCN/UI", "Vue.js", "React Router"]
+    },
+    {
+      "name": "Back-End",
+      "keywords": ["Node.js", "Express.js", "FastAPI", "Flask", "Phoenix (Elixir)", "tRPC", "GraphQL", "Kafka", "Supabase", "Firebase"]
+    },
+    {
+      "name": "Cloud",
+      "keywords": ["AWS (CDK, SAM)", "Serverless Framework", "S3", "EC2", "Lambda"]
+    },
+    {
+      "name": "DevOps",
+      "keywords": ["Kubernetes", "Helm", "ArgoCD", "Git", "GitHub Actions", "Terraform", "Linux", "Vim", "Prometheus", "Grafana", "Nginx", "Kustomize", "Ansible", "Chef", "DefectDojo", "Harbor", "Kubeflow", "Traefik"]
+    }
+  ],
+  "contributions": [
+    {
+      "name": "#376: CGI Inc.’s LINO CLI tool",
+      "url": "https://github.com/CGI-FR/LINO/issues/376"
+    },
+    {
+      "name": "#1431: Freelens k8s custom theme",
+      "url": "https://github.com/freelensapp/freelens/pull/1431"
+    },
+    {
+      "name": "#1685: Tab Completion to AsyncAPI CLI",
+      "url": "https://github.com/asyncapi/cli/issues/1685"
+    },
+    {
+      "name": "Hack Club: maintainer",
+      "url": "https://github.com/orgs/hackclub/teams/leaders?query=gambhirsharma"
+    }
+  ],
+  "meta": {
+    "canonical": "https://gambhir.dev/cv.pdf",
+    "version": "1.0.0",
+    "lastModified": "2026-11-11"
+  }
+}
