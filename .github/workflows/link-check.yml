@@ -33,9 +33,17 @@ jobs:
 
       # Domains, subdomains, short links from vercel.json, and email.
       # The list lives in .github/link-check/targets.json.
+      # On pull requests, fetch the target branch so short links the PR adds to
+      # vercel.json are reported as "not deployed yet" instead of failing.
+      - name: Fetch target branch
+        if: github.event_name == 'pull_request'
+        run: git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+
       - name: Check domains, short links, and email
         id: targets
         continue-on-error: true
+        env:
+          LINK_CHECK_BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
         run: node scripts/check-links.mjs
 
       - name: Collect pages from the sitemap

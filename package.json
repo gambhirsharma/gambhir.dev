@@ -17,6 +17,7 @@
   "scripts": {
     "prepare": "simple-git-hooks",
     "dev": "astro dev --host",
+    "cv:build": "node scripts/generate-cv.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",
@@ -52,6 +53,7 @@
     "eslint-plugin-format": "^0.1.3",
     "lint-staged": "^15.5.2",
     "lodash-es": "^4.17.21",
+    "pdfkit": "0.20.2",
     "prettier-plugin-astro": "^0.13.0",
     "sharp": "^0.35.5",
     "simple-git-hooks": "^2.13.0"
