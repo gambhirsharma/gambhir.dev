@@ -31,11 +31,25 @@ async function readShortLinks() {
   if (!config.redirectsFile)
     return []
   const { redirects = [] } = JSON.parse(await readFile(config.redirectsFile, 'utf8'))
+  const deployed = await readDeployedRedirects()
   return redirects.map(r => ({
     url: new URL(r.source, config.redirectsBase).href,
     expect: new URL(r.destination, config.redirectsBase).href,
     group: 'Short links',
+    // Added or changed by the pull request being checked, so the live site can't serve it yet.
+    pending: deployed && deployed.get(r.source) !== r.destination,
   }))
+}
+
+// On pull requests the workflow sets LINK_CHECK_BASE_REF to the target branch. Its
+// vercel.json is what production serves; anything else in this checkout isn't deployed.
+async function readDeployedRedirects() {
+  const ref = process.env.LINK_CHECK_BASE_REF
+  if (!ref)
+    return null
+  const { stdout } = await run('git', ['show', `${ref}:${config.redirectsFile}`])
+  const { redirects = [] } = JSON.parse(stdout)
+  return new Map(redirects.map(r => [r.source, r.destination]))
 }
 
 async function checkUrl(target) {
@@ -86,8 +100,8 @@ async function checkUrl(target) {
     tlsMs: ms(info.time_appconnect),
     ttfbMs: ms(info.time_starttransfer),
     totalMs,
-    result: problem ? 'fail' : totalMs > config.slowMs ? 'slow' : 'ok',
-    note: problem ?? note,
+    result: problem ? (target.pending ? 'pending' : 'fail') : totalMs > config.slowMs ? 'slow' : 'ok',
+    note: problem && target.pending ? `not deployed yet (new in this PR): ${problem}` : problem ?? note,
   }
 }
 
@@ -194,13 +208,15 @@ const results = [
   ...await Promise.all((config.emails ?? []).map(checkEmail)),
 ]
 
-const icon = { ok: '✅', slow: '🐢', fail: '❌' }
+const icon = { ok: '✅', slow: '🐢', fail: '❌', pending: '⏳' }
 const time = value => value == null ? '—' : `${value} ms`
 const failed = results.filter(r => r.result === 'fail')
 const slow = results.filter(r => r.result === 'slow')
+const pending = results.filter(r => r.result === 'pending')
 
 let md = `## Domains, short links & email\n\n`
-md += `${results.length} checked · ${failed.length} failing · ${slow.length} slow (> ${config.slowMs} ms)\n`
+md += `${results.length} checked · ${failed.length} failing · ${slow.length} slow (> ${config.slowMs} ms)`
+md += pending.length ? ` · ${pending.length} not deployed yet\n` : '\n'
 for (const group of [...new Set(results.map(r => r.group))]) {
   md += `\n### ${group}\n\n| | Target | Status | DNS | TLS | TTFB | Total | Notes |\n|---|---|---|---|---|---|---|---|\n`
   for (const r of results.filter(r => r.group === group)) {
