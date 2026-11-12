@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - resume.json
+      - cv-variants/**
       - scripts/generate-cv.mjs
       - package.json
       - pnpm-lock.yaml
@@ -13,6 +14,7 @@ on:
   pull_request:
     paths:
       - resume.json
+      - cv-variants/**
       - scripts/generate-cv.mjs
       - package.json
       - pnpm-lock.yaml
@@ -53,19 +55,19 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: cv-pdf
-          path: public/cv.pdf
+          path: public/cv*.pdf
           retention-days: 14
 
       - name: Commit updated PDF
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          if git diff --quiet -- public/cv.pdf; then
+          if [ -z "$(git status --porcelain -- 'public/cv*.pdf')" ]; then
             echo "CV is already up to date."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/cv.pdf
-          git commit -m "chore(cv): regenerate PDF"
+          git add -A -- 'public/cv*.pdf'
+          git commit -m "chore(cv): regenerate PDFs"
           git push

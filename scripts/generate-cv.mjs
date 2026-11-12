@@ -1,4 +1,5 @@
-import { createWriteStream, existsSync, readFileSync } from 'node:fs'
+import { createWriteStream, existsSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import process from 'node:process'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -6,9 +7,9 @@ import PDFDocument from 'pdfkit'
 import sharp from 'sharp'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const sourcePath = resolve(root, 'resume.json')
-const outputPath = resolve(root, 'public/cv.pdf')
-const resume = JSON.parse(readFileSync(sourcePath, 'utf8'))
+const basePath = resolve(root, 'resume.json')
+const variantsDir = resolve(root, 'cv-variants')
+const publicDir = resolve(root, 'public')
 const lucide = JSON.parse(readFileSync(createRequire(import.meta.url).resolve('@iconify/json/json/lucide.json'), 'utf8'))
 const contactIcons = {
   email: 'mail',
@@ -21,94 +22,183 @@ const contactIcons = {
   codepen: 'codepen',
 }
 
-validateResume(resume)
-
-const profileImage = resume.basics.image
-  ? await sharp(resolve(root, resume.basics.image))
-    .resize(256, 256, { fit: 'cover', position: 'centre' })
-    .jpeg({ chromaSubsampling: '4:4:4', quality: 88 })
-    .toBuffer()
-  : null
-
 const colors = {
   ink: '#111111',
   accent: '#0093b8',
   link: '#075fd5',
 }
 
-const doc = new PDFDocument({
-  autoFirstPage: false,
-  compress: true,
-  info: {
-    Title: `${resume.basics.name} — Curriculum Vitae`,
-    Author: resume.basics.name,
-    Subject: resume.basics.label,
-    Keywords: resume.skills.flatMap(skill => skill.keywords).join(', '),
-    CreationDate: new Date('2000-01-01T00:00:00.000Z'),
-    ModDate: new Date('2000-01-01T00:00:00.000Z'),
-  },
-  margins: { top: 18, right: 18, bottom: 18, left: 18 },
-  size: 'LETTER',
-})
-
-const output = createWriteStream(outputPath)
-doc.pipe(output)
-
 const left = 18
 const right = 594
 const width = right - left
 const bottom = 774
+
+// Rendering state, reset for every CV that is generated.
+let resume
+let doc
+let profileImage
 let y = 0
+let pageCount = 0
 
-addPage(false)
-drawHeader()
-drawSummary()
+const base = JSON.parse(readFileSync(basePath, 'utf8'))
+const variantNames = existsSync(variantsDir)
+  ? readdirSync(variantsDir).filter(file => file.endsWith('.json')).map(file => file.slice(0, -5)).sort()
+  : []
 
-drawSection('Experience')
-for (const role of resume.work) {
-  drawEntry({
-    body: role.summary,
-    dates: dateRange(role),
-    meta: role.location,
-    subtitle: role.position,
-    title: role.name,
-    url: role.url,
-  })
+// `pnpm cv:build` builds everything; `pnpm cv:build fullstack mlops` builds only the named variants
+// (`base` refers to resume.json itself).
+const requested = process.argv.slice(2)
+for (const name of requested) {
+  if (name !== 'base' && !variantNames.includes(name))
+    throw new Error(`Unknown CV variant "${name}". Available: base, ${variantNames.join(', ') || '(none)'}`)
+}
+const targets = requested.length ? requested : ['base', ...variantNames]
+
+for (const name of targets) {
+  if (name === 'base') {
+    await renderCv(base, resolve(publicDir, 'cv.pdf'), 'resume.json')
+    continue
+  }
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name))
+    throw new Error(`Variant file name must be kebab-case: cv-variants/${name}.json`)
+  const patch = JSON.parse(readFileSync(resolve(variantsDir, `${name}.json`), 'utf8'))
+  await renderCv(applyVariant(base, patch), resolve(publicDir, `cv-${name}.pdf`), `cv-variants/${name}.json`)
 }
 
-drawSection('Education')
-for (const item of resume.education) {
-  drawEntry({
-    body: item.summary,
-    dates: [item.location, dateRange(item)].filter(Boolean).join(' • '),
-    meta: item.studyType,
-    subtitle: item.area,
-    title: item.institution,
-    url: item.url,
-  })
+// When building everything, delete PDFs of variants whose source file was removed.
+if (!requested.length) {
+  for (const file of readdirSync(publicDir)) {
+    const match = file.match(/^cv-(.+)\.pdf$/)
+    if (match && !variantNames.includes(match[1])) {
+      rmSync(resolve(publicDir, file))
+      console.log(`Removed stale public/${file}`)
+    }
+  }
 }
 
-drawSection('Projects')
-for (const project of resume.projects)
-  drawProject(project)
+/**
+ * Applies a variant on top of resume.json using JSON Merge Patch (RFC 7386):
+ * objects merge recursively, arrays and other values replace, `null` deletes a key.
+ * Additionally, a string inside a top-level section array (work, education, projects,
+ * contributions, skills) picks the base entry with that name, so variants can select
+ * and reorder entries without copying them.
+ */
+function applyVariant(source, patch) {
+  const result = mergePatch(source, patch)
+  for (const section of ['work', 'education', 'projects', 'contributions', 'skills']) {
+    if (!Array.isArray(patch[section]))
+      continue
+    result[section] = patch[section].map((entry) => {
+      if (typeof entry !== 'string')
+        return entry
+      const found = source[section]?.find(item => (item.name ?? item.institution) === entry)
+      if (!found)
+        throw new Error(`Variant references unknown ${section} entry "${entry}"`)
+      return structuredClone(found)
+    })
+  }
+  return result
+}
 
-drawSection('Open Source Contribution')
-drawContributions(resume.contributions)
+function mergePatch(target, patch) {
+  if (!isPlainObject(patch))
+    return structuredClone(patch)
+  const result = isPlainObject(target) ? structuredClone(target) : {}
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === null)
+      delete result[key]
+    else
+      result[key] = mergePatch(result[key], value)
+  }
+  return result
+}
 
-drawSection('Skills')
-for (const skill of resume.skills)
-  drawSkill(skill)
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+}
 
-doc.end()
+async function renderCv(data, outputPath, sourceLabel) {
+  validateResume(data, sourceLabel)
+  resume = data
+  y = 0
+  pageCount = 0
 
-await new Promise((resolvePromise, reject) => {
-  output.on('finish', resolvePromise)
-  output.on('error', reject)
-})
+  profileImage = resume.basics.image
+    ? await sharp(resolve(root, resume.basics.image))
+      .resize(256, 256, { fit: 'cover', position: 'centre' })
+      .jpeg({ chromaSubsampling: '4:4:4', quality: 88 })
+      .toBuffer()
+    : null
 
-console.log(`Generated ${outputPath}`)
+  doc = new PDFDocument({
+    autoFirstPage: false,
+    compress: true,
+    info: {
+      Title: `${resume.basics.name} — Curriculum Vitae`,
+      Author: resume.basics.name,
+      Subject: resume.basics.label,
+      Keywords: resume.skills.flatMap(skill => skill.keywords).join(', '),
+      CreationDate: new Date('2000-01-01T00:00:00.000Z'),
+      ModDate: new Date('2000-01-01T00:00:00.000Z'),
+    },
+    margins: { top: 18, right: 18, bottom: 18, left: 18 },
+    size: 'LETTER',
+  })
 
-function validateResume(data) {
+  const output = createWriteStream(outputPath)
+  doc.pipe(output)
+
+  addPage(false)
+  drawHeader()
+  drawSummary()
+
+  drawSection('Experience')
+  for (const role of resume.work) {
+    drawEntry({
+      body: role.summary,
+      dates: dateRange(role),
+      meta: role.location,
+      subtitle: role.position,
+      title: role.name,
+      url: role.url,
+    })
+  }
+
+  drawSection('Education')
+  for (const item of resume.education) {
+    drawEntry({
+      body: item.summary,
+      dates: [item.location, dateRange(item)].filter(Boolean).join(' • '),
+      meta: item.studyType,
+      subtitle: item.area,
+      title: item.institution,
+      url: item.url,
+    })
+  }
+
+  drawSection('Projects')
+  for (const project of resume.projects)
+    drawProject(project)
+
+  drawSection('Open Source Contribution')
+  drawContributions(resume.contributions)
+
+  drawSection('Skills')
+  for (const skill of resume.skills)
+    drawSkill(skill)
+
+  const pages = pageCount
+  doc.end()
+
+  await new Promise((resolvePromise, reject) => {
+    output.on('finish', resolvePromise)
+    output.on('error', reject)
+  })
+
+  console.log(`Generated ${outputPath.slice(root.length + 1)} from ${sourceLabel} (${pages} page${pages === 1 ? '' : 's'})`)
+}
+
+function validateResume(data, sourceLabel) {
   const errors = []
   if (!data.basics?.name)
     errors.push('basics.name is required')
@@ -126,11 +216,12 @@ function validateResume(data) {
     errors.push(`basics.image does not exist: ${data.basics.image}`)
 
   if (errors.length)
-    throw new Error(`Invalid resume.json:\n- ${errors.join('\n- ')}`)
+    throw new Error(`Invalid CV data in ${sourceLabel}:\n- ${errors.join('\n- ')}`)
 }
 
 function addPage(continued = true) {
   doc.addPage()
+  pageCount++
   y = 18
 
   if (continued) {
@@ -173,13 +264,13 @@ function drawHeader() {
     doc.restore()
   }
 
-  const location = [resume.basics.location.city, resume.basics.location.countryCode].filter(Boolean).join(', ')
-  const profiles = Object.fromEntries(resume.basics.profiles.map(profile => [profile.network, profile]))
+  const location = [resume.basics.location?.city, resume.basics.location?.countryCode].filter(Boolean).join(', ')
+  const profiles = Object.fromEntries((resume.basics.profiles ?? []).map(profile => [profile.network, profile]))
   const contacts = [
     { icon: 'email', link: `mailto:${resume.basics.email}`, text: resume.basics.email },
-    { icon: 'phone', link: `tel:${resume.basics.phone.replaceAll(' ', '')}`, text: resume.basics.phone },
+    { icon: 'phone', link: resume.basics.phone && `tel:${resume.basics.phone.replaceAll(' ', '')}`, text: resume.basics.phone },
     { icon: 'location', text: location },
-    { icon: 'website', link: resume.basics.url, text: displayUrl(resume.basics.url) },
+    { icon: 'website', link: resume.basics.url, text: resume.basics.url && displayUrl(resume.basics.url) },
     { icon: 'github', link: profiles.GitHub?.url, text: profiles.GitHub && 'GitHub' },
     { icon: 'linkedin', link: profiles.LinkedIn?.url, text: profiles.LinkedIn && 'LinkedIn' },
     { icon: 'x', link: profiles.X?.url, text: profiles.X && 'X' },
