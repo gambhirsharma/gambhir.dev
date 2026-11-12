@@ -26,6 +26,7 @@ const colors = {
   ink: '#111111',
   accent: '#0093b8',
   link: '#075fd5',
+  muted: '#444444',
 }
 
 const left = 18
@@ -253,6 +254,18 @@ function drawHeader() {
   doc.font('Helvetica').fontSize(10.2)
   doc.text(resume.basics.label, left, 43, { lineBreak: false })
 
+  // Location is information, not a link, so it sits next to the role instead of in the contact row.
+  const location = formatLocation(resume.basics.location)
+  if (location) {
+    const labelFontSize = 10.2
+    let x = left + doc.widthOfString(resume.basics.label) + 8
+    doc.circle(x, 43 + labelFontSize * 0.42, 1.1).fillColor(colors.accent).fill()
+    x += 8
+    drawIcon(contactIcons.location, x, 43 + labelFontSize * 0.42 - 4.5, 9)
+    doc.font('Helvetica').fontSize(labelFontSize).fillColor(colors.muted)
+    doc.text(location, x + 12, 43, { lineBreak: false })
+  }
+
   if (profileImage) {
     doc.save()
     doc.roundedRect(photoX, photoY, photoSize, photoSize, 7).clip()
@@ -264,12 +277,10 @@ function drawHeader() {
     doc.restore()
   }
 
-  const location = [resume.basics.location?.city, resume.basics.location?.countryCode].filter(Boolean).join(', ')
   const profiles = Object.fromEntries((resume.basics.profiles ?? []).map(profile => [profile.network, profile]))
   const contacts = [
     { icon: 'email', link: `mailto:${resume.basics.email}`, text: resume.basics.email },
     { icon: 'phone', link: resume.basics.phone && `tel:${resume.basics.phone.replaceAll(' ', '')}`, text: resume.basics.phone },
-    { icon: 'location', text: location },
     { icon: 'website', link: resume.basics.url, text: resume.basics.url && displayUrl(resume.basics.url) },
     { icon: 'github', link: profiles.GitHub?.url, text: profiles.GitHub && 'GitHub' },
     { icon: 'linkedin', link: profiles.LinkedIn?.url, text: profiles.LinkedIn && 'LinkedIn' },
@@ -491,6 +502,15 @@ function formatDate(value) {
     return String(year)
   return new Intl.DateTimeFormat('en', { month: 'long', timeZone: 'UTC', year: 'numeric' })
     .format(new Date(Date.UTC(year, month - 1, 1)))
+}
+
+function formatLocation(location) {
+  if (!location)
+    return ''
+  const country = location.countryCode
+    ? new Intl.DisplayNames('en', { type: 'region' }).of(location.countryCode)
+    : location.country
+  return [location.city, country].filter(Boolean).join(', ')
 }
 
 function displayUrl(url) {
