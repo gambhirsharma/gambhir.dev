@@ -1,4 +1,5 @@
 import { createWriteStream, existsSync, readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import PDFDocument from 'pdfkit'
@@ -8,6 +9,17 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const sourcePath = resolve(root, 'resume.json')
 const outputPath = resolve(root, 'public/cv.pdf')
 const resume = JSON.parse(readFileSync(sourcePath, 'utf8'))
+const lucide = JSON.parse(readFileSync(createRequire(import.meta.url).resolve('@iconify/json/json/lucide.json'), 'utf8'))
+const contactIcons = {
+  email: 'mail',
+  phone: 'phone',
+  location: 'map-pin',
+  website: 'globe',
+  github: 'github',
+  linkedin: 'linkedin',
+  x: 'twitter',
+  codepen: 'codepen',
+}
 
 validateResume(resume)
 
@@ -168,10 +180,10 @@ function drawHeader() {
     { icon: 'phone', link: `tel:${resume.basics.phone.replaceAll(' ', '')}`, text: resume.basics.phone },
     { icon: 'location', text: location },
     { icon: 'website', link: resume.basics.url, text: displayUrl(resume.basics.url) },
-    { icon: 'github', link: profiles.GitHub?.url },
-    { icon: 'linkedin', link: profiles.LinkedIn?.url },
-    { icon: 'x', link: profiles.X?.url },
-    { icon: 'codepen', link: profiles.CodePen?.url },
+    { icon: 'github', link: profiles.GitHub?.url, text: profiles.GitHub && 'GitHub' },
+    { icon: 'linkedin', link: profiles.LinkedIn?.url, text: profiles.LinkedIn && 'LinkedIn' },
+    { icon: 'x', link: profiles.X?.url, text: profiles.X && 'X' },
+    { icon: 'codepen', link: profiles.CodePen?.url, text: profiles.CodePen && 'CodePen' },
   ].filter(item => item.link || item.text)
 
   drawContactRow(contacts, 65, photoX - 14)
@@ -181,23 +193,26 @@ function drawHeader() {
 }
 
 function drawContactRow(items, rowY, maxX) {
-  doc.font('Helvetica').fontSize(8.7)
+  const fontSize = 8.7
+  const iconSize = 9
+  // Visual middle of mixed-case Helvetica text drawn at rowY (between x-height and cap height).
+  const middle = rowY + fontSize * 0.42
+  doc.font('Helvetica').fontSize(fontSize)
   let x = left
 
   for (const [index, item] of items.entries()) {
-    const iconWidth = 10
     const textWidth = item.text ? doc.widthOfString(item.text) : 0
-    const itemWidth = iconWidth + (item.text ? 4 + textWidth : 2)
+    const itemWidth = iconSize + (item.text ? 3 + textWidth : 0)
     if (x + itemWidth > maxX)
       break
 
     const itemX = x
-    drawContactIcon(item.icon, x, rowY + 1)
-    x += iconWidth
+    drawIcon(contactIcons[item.icon], x, middle - iconSize / 2, iconSize)
+    x += iconSize
 
     if (item.text) {
       x += 3
-      doc.fillColor(item.link ? colors.link : colors.ink)
+      doc.font('Helvetica').fontSize(fontSize).fillColor(item.link ? colors.link : colors.ink)
       doc.text(item.text, x, rowY, {
         lineBreak: false,
         underline: Boolean(item.link),
@@ -206,52 +221,37 @@ function drawContactRow(items, rowY, maxX) {
     }
 
     if (item.link)
-      doc.link(itemX - 1, rowY - 1, itemWidth + 2, 11, item.link)
+      doc.link(itemX - 1, middle - 6, itemWidth + 2, 12, item.link)
 
     if (index < items.length - 1) {
       x += 7
-      doc.moveTo(x, rowY - 1).lineTo(x, rowY + 10).lineWidth(0.55).strokeColor(colors.accent).stroke()
+      doc.moveTo(x, middle - 5).lineTo(x, middle + 5).lineWidth(0.55).strokeColor(colors.accent).stroke()
       x += 7
     }
   }
 }
 
-function drawContactIcon(type, x, iconY) {
-  const centerY = iconY + 4
-  doc.save().lineWidth(0.65).strokeColor(colors.accent).fillColor(colors.accent)
+// Renders a 24x24 Lucide icon (stroke-only path/rect/circle elements) at the given size.
+function drawIcon(name, x, iconY, size) {
+  const body = lucide.icons[name]?.body
+  if (!body)
+    return
 
-  if (type === 'email') {
-    doc.rect(x, iconY, 8.5, 6.5).stroke()
-    doc.moveTo(x, iconY).lineTo(x + 4.25, iconY + 3.5).lineTo(x + 8.5, iconY).stroke()
-  }
-  else if (type === 'phone') {
-    doc.path(`M${x + 1},${iconY} C${x},${iconY + 1.5} ${x + 1.5},${iconY + 5.8} ${x + 6.6},${iconY + 8} C${x + 7.8},${iconY + 8.4} ${x + 8.8},${iconY + 7.2} ${x + 8},${iconY + 6.2} L${x + 6.5},${iconY + 5.2} C${x + 5.8},${iconY + 4.9} ${x + 5.4},${iconY + 6} ${x + 4.7},${iconY + 5.5} C${x + 3.4},${iconY + 4.7} ${x + 2.8},${iconY + 3.8} ${x + 2.4},${iconY + 2.9} C${x + 2.1},${iconY + 2.2} ${x + 3},${iconY + 1.8} ${x + 2.6},${iconY + 1.1} Z`).stroke()
-  }
-  else if (type === 'location') {
-    doc.circle(x + 4.2, iconY + 3.4, 2.8).stroke()
-    doc.circle(x + 4.2, iconY + 3.4, 0.8).fill()
-    doc.moveTo(x + 1.8, iconY + 4.7).lineTo(x + 4.2, iconY + 8.3).lineTo(x + 6.6, iconY + 4.7).stroke()
-  }
-  else if (type === 'website') {
-    doc.circle(x + 4.3, centerY, 4).stroke()
-    doc.ellipse(x + 4.3, centerY, 1.8, 4).stroke()
-    doc.moveTo(x + 0.5, centerY).lineTo(x + 8.1, centerY).stroke()
-  }
-  else if (type === 'linkedin') {
-    doc.rect(x + 0.5, iconY, 7.5, 7.5).stroke()
-    doc.font('Helvetica-Bold').fontSize(5.5).text('in', x + 2.1, iconY + 1.1, { lineBreak: false })
-  }
-  else if (type === 'x') {
-    doc.font('Helvetica').fontSize(8).text('X', x + 1.4, iconY - 0.5, { lineBreak: false })
-  }
-  else if (type === 'codepen') {
-    doc.moveTo(x + 4.2, iconY).lineTo(x + 8, iconY + 2.3).lineTo(x + 8, iconY + 5.7)
-      .lineTo(x + 4.2, iconY + 8).lineTo(x + 0.4, iconY + 5.7).lineTo(x + 0.4, iconY + 2.3).closePath().stroke()
-    doc.moveTo(x + 0.5, iconY + 2.4).lineTo(x + 4.2, iconY + 4.6).lineTo(x + 7.9, iconY + 2.4).stroke()
-  }
-  else {
-    doc.circle(x + 4.2, centerY, 4).stroke()
-    doc.font('Helvetica-Bold').fontSize(4.8).text('GH', x + 1.1, iconY + 1.4, { lineBreak: false })
+  const scale = size / 24
+  doc.save()
+  doc.translate(x, iconY).scale(scale)
+  doc.lineWidth(1.9).lineCap('round').lineJoin('round').strokeColor(colors.accent)
+
+  for (const [, tag, attrs] of body.matchAll(/<(path|rect|circle)\b([^>]*)\/>/g)) {
+    const attr = key => attrs.match(new RegExp(`\\s${key}="([^"]*)"`))?.[1]
+    const num = key => Number(attr(key) ?? 0)
+    if (tag === 'path')
+      doc.path(attr('d'))
+    else if (tag === 'rect')
+      doc.roundedRect(num('x'), num('y'), num('width'), num('height'), num('rx'))
+    else
+      doc.circle(num('cx'), num('cy'), num('r'))
+    doc.stroke()
   }
 
   doc.restore()

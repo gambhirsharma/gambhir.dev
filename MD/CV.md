@@ -32,7 +32,8 @@ and `contributions[]` entries with `name`, `summary`, and `url`.
 
 The profile image is selected by `basics.image` in `resume.json`. The current
 design uses `public/me.png` and mirrors the previous CV's typography, colors,
-compact section layout, contact icons, and rounded photo.
+compact section layout, contact icons, and rounded photo. Contact icons are
+Lucide icons read from the `@iconify/json` dev dependency.
 
 The generated PDF is deterministic: running the command again without changing
 the source data produces the same file.
