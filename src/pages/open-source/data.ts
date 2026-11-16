@@ -17,7 +17,7 @@ export const openSourceData: OpenSourceData = [
     techStack: ['TypeScript', 'Electron', 'k8s'],
     prNumber: 1431,
     prUrl: 'https://github.com/freelensapp/freelens/pull/1431',
-    status: 'open',
+    status: 'merged',
   },
 
 ]
