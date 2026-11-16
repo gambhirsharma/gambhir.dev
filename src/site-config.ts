@@ -5,8 +5,13 @@ export const siteConfig = {
   subtitle: 'presonal blog',
   description: 'Personal website and blog of Gambhir Sharma',
   image: {
+    src: '/og.jpg',
+    alt: 'Gambhir Sharma — devops, distributed systems, open source · gambhir.dev',
+  },
+  // previous OG card, kept as a backup og:image (see BaseHead.astro)
+  fallbackImage: {
     src: '/OG.png',
-    alt: 'Website Main Image',
+    alt: 'gambhir.dev',
   },
   email: 'hey@gambhir.dev',
   emailDisplay: 'hey@gambhir.dev',
