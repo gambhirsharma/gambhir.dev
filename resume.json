@@ -1,0 +1,232 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Gambhir Sharma",
+    "label": "DevOps Engineer",
+    "email": "hey@gambhir.dev",
+    "phone": "+39 351 474 6445",
+    "url": "https://gambhir.dev",
+    "image": "public/me.png",
+    "summary": "DevOps Engineer with hands-on experience building and deploying cloud-native applications on Kubernetes and AWS. Experienced in CI/CD automation, GitOps, infrastructure as code, observability, and DevSecOps using tools such as GitHub Actions, Helm, ArgoCD, Prometheus, Grafana, and Terraform. Strong software engineering background with TypeScript, Python, Go, and PostgreSQL, enabling automation and scalable infrastructure solutions. Also experienced with networking and 6G ISAC research.",
+    "location": {
+      "city": "Rome",
+      "countryCode": "IT"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "gambhirsharma",
+        "url": "https://github.com/gambhirsharma"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "gambhir-sharma",
+        "url": "https://www.linkedin.com/in/gambhir-sharma/"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CGI",
+      "position": "DevOps Space Engineer - Intern",
+      "url": "https://www.cgi.com/en",
+      "location": "Rome, Italy | Full-time",
+      "startDate": "2025-09",
+      "endDate": "2026-03",
+      "summary": "Worked across multiple spheres of DevOps, including CI/CD automation, cloud infrastructure management, and deployment optimization, with a strong DevSecOps focus on vulnerability analysis and remediation, and MLOps experience using Kubeflow and JupyterHub to support scalable ML and Earth observation data platforms. Built a full test suite for web UI components on isula.earth, covering validation, regression testing, and troubleshooting of front-end issues."
+    },
+    {
+      "name": "RepoCraft",
+      "position": "Full Stack Developer",
+      "url": "https://www.linkedin.com/company/repocraft",
+      "location": "Remote | Mumbai",
+      "startDate": "2023-06",
+      "endDate": "2024-02",
+      "summary": "Worked on the open-source RepoCraft project, contributing to both frontend and backend. Gained experience building production-grade web apps and exposure to DevOps."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Università degli Studi di Roma Tor Vergata",
+      "url": "https://web.uniroma2.it/",
+      "area": "ICT and Internet Engineering",
+      "studyType": "Bachelor",
+      "startDate": "2024-09",
+      "summary": "Final-year Engineering student specializing in 6G technologies, Integrated Sensing and Communication (ISAC), computer networking, distributed systems, and edge computing. Final-year thesis focused on 6G ISAC systems and distributed edge networking.",
+      "location": "Rome, Italy"
+    },
+    {
+      "institution": "CyberChallenge.IT",
+      "url": "https://cyberchallenge.it/",
+      "area": "Cybersecurity",
+      "studyType": "Training Program",
+      "startDate": "2025-02",
+      "endDate": "2025-07",
+      "summary": "Learned a lot from a security point of view through this CTF program. Explored cryptography, web vulnerabilities, social engineering, and system-level exploit development. It really broadened my understanding of secure software design.",
+      "location": "Rome, Italy"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Lynq NTN-Pulse (Winner, NEOSPACE Europe 2026)",
+      "url": "https://github.com/gambhirsharma/Lynq",
+      "date": "2026-10",
+      "description": "Designed a 112-satellite global 5G IoT constellation (<100 ms p99 latency) and built its Kubernetes/KubeEdge cloud-to-edge orchestration, with canary OTA updates for satellites, gateways and devices.",
+      "keywords": [
+        "Kubernetes",
+        "KubeEdge",
+        "Slurm/HPC (MeluXina)",
+        "Streamlit"
+      ]
+    },
+    {
+      "name": "ISAC-K8s",
+      "url": "https://github.com/gambhirsharma/ISAC-k8s",
+      "description": "Developed a distributed 6G ISAC (Integrated Sensing and Communication) platform using KubeEdge, with federated learning for decentralized model training on edge nodes.",
+      "keywords": [
+        "K8s",
+        "Go",
+        "6G",
+        "gRPC",
+        "KubeEdge"
+      ]
+    },
+    {
+      "name": "On Fly Image Optimization",
+      "url": "https://github.com/gambhirsharma/OnFly-Image-Optimization",
+      "description": "Self-hosted image optimizer deployed on Kubernetes. Built with Next.js and Supabase Edge Functions, with observability via Prometheus & Grafana. Deployed using ArgoCD and Helm, with CI/CD pipelines automated via GitHub Actions and Kustomize.",
+      "keywords": [
+        "TypeScript",
+        "Next.js",
+        "Supabase",
+        "S3",
+        "GitHub Actions",
+        "PostgreSQL",
+        "K8s",
+        "Helm",
+        "ArgoCD"
+      ]
+    },
+    {
+      "name": "Lambda Web Scraping",
+      "url": "https://github.com/gambhirsharma/lazio-disco-bot",
+      "description": "Serverless scraper using AWS Lambda, storing logs in DynamoDB and sending real-time alerts via Telegram API. Fully deployed on AWS.",
+      "keywords": [
+        "AWS",
+        "EC2",
+        "DynamoDB",
+        "Python"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Software Development",
+      "keywords": [
+        "TypeScript",
+        "Python",
+        "Node.js",
+        "Next.js",
+        "React",
+        "FastAPI",
+        "Flask",
+        "Express.js",
+        "Phoenix (Elixir)",
+        "GraphQL",
+        "tRPC",
+        "Supabase",
+        "Firebase",
+        "Vue.js"
+      ]
+    },
+    {
+      "name": "DevOps & Infrastructure",
+      "keywords": [
+        "Kubernetes",
+        "Helm",
+        "ArgoCD",
+        "Terraform",
+        "Ansible",
+        "Kustomize",
+        "Chef",
+        "Docker",
+        "Harbor",
+        "Traefik",
+        "Nginx",
+        "Envoy"
+      ]
+    },
+    {
+      "name": "Networking & Virtualization",
+      "keywords": [
+        "Tailscale",
+        "WireGuard",
+        "Proxmox (KVM)",
+        "Cilium",
+        "Istio",
+        "eBPF",
+        "Linux Traffic Control (tc)",
+        "IPVS",
+        "VXLAN",
+        "NFV/SDN fundamentals"
+      ]
+    },
+    {
+      "name": "Cloud & CI/CD",
+      "keywords": [
+        "AWS",
+        "SAM",
+        "S3",
+        "EC2",
+        "Lambda",
+        "Serverless Framework",
+        "Git",
+        "Jenkins"
+      ]
+    },
+    {
+      "name": "Observability & Security",
+      "keywords": [
+        "Prometheus",
+        "Grafana",
+        "DefectDojo",
+        "OpenTelemetry"
+      ]
+    },
+    {
+      "name": "MLOps & Edge Computing",
+      "keywords": [
+        "Kubeflow",
+        "KubeEdge",
+        "Kafka"
+      ]
+    }
+  ],
+  "contributions": [
+    {
+      "name": "Freelens",
+      "summary": "#1431 Freelens k8s custom theme",
+      "url": "https://github.com/freelensapp/freelens/pull/1431"
+    },
+    {
+      "name": "CGI",
+      "summary": "LINO CLI binary installation for macOS",
+      "url": "https://github.com/CGI-FR/homebrew-lino/pull/1"
+    },
+    {
+      "name": "Arch Linux",
+      "summary": "Arch Linux package maintainer for keadm-bin",
+      "url": "https://aur.archlinux.org/packages/keadm-bin"
+    },
+    {
+      "name": "Hack Club",
+      "summary": "Former maintainer at Hack Club",
+      "url": "https://github.com/orgs/hackclub/teams/leaders?query=gambhirsharma"
+    }
+  ],
+  "meta": {
+    "canonical": "https://gambhir.dev/cv.pdf",
+    "version": "1.1.0",
+    "lastModified": "2026-11-11"
+  }
+}
