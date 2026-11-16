@@ -32,6 +32,29 @@ export default defineConfig({
     // Bluesky
     '/bsky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
     '/bluesky': 'https://bsky.app/profile/gambhirsharma.bsky.social',
+    // Internal route aliases — alternate spellings of real pages
+    // Open source
+    '/opensource': '/open-source',
+    '/open_source': '/open-source',
+    '/oss': '/open-source',
+    // Projects
+    '/project': '/projects',
+    // Treks
+    '/trek': '/treks',
+    '/trekking': '/treks',
+    // Social
+    '/socials': '/social',
+    // Blog sections
+    '/notes': '/blog/notes',
+    '/talks': '/blog/talks',
+    '/papers': '/blog/papers',
+    '/blog/note': '/blog/notes',
+    '/blog/talk': '/blog/talks',
+    '/blog/paper': '/blog/papers',
+    '/posts': '/blog',
+    '/articles': '/blog',
+    // Mail
+    '/email': '/mail',
     // VPS bootstrap — single entrypoint (clones vps-setup repo)
     '/install': '/install.sh',
     '/bootstrap': '/bootstrap.sh',

@@ -19,3 +19,20 @@
 /nvim    /install.sh 301
 /nvim.sh /install.sh 301
 /nvim-setup.sh /install.sh 301
+# Internal route aliases — alternate spellings of real pages
+/opensource    /open-source 301
+/open_source   /open-source 301
+/oss           /open-source 301
+/project       /projects 301
+/trek          /treks 301
+/trekking      /treks 301
+/socials       /social 301
+/notes         /blog/notes 301
+/talks         /blog/talks 301
+/papers        /blog/papers 301
+/blog/note     /blog/notes 301
+/blog/talk     /blog/talks 301
+/blog/paper    /blog/papers 301
+/posts         /blog 301
+/articles      /blog 301
+/email         /mail 301

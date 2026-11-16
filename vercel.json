@@ -19,6 +19,22 @@
     { "source": "/vps-setup", "destination": "/vps-setup.sh", "permanent": false },
     { "source": "/nvim", "destination": "/install.sh", "permanent": false },
     { "source": "/nvim.sh", "destination": "/install.sh", "permanent": false },
-    { "source": "/nvim-setup.sh", "destination": "/install.sh", "permanent": false }
+    { "source": "/nvim-setup.sh", "destination": "/install.sh", "permanent": false },
+    { "source": "/opensource", "destination": "/open-source", "permanent": true },
+    { "source": "/open_source", "destination": "/open-source", "permanent": true },
+    { "source": "/oss", "destination": "/open-source", "permanent": true },
+    { "source": "/project", "destination": "/projects", "permanent": true },
+    { "source": "/trek", "destination": "/treks", "permanent": true },
+    { "source": "/trekking", "destination": "/treks", "permanent": true },
+    { "source": "/socials", "destination": "/social", "permanent": true },
+    { "source": "/notes", "destination": "/blog/notes", "permanent": true },
+    { "source": "/talks", "destination": "/blog/talks", "permanent": true },
+    { "source": "/papers", "destination": "/blog/papers", "permanent": true },
+    { "source": "/blog/note", "destination": "/blog/notes", "permanent": true },
+    { "source": "/blog/talk", "destination": "/blog/talks", "permanent": true },
+    { "source": "/blog/paper", "destination": "/blog/papers", "permanent": true },
+    { "source": "/posts", "destination": "/blog", "permanent": true },
+    { "source": "/articles", "destination": "/blog", "permanent": true },
+    { "source": "/email", "destination": "/mail", "permanent": true }
   ]
 }
