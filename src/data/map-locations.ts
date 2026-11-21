@@ -113,6 +113,36 @@ export const mapLocations: MapLocationsData = {
       lng: 13.8869,
       category: 'visited',
     },
+    {
+      name: 'Dolomites, Italy',
+      lat: 46.4102,
+      lng: 11.844,
+      category: 'visited',
+    },
+    {
+      name: 'Belluno, Italy',
+      lat: 46.1425,
+      lng: 12.2167,
+      category: 'visited',
+    },
+    {
+      name: 'Pavia, Italy',
+      lat: 45.1847,
+      lng: 9.1582,
+      category: 'visited',
+    },
+    {
+      name: 'Falcade, Italy',
+      lat: 46.3542,
+      lng: 11.8697,
+      category: 'visited',
+    },
+    {
+      name: 'Alleghe Lake, Italy',
+      lat: 46.4061,
+      lng: 12.0219,
+      category: 'visited',
+    },
 
     // Places I want to visit
     {
