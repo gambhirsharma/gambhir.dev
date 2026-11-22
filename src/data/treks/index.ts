@@ -66,6 +66,14 @@ export const treks: Trek[] = [
     elevationGainM: 153, // published ascent, the DEM elevation in the GPX is too noisy inside the gorge
     region: 'Podhom, near Bled, Slovenia',
   },
+  {
+    name: 'Lago di Alleghe Loop',
+    date: '2026-11-21',
+    // Built from OSM foot routing around the lake, not a recorded track
+    gpx: '2026-11-21-lago-di-alleghe-loop.gpx',
+    elevationGainM: 60, // published ascent, the DEM elevation in the GPX picks up the steep valley sides
+    region: 'Alleghe, Agordino, Dolomites, Italy',
+  },
 ]
 
 export default treks
