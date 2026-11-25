@@ -14,6 +14,8 @@
     { "source": "/discord", "destination": "https://discord.com", "permanent": true },
     { "source": "/bsky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true },
     { "source": "/bluesky", "destination": "https://bsky.app/profile/gambhirsharma.bsky.social", "permanent": true },
+    { "source": "/cv", "destination": "/cv.pdf", "permanent": false },
+    { "source": "/resume", "destination": "/cv.pdf", "permanent": false },
     { "source": "/install", "destination": "/install.sh", "permanent": false },
     { "source": "/bootstrap", "destination": "/bootstrap.sh", "permanent": false },
     { "source": "/vps-setup", "destination": "/vps-setup.sh", "permanent": false },
