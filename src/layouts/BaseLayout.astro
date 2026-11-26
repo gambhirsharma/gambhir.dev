@@ -13,13 +13,30 @@ const { ...head } = Astro.props
   <head>
     <BaseHead {...head} />
     <ViewTransitions />
-<!-- Google tag (gtag.js) -->
-    <script is:inline type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-TXR5YDK68S"></script>
-    <script is:inline type="text/partytown">
+    <!-- Google tag (gtag.js), loaded on the main thread but only once the page is idle,
+         so it never competes with first paint or island hydration. Calls made before
+         gtag.js arrives are queued in dataLayer and flushed when it loads. -->
+    <script is:inline>
       window.dataLayer = window.dataLayer || []
-      function gtag() {dataLayer.push(arguments)}
+      function gtag() {
+        dataLayer.push(arguments)
+      }
       gtag('js', new Date())
       gtag('config', 'G-TXR5YDK68S')
+
+      if (!window.__gtagScheduled) {
+        window.__gtagScheduled = true
+        const loadGtag = () => {
+          const s = document.createElement('script')
+          s.async = true
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-TXR5YDK68S'
+          document.head.appendChild(s)
+        }
+        const whenIdle = () =>
+          'requestIdleCallback' in window ? requestIdleCallback(loadGtag, { timeout: 4000 }) : setTimeout(loadGtag, 1500)
+        if (document.readyState === 'complete') whenIdle()
+        else addEventListener('load', whenIdle, { once: true })
+      }
     </script>
   </head>
   <body class="bg-main text-main min-h-screen font-sans w-full bg-dot">
