@@ -32,7 +32,7 @@ const colors = {
 const left = 18
 const right = 594
 const width = right - left
-const bottom = 774
+const bottom = 780
 
 // Rendering state, reset for every CV that is generated.
 let resume
@@ -177,6 +177,10 @@ async function renderCv(data, outputPath, sourceLabel) {
     })
   }
 
+  drawSection('Certifications')
+  for (const certificate of resume.certificates)
+    drawCertificate(certificate)
+
   drawSection('Projects')
   for (const project of resume.projects)
     drawProject(project)
@@ -208,7 +212,7 @@ function validateResume(data, sourceLabel) {
   if (!data.basics?.email)
     errors.push('basics.email is required')
 
-  for (const field of ['work', 'education', 'projects', 'skills', 'contributions']) {
+  for (const field of ['work', 'education', 'certificates', 'projects', 'skills', 'contributions']) {
     if (!Array.isArray(data[field]))
       errors.push(`${field} must be an array`)
   }
@@ -362,17 +366,17 @@ function drawIcon(name, x, iconY, size) {
 function drawSummary() {
   doc.font('Helvetica').fontSize(9.3).fillColor(colors.ink)
   doc.text(resume.basics.summary, left, y, { lineGap: 0.5, width })
-  y = doc.y + 3
+  y = doc.y + 2
 }
 
 function drawSection(title) {
-  ensureSpace(22)
-  y += 2
+  ensureSpace(18)
+  y += 1
   doc.font('Helvetica-Bold').fontSize(9.4).fillColor(colors.accent)
   doc.text(title, left, y, { lineBreak: false })
-  y += 12
+  y += 11
   doc.moveTo(left, y).lineTo(right, y).lineWidth(0.65).strokeColor(colors.accent).stroke()
-  y += 5
+  y += 3
 }
 
 function drawEntry({ body, dates, meta, subtitle, title, url }) {
@@ -388,7 +392,7 @@ function drawEntry({ body, dates, meta, subtitle, title, url }) {
       width,
     })
   }
-  y += 10.5
+  y += 10
 
   doc.font('Helvetica').fontSize(9.3).fillColor(colors.ink)
   doc.text(subtitle, left, y, { lineBreak: false })
@@ -399,11 +403,11 @@ function drawEntry({ body, dates, meta, subtitle, title, url }) {
       width,
     })
   }
-  y += 10.5
+  y += 10
 
   doc.font('Helvetica').fontSize(9.3).fillColor(colors.ink)
   doc.text(body, left, y, { lineGap: 0.45, width })
-  y = doc.y + 3
+  y = doc.y + 2
 }
 
 function drawProject(project) {
@@ -433,7 +437,34 @@ function drawProject(project) {
   doc.text(project.description, left, y, { lineGap: 0.45, width })
   y = doc.y + 1
   doc.text(stack, left, y, { lineGap: 0.3, width })
-  y = doc.y + 4
+  y = doc.y + 2
+}
+
+function drawCertificate(certificate) {
+  ensureSpace(12)
+
+  doc.font('Helvetica').fontSize(9.3).fillColor(colors.link)
+  doc.text(certificate.name, left, y, {
+    continued: true,
+    link: certificate.url,
+    underline: Boolean(certificate.url),
+  })
+  doc.fillColor(colors.ink).text(` — ${certificate.issuer}`, {
+    continued: false,
+    link: null,
+    lineBreak: false,
+    underline: false,
+  })
+  if (certificate.date) {
+    doc.fillColor(colors.ink).text(formatDate(certificate.date), left, y, {
+      align: 'right',
+      link: null,
+      lineBreak: false,
+      underline: false,
+      width,
+    })
+  }
+  y += 11
 }
 
 function drawSkill(skill) {
@@ -445,13 +476,13 @@ function drawSkill(skill) {
 
   doc.fillColor(colors.ink).font('Helvetica-Bold').text(label, left, y, { continued: true, lineGap: 0.2, width })
   doc.font('Helvetica').text(value, { lineGap: 0.2 })
-  y = doc.y + 1
+  y = doc.y
 }
 
 function drawContributions(items) {
   const gap = 18
   const columnWidth = (width - gap) / 2
-  const rowHeight = 21
+  const rowHeight = 20
   const rows = Math.ceil(items.length / 2)
   ensureSpace(rows * rowHeight)
 
@@ -477,7 +508,7 @@ function drawContributions(items) {
     }
   })
 
-  y += rows * rowHeight + 3
+  y += rows * rowHeight + 1
 }
 
 function textHeight(text, font, size, availableWidth, lineGap) {

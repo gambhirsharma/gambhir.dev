@@ -66,6 +66,26 @@
       "location": "Rome, Italy"
     }
   ],
+  "certificates": [
+    {
+      "name": "AWS Cloud Practitioner Essentials",
+      "issuer": "Amazon Web Services (AWS)",
+      "date": "2026-11",
+      "url": "https://www.linkedin.com/in/gambhir-sharma/details/certifications/"
+    },
+    {
+      "name": "LFS148: OpenTelemetry",
+      "issuer": "The Linux Foundation",
+      "date": "2026-09",
+      "url": "https://www.credly.com/badges/2c6c84a0-ed02-42a9-9e58-612940d71413/linked_in_profile"
+    },
+    {
+      "name": "eBPF Getting Started",
+      "issuer": "Isovalent",
+      "date": "2026-10",
+      "url": "https://www.credly.com/badges/2ec415a7-e192-4696-8ae9-8d8f00d99354/linked_in_profile"
+    }
+  ],
   "projects": [
     {
       "name": "Lynq NTN-Pulse (Winner, NEOSPACE Europe 2026)",
@@ -227,6 +247,6 @@
   "meta": {
     "canonical": "https://gambhir.dev/cv.pdf",
     "version": "1.1.0",
-    "lastModified": "2026-11-11"
+    "lastModified": "2026-11-27"
   }
 }
